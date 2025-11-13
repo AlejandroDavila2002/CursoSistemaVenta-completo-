@@ -62,7 +62,7 @@
             this.txtId = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.cboBusqueda = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtBusqueda = new System.Windows.Forms.TextBox();
             this.txtIndice = new System.Windows.Forms.TextBox();
             this.btnLimpiar = new FontAwesome.Sharp.IconButton();
             this.btnBuscar = new FontAwesome.Sharp.IconButton();
@@ -370,14 +370,13 @@
             this.cboBusqueda.Name = "cboBusqueda";
             this.cboBusqueda.Size = new System.Drawing.Size(161, 21);
             this.cboBusqueda.TabIndex = 25;
-  
             // 
-            // textBox1
+            // txtBusqueda
             // 
-            this.textBox1.Location = new System.Drawing.Point(942, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(179, 20);
-            this.textBox1.TabIndex = 26;
+            this.txtBusqueda.Location = new System.Drawing.Point(942, 25);
+            this.txtBusqueda.Name = "txtBusqueda";
+            this.txtBusqueda.Size = new System.Drawing.Size(179, 20);
+            this.txtBusqueda.TabIndex = 26;
             // 
             // txtIndice
             // 
@@ -421,6 +420,7 @@
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
             this.btnBuscar.TabIndex = 27;
             this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // BtnEliminar
             // 
@@ -441,6 +441,7 @@
             this.BtnEliminar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.BtnEliminar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.BtnEliminar.UseVisualStyleBackColor = false;
+            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
             // 
             // btnEditar
             // 
@@ -461,6 +462,7 @@
             this.btnEditar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnEditar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEditar.UseVisualStyleBackColor = false;
+            this.btnEditar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // btnGuardar
             // 
@@ -492,7 +494,7 @@
             this.Controls.Add(this.txtIndice);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.btnBuscar);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtBusqueda);
             this.Controls.Add(this.cboBusqueda);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.txtId);
@@ -554,7 +556,7 @@
         private System.Windows.Forms.TextBox txtId;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox cboBusqueda;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtBusqueda;
         private FontAwesome.Sharp.IconButton btnLimpiar;
         private FontAwesome.Sharp.IconButton btnBuscar;
         private System.Windows.Forms.DataGridViewButtonColumn btnSeleccionar;

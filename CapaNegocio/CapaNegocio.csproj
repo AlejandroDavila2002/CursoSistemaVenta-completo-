@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BcvScraper.cs" />
+    <Compile Include="CN_Categoria.cs" />
     <Compile Include="CN_Permiso.cs" />
     <Compile Include="CN_RegistroUsuario.cs" />
     <Compile Include="CN_Rol.cs" />

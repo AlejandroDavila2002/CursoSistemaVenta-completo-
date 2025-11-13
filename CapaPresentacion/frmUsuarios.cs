@@ -154,6 +154,8 @@ namespace CapaPresentacion
             txtConfirmarClave.Text = "";
             cboRol.SelectedIndex = 0;
             cboEstado.SelectedIndex = 0;
+
+            txtDocumento.Focus();
         }
 
         private void dgvData_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -256,5 +258,19 @@ namespace CapaPresentacion
             }
         }
 
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            txtBusqueda.Text = "";
+            cboBusqueda.SelectedIndex = 0;
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                row.Visible = true;
+            }
+        }
+
+        private void btnLimpiar_Click_1(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
     }
 }

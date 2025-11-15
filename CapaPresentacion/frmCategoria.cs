@@ -84,7 +84,7 @@ namespace CapaPresentacion
 
                     Limpiar();
 
-                    MessageBox.Show(Mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Mensaje, "Éxito, Categoria agredada.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace CapaPresentacion
                 {
                     DataGridViewRow row = dgvData.Rows[Convert.ToInt32(txtIndice.Text)];
                     row.Cells["Id"].Value = txtId.Text;
-                    row.Cells["Descripcion"].Value = txtDescripcion.Text;
+                    row.Cells["Descripcion"].Value = label.Text;
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString();
                     Limpiar();
@@ -119,16 +119,123 @@ namespace CapaPresentacion
             txtDescripcion.Text = "";
             cboEstado.SelectedIndex = 0;
 
-            txtDescripcion.Focus();
+            txtDescripcion.Select();
         }
 
+        private void dgvData_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
 
+            if (e.ColumnIndex == 0)
+            {
+
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                var w = Properties.Resources.icons8_comprobado_20.Width;
+                var h = Properties.Resources.icons8_comprobado_20.Height;
+                var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 2;
+                e.Graphics.DrawImage(Properties.Resources.icons8_comprobado_20, new Rectangle(x, y, w, h));
+                e.Handled = true;
+
+            }
+        }
+
+        private void dgvData_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvData.Columns[e.ColumnIndex].Name == "btnSeleccionar")
+            {
+                int Indice = e.RowIndex;
+                if (Indice >= 0)
+                {
+                    txtIndice.Text = Indice.ToString();
+                    txtId.Text = dgvData.Rows[Indice].Cells["Id"].Value.ToString();
+                    txtDescripcion.Text = dgvData.Rows[Indice].Cells["Descripcion"].Value.ToString();
+                    }
+
+                    foreach (OpcionCombo oc in cboEstado.Items)
+                    {
+                        if (Convert.ToInt32(oc.Valor) == Convert.ToInt32(dgvData.Rows[Indice].Cells["EstadoValor"].Value))
+                        {
+                            cboEstado.SelectedItem = oc;
+                            break;
+                        }
+
+
+                    }
+
+
+                }
+
+
+            }
+
+        private void BtnEliminar_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(txtId.Text) != 0)
+            {
+                if (MessageBox.Show("¿Desea eliminar el usuario?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string Mensaje = string.Empty;
+                    Categoria objCategoria = new Categoria()
+                    {
+                        IdCategoria = Convert.ToInt32(txtId.Text)
+                    };
+                    bool resultado = new CN_Categoria().Eliminar(objCategoria, out Mensaje);
+                    if (resultado)
+                    {
+                        dgvData.Rows.RemoveAt(Convert.ToInt32(txtIndice.Text));
+                        Limpiar();
+                    }
+                    else
+                    {
+                        MessageBox.Show(Mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+            }
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string columnaFiltro = ((OpcionCombo)cboBusqueda.SelectedItem).Valor.ToString();
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(txtBusqueda.Text.Trim().ToUpper()))
+                    row.Visible = true;
+                else
+                    row.Visible = false;
+            }
+        }
+
+        private void btnLimpiarCombo_Click(object sender, EventArgs e)
+        {
+            txtBusqueda.Text = "";
+            cboBusqueda.SelectedIndex = 0;
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                row.Visible = true;
+            }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
     }
 
 
 
-
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

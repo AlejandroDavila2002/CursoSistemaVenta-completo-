@@ -61,9 +61,10 @@ namespace CapaPresentacion
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             string Mensaje = string.Empty;
+            int idCategoria = int.TryParse(txtId.Text, out int id) ? id : 0;
             Categoria objCatgoria = new Categoria()
             {
-                IdCategoria = Convert.ToInt32(txtId.Text),
+                IdCategoria = idCategoria,
                 Descripcion = txtDescripcion.Text,
                 Estado = Convert.ToInt32(((OpcionCombo)cboEstado.SelectedItem).Valor) == 1 ? true : false
             };

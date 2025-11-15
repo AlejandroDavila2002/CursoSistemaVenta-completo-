@@ -92,7 +92,7 @@ namespace CapaPresentacion
 
             Producto objProducto = new Producto()
             {
-             IdProducto = Convert.ToInt32(txtId.Text),
+             IdProducto = int.TryParse(txtId.Text, out int id) ? id : 0,
              Codigo = txtCodigo.Text,
              NombreProducto = txtNombreProducto.Text,
              Descripcion = txtDescripcion.Text,         

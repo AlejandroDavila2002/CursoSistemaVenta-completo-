@@ -76,10 +76,10 @@ namespace CapaPresentacion
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             string Mensaje = string.Empty;
-
+            int idUsuario = int.TryParse(txtId.Text, out int id) ? id : 0;
             Usuario objUsuario = new Usuario()
             {
-                IdUsuario = Convert.ToInt32(txtId.Text),
+                IdUsuario = idUsuario,
                 Documento = txtDocumento.Text,
                 NombreCompleto = txtNombreCompleto.Text,
                 Correo = txtCorreo.Text,

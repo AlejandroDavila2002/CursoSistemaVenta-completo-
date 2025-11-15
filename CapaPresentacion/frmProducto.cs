@@ -156,7 +156,7 @@ namespace CapaPresentacion
         private void Limpiar()
         {
             txtIndice.Text = "-1";
-            txtId.Text = "";
+            txtId.Text = "0";
             txtCodigo.Text = "";
             txtNombreProducto.Text = "";
             txtDescripcion.Text = "";

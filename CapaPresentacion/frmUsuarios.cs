@@ -146,7 +146,7 @@ namespace CapaPresentacion
         private void Limpiar()
         {
             txtIndice.Text = "-1";
-            txtId.Text = "";
+            txtId.Text = "0";
             txtDocumento.Text = "";
             txtNombreCompleto.Text = "";
             txtCorreo.Text = "";

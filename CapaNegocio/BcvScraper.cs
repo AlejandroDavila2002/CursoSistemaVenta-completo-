@@ -15,7 +15,7 @@ namespace CapaNegocio
         private const string URL_BCV = "https://www.bcv.org.ve/";
 
         // Intervalo de actualización: 1 hora
-        private static readonly TimeSpan IntervaloActualizacion = TimeSpan.FromHours(0.0005);
+        private static readonly TimeSpan IntervaloActualizacion = TimeSpan.FromHours(1);
 
         // Instancia de la Capa de Datos para interactuar con SQL Server
         private static CD_TasaCambio _dataManager = new CD_TasaCambio();

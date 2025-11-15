@@ -2,44 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; // <-- AÑADIDO
 using CapaEntidad;
 using CapaDatos;
 
 namespace CapaNegocio
 {
-    public class CN_RegistroUsuario
-    {
+    public class CN_RegistroUsuario
+    {
         // Se asume que CD_TasaCambio contiene los métodos para interactuar con la BD.
         private CD_TasaCambio oCD_TasaCambio = new CD_TasaCambio();
 
+        // ==============================================================================
+        // MÉTODOS DE OBTENCIÓN DE TASAS
+        // ==============================================================================
+
+        /// <summary>
+        /// [NUEVO MÉTODO] Obtiene las tasas de cambio, invocando al BcvScraper para decidir
+        /// si debe actualizar desde la web o usar la caché de la BD.
+        /// </summary>
+        public async Task<Dictionary<string, TasaCambio>> ObtenerTasasActualizadasAsync()
+        {
+            // Esta es la llamada correcta que invoca al scraper
+            return await BcvScraper.ObtenerTasasAsync();
+        }
+
         /// <summary>
-        /// Obtiene un diccionario de las últimas tasas de cambio registradas en la BD para la inicialización de formularios.
+        /// Obtiene un diccionario de las últimas tasas de cambio registradas en la BD (SIN SCRAPING).
         /// </summary>
         /// <returns>Diccionario con la MonedaAbreviacion como clave y el objeto TasaCambio como valor.</returns>
         public Dictionary<string, TasaCambio> ObtenerTasasDisponibles()
-        {
-            return oCD_TasaCambio.ObtenerUltimasTasas();
-        }
+        {
+            return oCD_TasaCambio.ObtenerUltimasTasas();
+        }
+
+        // ==============================================================================
+        // MÉTODOS DE REGISTRO
+        // ==============================================================================
 
         /// <summary>
         /// Guarda un registro individual de operación de tasa de cambio asociada a un usuario.
         /// </summary>
         public bool GuardarRegistroIndividual(Usuario oUsuario, TasaCambio tasa, decimal montoOperacion)
-        {
+        {
             // Simple validación de negocio antes de llamar a la Capa de Datos
             if (oUsuario == null || oUsuario.IdUsuario <= 0)
-            {
-                throw new ArgumentException("El usuario de la sesión es inválido.");
-            }
+            {
+                throw new ArgumentException("El usuario de la sesión es inválido.");
+            }
 
-            if (montoOperacion <= 0)
-            {
-                throw new ArgumentException("El monto de la operación debe ser un valor positivo.");
-            }
+            if (montoOperacion <= 0)
+            {
+                throw new ArgumentException("El monto de la operación debe ser un valor positivo.");
+            }
 
-            return oCD_TasaCambio.RegistrarRegistroUsuario(oUsuario, tasa, montoOperacion);
-        }
+            return oCD_TasaCambio.RegistrarRegistroUsuario(oUsuario, tasa, montoOperacion);
+        }
 
         // ==============================================================================
         // MÉTODOS DE HISTORIAL Y TASA GENERAL
@@ -50,33 +68,33 @@ namespace CapaNegocio
         /// previamente por un usuario.
         /// </summary>
         public List<object[]> ObtenerHistorialOperacionesPorUsuario(int idUsuario)
-        {
-            if (idUsuario <= 0)
-            {
-                return new List<object[]>();
-            }
+        {
+            if (idUsuario <= 0)
+            {
+                return new List<object[]>();
+            }
 
-            return oCD_TasaCambio.ObtenerHistorialUsuario(idUsuario);
-        }
+            return oCD_TasaCambio.ObtenerHistorialUsuario(idUsuario);
+        }
 
         /// <summary>
         /// Establece una tasa de cambio específica (Moneda y Monto) como 
         /// la 'Tasa General' o predeterminada del sistema para este usuario.
         /// </summary>
         public bool EstablecerTasaGeneralUsuario(int idUsuario, TasaCambio tasaOriginal, decimal montoOperacion)
-        {
-            if (idUsuario <= 0)
-            {
-                throw new ArgumentException("El ID de usuario es inválido para establecer la Tasa General.");
-            }
+        {
+            if (idUsuario <= 0)
+            {
+                throw new ArgumentException("El ID de usuario es inválido para establecer la Tasa General.");
+            }
 
-            if (montoOperacion <= 0)
-            {
-                throw new ArgumentException("El monto de la Tasa General debe ser un valor positivo.");
-            }
+            if (montoOperacion <= 0)
+            {
+                throw new ArgumentException("El monto de la Tasa General debe ser un valor positivo.");
+            }
 
-            return oCD_TasaCambio.GuardarTasaGeneralUsuario(idUsuario, tasaOriginal.MonedaAbreviacion, montoOperacion);
-        }
+            return oCD_TasaCambio.GuardarTasaGeneralUsuario(idUsuario, tasaOriginal.MonedaAbreviacion, montoOperacion);
+        }
 
         /// <summary>
         /// [AGREGADO] Carga la tasa de cambio preferida o "General" guardada por el usuario.

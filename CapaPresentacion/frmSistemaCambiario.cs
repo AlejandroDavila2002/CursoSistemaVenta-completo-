@@ -19,13 +19,13 @@ namespace CapaPresentacion
 {
     public partial class frmSistemaCambiario : Form
     {
-        
+
         private Usuario oUsuarioActual;
 
         // Diccionario para mantener el registro completo de las tasas BCV actuales (Abreviación -> TasaCambio)
         private Dictionary<string, TasaCambio> _tasasActuales = new Dictionary<string, TasaCambio>();
 
-     
+
 
         public frmSistemaCambiario(Usuario usuarioLogueado)
         {
@@ -42,10 +42,13 @@ namespace CapaPresentacion
         // MÉTODOS DE INICIALIZACIÓN Y CARGA
         // ==============================================================================
 
-        private void frmSistemaCambiario_Load(object sender, EventArgs e)
+        // CAMBIO 1: Convertido a "async void"
+        private async void frmSistemaCambiario_Load(object sender, EventArgs e)
         {
             // Carga los datos al iniciar el formulario
-            CargarDatosTasaCambio();
+            // CAMBIO 2: Añadido "await"
+            await CargarDatosTasaCambio();
+
             // 2. FUNCIÓN CLAVE: Carga el historial de operaciones del usuario logueado en la misma tabla
             CargarHistorialUsuario();
             // _actualizacionTimer.Start(); 
@@ -100,14 +103,16 @@ namespace CapaPresentacion
         /// <summary>
         /// Carga las tasas de cambio desde la Capa de Negocio y llena el ComboBox y las variables internas.
         /// </summary>
-        private void CargarDatosTasaCambio()
+        // CAMBIO 3: Convertido a "async Task"
+        private async Task CargarDatosTasaCambio()
         {
             try
             {
                 CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
 
                 // 1. Obtener las últimas tasas
-                _tasasActuales = cnRegistro.ObtenerTasasDisponibles();
+                // CAMBIO 4: Se llama al nuevo método asíncrono que invoca al Scraper
+                _tasasActuales = await cnRegistro.ObtenerTasasActualizadasAsync();
 
                 // 2. Limpiar y llenar el ComboBox
                 cboTasaDeCambio.Items.Clear();
@@ -301,7 +306,7 @@ namespace CapaPresentacion
         }
 
 
-       
+
         /// Evento click del botón de Aceptar: Itera sobre el DataGridView y guarda los registros 
         /// de las operaciones de tasa realizadas por el usuario en la base de datos.
         /// </summary>

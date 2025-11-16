@@ -134,7 +134,7 @@ namespace CapaPresentacion
                 {
                     // Manejo si no hay datos
                     cboTasaDeCambio.Items.Add("No hay tasas disponibles");
-                    cboTasaDeCambio.SelectedIndex = 0;
+                    cboTasaDeCambio.SelectedIndex = 4;
                     cboTasaDeCambio.Enabled = false;
                     txtMonto.Enabled = false;
                     btnBuscar.Enabled = false;
@@ -411,7 +411,7 @@ namespace CapaPresentacion
                 return;
             }
 
-            // Ignorar el click si es la fila de añadir nueva fila (aunque la pusimos en false, es buena práctica)
+
             if (dgvtasasdecambio.Rows[e.RowIndex].IsNewRow) return;
 
             // Obtener la fila donde se hizo clic

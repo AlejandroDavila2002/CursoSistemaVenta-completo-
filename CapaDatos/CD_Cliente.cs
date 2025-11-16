@@ -9,20 +9,22 @@ using System.Threading.Tasks;
 
 namespace CapaDatos
 {
-    public class CD_Categoria
+    public class CD_Cliente
     {
-        public List<Categoria> listar()
+        public List<Cliente> listar()
         {
 
-            List<Categoria> lista = new List<Categoria>();
+            List<Cliente> lista = new List<Cliente>();
 
             using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
             {
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select IdCategoria, Descripcion, Estado from CATEGORIA ");
+                    query.AppendLine("select  IdCliente, Documento, NombreCompleto, Correo,  Telefono, Estado from CLIENTE");
                     
+
+
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = CommandType.Text;
 
@@ -33,11 +35,15 @@ namespace CapaDatos
                         while (dr.Read())
                         {
 
-                            lista.Add(new Categoria()
+                            lista.Add(new Cliente()
                             {
-                                IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
-                                Descripcion = dr["Descripcion"].ToString(),
+                                IdCliente = Convert.ToInt32(dr["IdCliente"]),
+                                Documento = dr["Documento"].ToString(),
+                                NombreCompleto = dr["NombreCompleto"].ToString(),
+                                Correo = dr["Correo"].ToString(),
+                                Telefono = dr["Telefono"].ToString(),
                                 Estado = Convert.ToBoolean(dr["Estado"])
+
                             });
 
                         }
@@ -47,7 +53,7 @@ namespace CapaDatos
                 }
                 catch (Exception ex)
                 {
-                    lista = new List<Categoria>();
+                    lista = new List<Cliente>();
                     Console.WriteLine(ex.Message);
                 }
 
@@ -59,91 +65,99 @@ namespace CapaDatos
         }
 
 
-        public int Registrar(Categoria obj, out string Mensaje)
+        public int Registrar(Cliente obj, out string Mensaje)
         {
-            int Resultado = 0;
+            int idClientegenerado = 0;
             Mensaje = string.Empty;
             try
             {
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("SP_RegistrarCategoria", oconexion);
-                    cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarCliente", oconexion);
+                    cmd.Parameters.AddWithValue("Documento", obj.Documento);
+                    cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
+                    cmd.Parameters.AddWithValue("Correo", obj.Correo);
+                    cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
-                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@Resutado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
                     oconexion.Open();
                     cmd.ExecuteNonQuery();
-                    Resultado = Convert.ToInt32(cmd.Parameters["Resultado"].Value);
+                    idClientegenerado = Convert.ToInt32(cmd.Parameters["@Resutado"].Value);
                     Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
                 }
             }
             catch (Exception ex)
             {
-                Resultado = 0;
+                idClientegenerado = 0;
                 Mensaje = ex.Message;
             }
 
-            return @Resultado;
+            return idClientegenerado;
 
         }
 
 
-        public bool Editar(Categoria obj, out string Mensaje)
+        public bool Editar(Cliente obj, out string Mensaje)
         {
-            bool Resultado = false;
+            bool resultado = false;
             Mensaje = string.Empty;
             try
             {
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("SP_EditarCategoria", oconexion);
-                    cmd.Parameters.AddWithValue("IdCategoria", obj.IdCategoria);
-                    cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
+                    SqlCommand cmd = new SqlCommand("SP_EditarCliente", oconexion);
+                    cmd.Parameters.AddWithValue("IdCliente", obj.IdCliente);
+                    cmd.Parameters.AddWithValue("Documento", obj.Documento);
+                    cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
+                    cmd.Parameters.AddWithValue("Correo", obj.Correo);
+                    cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
-                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
                     oconexion.Open();
                     cmd.ExecuteNonQuery();
-                    Resultado = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    resultado = Convert.ToBoolean(cmd.Parameters["@Resultado"].Value);
                     Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
                 }
             }
             catch (Exception ex)
             {
-                Resultado = false;
+                resultado = false;
                 Mensaje = ex.Message;
             }
-            return Resultado;
+            return resultado;
         }
 
-        public bool Eliminar(Categoria obj, out string Mensaje)
+        public bool Eliminar(Cliente obj, out string Mensaje)
         {
-            bool Resultado = false;
+            bool resultado = false;
             Mensaje = string.Empty;
             try
             {
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("SP_EliminarCategoria", oconexion);
-                    cmd.Parameters.AddWithValue("IdCategoria", obj.IdCategoria);
-                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlCommand cmd = new SqlCommand("DELETE FROM CLIENTE WHERE IdCliente = @Id", oconexion);
+                    cmd.Parameters.AddWithValue("@Id", obj.IdCliente);
+                    cmd.CommandType = CommandType.Text;
                     oconexion.Open();
-                    cmd.ExecuteNonQuery();
-                    Resultado = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
-                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                  
+
+                    resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
             }
             catch (Exception ex)
             {
-                Resultado = false;
+                resultado = false;
                 Mensaje = ex.Message;
             }
-            return Resultado;
+            return resultado;
         }
+
+
+
+
     }
 }

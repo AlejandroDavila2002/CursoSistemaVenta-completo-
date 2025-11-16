@@ -162,6 +162,8 @@ namespace CapaPresentacion
             txtDescripcion.Text = "";
             cboCategoria.SelectedIndex = 0;
             cboEstado.SelectedIndex = 0;
+
+          
         }
 
         private void dgvData_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)

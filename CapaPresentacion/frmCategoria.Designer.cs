@@ -52,7 +52,7 @@
             this.cboEstado = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
-            this.label = new System.Windows.Forms.Label();
+            this.labelerror = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
@@ -331,15 +331,15 @@
             this.txtDescripcion.Size = new System.Drawing.Size(269, 20);
             this.txtDescripcion.TabIndex = 35;
             // 
-            // label
+            // labelerror
             // 
-            this.label.AutoSize = true;
-            this.label.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label.Location = new System.Drawing.Point(4, 57);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(66, 13);
-            this.label.TabIndex = 32;
-            this.label.Text = "Descripcion:";
+            this.labelerror.AutoSize = true;
+            this.labelerror.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.labelerror.Location = new System.Drawing.Point(4, 57);
+            this.labelerror.Name = "labelerror";
+            this.labelerror.Size = new System.Drawing.Size(66, 13);
+            this.labelerror.TabIndex = 32;
+            this.labelerror.Text = "Descripcion:";
             // 
             // label2
             // 
@@ -380,7 +380,7 @@
             this.Controls.Add(this.cboEstado);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.txtDescripcion);
-            this.Controls.Add(this.label);
+            this.Controls.Add(this.labelerror);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label1);
@@ -417,7 +417,7 @@
         private System.Windows.Forms.ComboBox cboEstado;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtDescripcion;
-        private System.Windows.Forms.Label label;
+        private System.Windows.Forms.Label labelerror;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label13;
     }

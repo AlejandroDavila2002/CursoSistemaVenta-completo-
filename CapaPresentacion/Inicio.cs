@@ -155,5 +155,10 @@ namespace CapaPresentacion
             frmSistemaCambiario.ShowDialog();
             frmSistemaCambiario.Dispose();
         }
+
+        private void detalleNegocioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(menumantenedor, new frmDetallesNegocio());
+        }
     }
 }

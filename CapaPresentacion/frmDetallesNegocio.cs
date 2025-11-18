@@ -25,7 +25,7 @@ namespace CapaPresentacion
         {
             MemoryStream ms = new MemoryStream(imagenByte);
 
-            ms.Write(imagenByte, 0, imagenByte.Length);
+           // ms.Write(imagenByte, 0, imagenByte.Length);
             Image image = new Bitmap(ms);
 
             return image;

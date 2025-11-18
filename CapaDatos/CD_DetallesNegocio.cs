@@ -105,26 +105,30 @@ namespace CapaDatos
                     query.AppendLine("select Logo from Detalles_Negocio where IdNegocio = 1");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = System.Data.CommandType.Text;
+
                     
+                    oconexion.Open();
+                    
+
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        while(dr.Read())
+                        while (dr.Read())
                         {
-                            LogoByte = (byte[])dr["Logo"];
+                            // Validación extra para evitar errores si el campo es NULL
+                            if (dr["Logo"] != DBNull.Value)
+                            {
+                                LogoByte = (byte[])dr["Logo"];
+                            }
                         }
                     }
                 }
-
-
             }
             catch (Exception ex)
             {
                 obtenido = false;
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message); 
                 LogoByte = new byte[0];
             }
-
-
 
             return LogoByte;
         }

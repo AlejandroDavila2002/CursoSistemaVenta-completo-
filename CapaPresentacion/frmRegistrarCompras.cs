@@ -17,6 +17,9 @@ namespace CapaPresentacion
             InitializeComponent();
         }
 
-       
+        private void frmRegistrarCompras_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

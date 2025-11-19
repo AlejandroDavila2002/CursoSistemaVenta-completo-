@@ -116,7 +116,25 @@ namespace CapaPresentacion
         // Evento para abrir el formulario de registro de compras
         private void submenuregistrarCompra_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menucompras, new frmRegistrarCompras());
+            // 1. Instanciamos el formulario para poder leer sus propiedades (Tamaño)
+            frmRegistrarCompras formulario = new frmRegistrarCompras();
+
+            // 2. Calculamos el nuevo tamaño para la ventana Inicio
+            // Ancho: El ancho del formulario hijo
+            // Alto: La altura del formulario hijo + la posición Y donde empieza el contenedor (que son tus menús)
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            // 3. Aplicamos el tamaño al área cliente (el área útil de la ventana sin contar bordes de Windows)
+            // Le sumamos un pequeño margen (ej. 20px) para que no quede muy pegado a los bordes
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            // Opcional: Centrar la ventana en la pantalla después de cambiar su tamaño
+            this.CenterToScreen();
+
+            // 4. Finalmente abrimos el formulario con tu método original
+            AbrirFormulario(menucompras, formulario);
+
         }
 
 
@@ -148,8 +166,7 @@ namespace CapaPresentacion
 
         private void menusistemaCambiario_Click(object sender, EventArgs e)
         {
-            // CAMBIO CLAVE: 
-            // Ahora le pasamos 'UsuarioActual' (que tiene tu ID 6) al constructor
+         
             frmSistemaCambiario frmSistemaCambiario = new frmSistemaCambiario(UsuarioActual);
 
             frmSistemaCambiario.ShowDialog();

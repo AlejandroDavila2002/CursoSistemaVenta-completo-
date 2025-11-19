@@ -24,7 +24,7 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select IdNegocio, Nombre, RUC, Direccion from Detalles_Negocio where IdNegocio = 1");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
-                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandType = CommandType.Text;
                     oconexion.Open();
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -78,7 +78,8 @@ namespace CapaDatos
                     }
 
                 }
-
+                
+                
 
             }
             catch (Exception ex)
@@ -104,7 +105,7 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select Logo from Detalles_Negocio where IdNegocio = 1");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
-                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandType = CommandType.Text;
 
                     
                     oconexion.Open();

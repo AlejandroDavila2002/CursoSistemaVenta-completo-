@@ -81,35 +81,74 @@ namespace CapaPresentacion
         // Evento para abrir el formulario de gestión de usuarios
         private void menuusuarios_Click(object sender, EventArgs e)
         {
-            AbrirFormulario((IconMenuItem)sender, new frmUsuarios());
+            frmUsuarios formulario = new frmUsuarios();
+
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+
+            AbrirFormulario((IconMenuItem)sender, formulario);
         }
 
 
         // Evento para abrir el formulario de categorías dentro del menú mantenedor
         private void subMenuCategoria_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menumantenedor, new frmCategoria());
+            frmCategoria formulario = new frmCategoria();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+
+            AbrirFormulario(menumantenedor, formulario);
         }
 
 
         // Evento para abrir el formulario de productos dentro del menú mantenedor
         private void subMenuProducto_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menumantenedor, new frmProducto());
+            frmProducto formulario = new frmProducto();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menumantenedor, formulario);
         }
 
 
         // Evento para abrir el formulario de registro de ventas
         private void submenuregistrarVenta_Click_1(object sender, EventArgs e)
         {
-            AbrirFormulario(menuventas, new frmRegistrarVentas());
+            frmRegistrarVentas formulario = new frmRegistrarVentas();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+
+            AbrirFormulario(menuventas, formulario);
         }
 
 
         // Evento para abrir el formulario de detalle de ventas
         private void submenuverdetalleVenta_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menuventas, new frmDetalleVentas());
+            frmDetalleVentas formulario = new frmDetalleVentas();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menuventas, formulario);
         }
 
 
@@ -141,26 +180,52 @@ namespace CapaPresentacion
         // Evento para abrir el formulario de detalle de compras
         private void submenuverdetalleCompra_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menucompras, new frmDetalleCompra());
+            frmDetalleCompra formulario = new frmDetalleCompra();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+
+
+            AbrirFormulario(menucompras, formulario);
         }
 
 
         // Evento para abrir el formulario de clientes
         private void menucliente_Click_1(object sender, EventArgs e)
         {
-            AbrirFormulario(menucliente, new frmClientes());
+            frmClientes formulario = new frmClientes();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menucliente, formulario);
         }
 
         // Evento para abrir el formulario de proveedores
         private void menuproveedores_Click_1(object sender, EventArgs e)
         {
-            AbrirFormulario(menuproveedores, new frmProveedores());
+            frmProveedores formulario = new frmProveedores();
+            
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menuproveedores, formulario);
         }
 
 
         // Evento para abrir el formulario de reportes
         private void menureportes_Click(object sender, EventArgs e)
         {
+            frmReportes formulario = new frmReportes();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
             AbrirFormulario(menureportes, new frmReportes());
         }
 
@@ -175,7 +240,15 @@ namespace CapaPresentacion
 
         private void detalleNegocioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menumantenedor, new frmDetallesNegocio());
+            frmDetallesNegocio formulario = new frmDetallesNegocio();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menumantenedor, formulario);
         }
+
+        
     }
 }

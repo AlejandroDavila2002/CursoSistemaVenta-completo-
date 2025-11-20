@@ -37,12 +37,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtFecha = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.IdProveedor = new System.Windows.Forms.TextBox();
-            this.txtNombreProveedor = new System.Windows.Forms.TextBox();
-            this.btnBuscarProveedor = new FontAwesome.Sharp.IconButton();
+            this.txtIdProveedor = new System.Windows.Forms.TextBox();
+            this.txtRazonSocialProveedor = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.txtdocproveedor = new System.Windows.Forms.TextBox();
+            this.txtDocumentoProveedor = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
@@ -52,7 +51,6 @@
             this.txtIdProducto = new System.Windows.Forms.TextBox();
             this.txtCompraProducto = new System.Windows.Forms.TextBox();
             this.txtNombreProducto = new System.Windows.Forms.TextBox();
-            this.btnBuscarProducto = new FontAwesome.Sharp.IconButton();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.txtcodProducto = new System.Windows.Forms.TextBox();
@@ -65,10 +63,12 @@
             this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.btnAgregar = new FontAwesome.Sharp.IconButton();
             this.label12 = new System.Windows.Forms.Label();
             this.txtIndice = new System.Windows.Forms.TextBox();
             this.iconButton2 = new FontAwesome.Sharp.IconButton();
+            this.btnAgregar = new FontAwesome.Sharp.IconButton();
+            this.btnBuscarProveedor = new FontAwesome.Sharp.IconButton();
+            this.btnBuscarProducto = new FontAwesome.Sharp.IconButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -140,12 +140,12 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox2.Controls.Add(this.IdProveedor);
-            this.groupBox2.Controls.Add(this.txtNombreProveedor);
+            this.groupBox2.Controls.Add(this.txtIdProveedor);
+            this.groupBox2.Controls.Add(this.txtRazonSocialProveedor);
             this.groupBox2.Controls.Add(this.btnBuscarProveedor);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.txtdocproveedor);
+            this.groupBox2.Controls.Add(this.txtDocumentoProveedor);
             this.groupBox2.Location = new System.Drawing.Point(427, 51);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(690, 75);
@@ -153,38 +153,19 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Informacion Proveedor";
             // 
-            // IdProveedor
+            // txtIdProveedor
             // 
-            this.IdProveedor.Location = new System.Drawing.Point(636, 12);
-            this.IdProveedor.Name = "IdProveedor";
-            this.IdProveedor.Size = new System.Drawing.Size(41, 20);
-            this.IdProveedor.TabIndex = 29;
-            this.IdProveedor.Visible = false;
+            this.txtIdProveedor.Location = new System.Drawing.Point(636, 12);
+            this.txtIdProveedor.Name = "txtIdProveedor";
+            this.txtIdProveedor.Size = new System.Drawing.Size(41, 20);
+            this.txtIdProveedor.TabIndex = 29;
             // 
-            // txtNombreProveedor
+            // txtRazonSocialProveedor
             // 
-            this.txtNombreProveedor.Location = new System.Drawing.Point(275, 35);
-            this.txtNombreProveedor.Name = "txtNombreProveedor";
-            this.txtNombreProveedor.Size = new System.Drawing.Size(402, 20);
-            this.txtNombreProveedor.TabIndex = 4;
-            // 
-            // btnBuscarProveedor
-            // 
-            this.btnBuscarProveedor.BackColor = System.Drawing.SystemColors.Control;
-            this.btnBuscarProveedor.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBuscarProveedor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnBuscarProveedor.ForeColor = System.Drawing.Color.Black;
-            this.btnBuscarProveedor.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.btnBuscarProveedor.IconColor = System.Drawing.Color.Black;
-            this.btnBuscarProveedor.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnBuscarProveedor.IconSize = 24;
-            this.btnBuscarProveedor.Location = new System.Drawing.Point(204, 33);
-            this.btnBuscarProveedor.Margin = new System.Windows.Forms.Padding(2);
-            this.btnBuscarProveedor.Name = "btnBuscarProveedor";
-            this.btnBuscarProveedor.Size = new System.Drawing.Size(66, 22);
-            this.btnBuscarProveedor.TabIndex = 28;
-            this.btnBuscarProveedor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBuscarProveedor.UseVisualStyleBackColor = false;
+            this.txtRazonSocialProveedor.Location = new System.Drawing.Point(275, 35);
+            this.txtRazonSocialProveedor.Name = "txtRazonSocialProveedor";
+            this.txtRazonSocialProveedor.Size = new System.Drawing.Size(402, 20);
+            this.txtRazonSocialProveedor.TabIndex = 4;
             // 
             // label5
             // 
@@ -204,12 +185,12 @@
             this.label6.TabIndex = 1;
             this.label6.Text = "Numero Documento";
             // 
-            // txtdocproveedor
+            // txtDocumentoProveedor
             // 
-            this.txtdocproveedor.Location = new System.Drawing.Point(12, 35);
-            this.txtdocproveedor.Name = "txtdocproveedor";
-            this.txtdocproveedor.Size = new System.Drawing.Size(187, 20);
-            this.txtdocproveedor.TabIndex = 0;
+            this.txtDocumentoProveedor.Location = new System.Drawing.Point(12, 35);
+            this.txtDocumentoProveedor.Name = "txtDocumentoProveedor";
+            this.txtDocumentoProveedor.Size = new System.Drawing.Size(187, 20);
+            this.txtDocumentoProveedor.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -287,7 +268,6 @@
             this.txtIdProducto.Name = "txtIdProducto";
             this.txtIdProducto.Size = new System.Drawing.Size(41, 20);
             this.txtIdProducto.TabIndex = 30;
-            this.txtIdProducto.Visible = false;
             // 
             // txtCompraProducto
             // 
@@ -302,24 +282,6 @@
             this.txtNombreProducto.Name = "txtNombreProducto";
             this.txtNombreProducto.Size = new System.Drawing.Size(290, 20);
             this.txtNombreProducto.TabIndex = 4;
-            // 
-            // btnBuscarProducto
-            // 
-            this.btnBuscarProducto.BackColor = System.Drawing.SystemColors.Control;
-            this.btnBuscarProducto.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBuscarProducto.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnBuscarProducto.ForeColor = System.Drawing.Color.Black;
-            this.btnBuscarProducto.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.btnBuscarProducto.IconColor = System.Drawing.Color.Black;
-            this.btnBuscarProducto.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnBuscarProducto.IconSize = 24;
-            this.btnBuscarProducto.Location = new System.Drawing.Point(173, 35);
-            this.btnBuscarProducto.Margin = new System.Windows.Forms.Padding(2);
-            this.btnBuscarProducto.Name = "btnBuscarProducto";
-            this.btnBuscarProducto.Size = new System.Drawing.Size(54, 22);
-            this.btnBuscarProducto.TabIndex = 28;
-            this.btnBuscarProducto.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBuscarProducto.UseVisualStyleBackColor = false;
             // 
             // label7
             // 
@@ -353,7 +315,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvData.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -443,24 +404,6 @@
             this.btnEliminar.HeaderText = "";
             this.btnEliminar.Name = "btnEliminar";
             // 
-            // btnAgregar
-            // 
-            this.btnAgregar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAgregar.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btnAgregar.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAgregar.IconChar = FontAwesome.Sharp.IconChar.Plus;
-            this.btnAgregar.IconColor = System.Drawing.Color.Green;
-            this.btnAgregar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnAgregar.IconSize = 45;
-            this.btnAgregar.Location = new System.Drawing.Point(1017, 132);
-            this.btnAgregar.Name = "btnAgregar";
-            this.btnAgregar.Size = new System.Drawing.Size(99, 75);
-            this.btnAgregar.TabIndex = 32;
-            this.btnAgregar.Text = "Agregar";
-            this.btnAgregar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnAgregar.UseCompatibleTextRendering = true;
-            this.btnAgregar.UseVisualStyleBackColor = false;
-            // 
             // label12
             // 
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -501,6 +444,61 @@
             this.iconButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.iconButton2.UseCompatibleTextRendering = true;
             this.iconButton2.UseVisualStyleBackColor = false;
+            // 
+            // btnAgregar
+            // 
+            this.btnAgregar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAgregar.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btnAgregar.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnAgregar.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.btnAgregar.IconColor = System.Drawing.Color.Green;
+            this.btnAgregar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnAgregar.IconSize = 45;
+            this.btnAgregar.Location = new System.Drawing.Point(1017, 132);
+            this.btnAgregar.Name = "btnAgregar";
+            this.btnAgregar.Size = new System.Drawing.Size(99, 75);
+            this.btnAgregar.TabIndex = 32;
+            this.btnAgregar.Text = "Agregar";
+            this.btnAgregar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnAgregar.UseCompatibleTextRendering = true;
+            this.btnAgregar.UseVisualStyleBackColor = false;
+            // 
+            // btnBuscarProveedor
+            // 
+            this.btnBuscarProveedor.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBuscarProveedor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBuscarProveedor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnBuscarProveedor.ForeColor = System.Drawing.Color.Black;
+            this.btnBuscarProveedor.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.btnBuscarProveedor.IconColor = System.Drawing.Color.Black;
+            this.btnBuscarProveedor.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnBuscarProveedor.IconSize = 24;
+            this.btnBuscarProveedor.Location = new System.Drawing.Point(204, 33);
+            this.btnBuscarProveedor.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBuscarProveedor.Name = "btnBuscarProveedor";
+            this.btnBuscarProveedor.Size = new System.Drawing.Size(66, 22);
+            this.btnBuscarProveedor.TabIndex = 28;
+            this.btnBuscarProveedor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBuscarProveedor.UseVisualStyleBackColor = false;
+            this.btnBuscarProveedor.Click += new System.EventHandler(this.btnBuscarProveedor_Click);
+            // 
+            // btnBuscarProducto
+            // 
+            this.btnBuscarProducto.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBuscarProducto.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBuscarProducto.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnBuscarProducto.ForeColor = System.Drawing.Color.Black;
+            this.btnBuscarProducto.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.btnBuscarProducto.IconColor = System.Drawing.Color.Black;
+            this.btnBuscarProducto.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnBuscarProducto.IconSize = 24;
+            this.btnBuscarProducto.Location = new System.Drawing.Point(173, 35);
+            this.btnBuscarProducto.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBuscarProducto.Name = "btnBuscarProducto";
+            this.btnBuscarProducto.Size = new System.Drawing.Size(54, 22);
+            this.btnBuscarProducto.TabIndex = 28;
+            this.btnBuscarProducto.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBuscarProducto.UseVisualStyleBackColor = false;
             // 
             // frmRegistrarCompras
             // 
@@ -543,10 +541,10 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtdocproveedor;
+        private System.Windows.Forms.TextBox txtDocumentoProveedor;
         private FontAwesome.Sharp.IconButton btnBuscarProveedor;
-        private System.Windows.Forms.TextBox txtNombreProveedor;
-        private System.Windows.Forms.TextBox IdProveedor;
+        private System.Windows.Forms.TextBox txtRazonSocialProveedor;
+        private System.Windows.Forms.TextBox txtIdProveedor;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox5;

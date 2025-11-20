@@ -22,8 +22,7 @@ namespace CapaPresentacion
         }
 
         private void frmRegistrarCompras_Load(object sender, EventArgs e)
-        {
-            MessageBox.Show($"Usuario actual: {_usuarioActual.NombreCompleto}", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        { 
 
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Boleta", Texto = "Boleta" });
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Factura", Texto = "Factura" });
@@ -31,6 +30,36 @@ namespace CapaPresentacion
             cboTipoDocumento.ValueMember = "Valor";
             cboTipoDocumento.SelectedIndex = 0;
 
+            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+            txtIdProveedor.Text = "0";
+            txtIdProducto.Text = "0";
+
+
+        }
+
+        private void btnBuscarProveedor_Click(object sender, EventArgs e)
+        {
+            using (modales.mdProveedores mdProveedores = new modales.mdProveedores())
+            {
+                mdProveedores.ShowDialog();
+
+                if (mdProveedores._Proveedor != null)
+                {
+                    txtIdProveedor.Text = mdProveedores._Proveedor.IdProveedor.ToString();
+                    txtDocumentoProveedor.Text = mdProveedores._Proveedor.Documento;
+                    txtRazonSocialProveedor.Text = mdProveedores._Proveedor.RazonSocial;
+                }
+                else
+                {
+                    txtIdProveedor.Text = "0";
+                    txtDocumentoProveedor.Text = "";
+                    txtRazonSocialProveedor.Text = "";
+
+                    MessageBox.Show("No se seleccionó ningún proveedor", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+            }
         }
     }
 }

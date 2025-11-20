@@ -58,7 +58,7 @@
             this.menu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.menu.AutoSize = false;
-            this.menu.BackColor = System.Drawing.SystemColors.Control;
+            this.menu.BackColor = System.Drawing.Color.White;
             this.menu.Dock = System.Windows.Forms.DockStyle.None;
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuusuarios,

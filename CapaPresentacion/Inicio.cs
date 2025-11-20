@@ -21,13 +21,22 @@ namespace CapaPresentacion
         private static IconMenuItem MenuActivo = null;
         private static Form FormularioActivo = null;
 
-        public Inicio(Usuario objusuario)
+        public Inicio(Usuario objusuario = null)
         {
 
-            UsuarioActual = objusuario;
-                    
+            if (objusuario == null)
+            {
+                UsuarioActual = new Usuario() { NombreCompleto = "PRUEBA ADMIN" , IdUsuario = 22};
 
-            InitializeComponent();
+
+
+            }
+            else
+            {
+                UsuarioActual = objusuario;
+            }
+
+                InitializeComponent();
 
         }
         private void Inicio_Load(object sender, EventArgs e)
@@ -156,7 +165,7 @@ namespace CapaPresentacion
         private void submenuregistrarCompra_Click(object sender, EventArgs e)
         {
             // 1. Instanciamos el formulario para poder leer sus propiedades (Tamaño)
-            frmRegistrarCompras formulario = new frmRegistrarCompras();
+            frmRegistrarCompras formulario = new frmRegistrarCompras(UsuarioActual);
 
             // 2. Calculamos el nuevo tamaño para la ventana Inicio
             // Ancho: El ancho del formulario hijo

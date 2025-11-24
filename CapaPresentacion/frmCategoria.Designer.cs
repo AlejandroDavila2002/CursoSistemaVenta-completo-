@@ -78,6 +78,7 @@
             // 
             // btnLimpiarCombo
             // 
+            this.btnLimpiarCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLimpiarCombo.BackColor = System.Drawing.SystemColors.Control;
             this.btnLimpiarCombo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLimpiarCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -86,7 +87,7 @@
             this.btnLimpiarCombo.IconColor = System.Drawing.Color.Black;
             this.btnLimpiarCombo.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnLimpiarCombo.IconSize = 24;
-            this.btnLimpiarCombo.Location = new System.Drawing.Point(1160, 23);
+            this.btnLimpiarCombo.Location = new System.Drawing.Point(1114, 23);
             this.btnLimpiarCombo.Margin = new System.Windows.Forms.Padding(2);
             this.btnLimpiarCombo.Name = "btnLimpiarCombo";
             this.btnLimpiarCombo.Size = new System.Drawing.Size(48, 23);
@@ -96,6 +97,7 @@
             // 
             // btnBuscar
             // 
+            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -104,7 +106,7 @@
             this.btnBuscar.IconColor = System.Drawing.Color.Black;
             this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnBuscar.IconSize = 24;
-            this.btnBuscar.Location = new System.Drawing.Point(1108, 23);
+            this.btnBuscar.Location = new System.Drawing.Point(1062, 23);
             this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
@@ -114,27 +116,30 @@
             // 
             // txtBusqueda
             // 
-            this.txtBusqueda.Location = new System.Drawing.Point(924, 25);
+            this.txtBusqueda.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBusqueda.Location = new System.Drawing.Point(878, 25);
             this.txtBusqueda.Name = "txtBusqueda";
             this.txtBusqueda.Size = new System.Drawing.Size(179, 20);
             this.txtBusqueda.TabIndex = 55;
             // 
             // cboBusqueda
             // 
+            this.cboBusqueda.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBusqueda.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.cboBusqueda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBusqueda.FormattingEnabled = true;
-            this.cboBusqueda.Location = new System.Drawing.Point(757, 25);
+            this.cboBusqueda.Location = new System.Drawing.Point(711, 25);
             this.cboBusqueda.Name = "cboBusqueda";
             this.cboBusqueda.Size = new System.Drawing.Size(161, 21);
             this.cboBusqueda.TabIndex = 54;
             // 
             // label12
             // 
+            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
             this.label12.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(679, 28);
+            this.label12.Location = new System.Drawing.Point(633, 28);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(72, 13);
             this.label12.TabIndex = 53;
@@ -151,11 +156,13 @@
             // 
             // label11
             // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label11.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(316, 4);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(900, 66);
+            this.label11.Size = new System.Drawing.Size(859, 66);
             this.label11.TabIndex = 51;
             this.label11.Text = "Lista de Datos";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -229,6 +236,9 @@
             // dgvData
             // 
             this.dgvData.AllowUserToAddRows = false;
+            this.dgvData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -258,13 +268,14 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvData.RowTemplate.Height = 28;
-            this.dgvData.Size = new System.Drawing.Size(900, 446);
+            this.dgvData.Size = new System.Drawing.Size(859, 451);
             this.dgvData.TabIndex = 50;
             this.dgvData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellContentClick);
             this.dgvData.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvData_CellPainting);
             // 
             // btnSeleccionar
             // 
+            this.btnSeleccionar.FillWeight = 14.00233F;
             this.btnSeleccionar.HeaderText = "";
             this.btnSeleccionar.Name = "btnSeleccionar";
             this.btnSeleccionar.Width = 40;
@@ -277,9 +288,10 @@
             // 
             // Descripcion
             // 
+            this.Descripcion.FillWeight = 57.23656F;
             this.Descripcion.HeaderText = "Descripcion";
             this.Descripcion.Name = "Descripcion";
-            this.Descripcion.Width = 160;
+            this.Descripcion.Width = 164;
             // 
             // EstadoValor
             // 
@@ -289,9 +301,10 @@
             // 
             // Estado
             // 
+            this.Estado.FillWeight = 228.761F;
             this.Estado.HeaderText = "Estado";
             this.Estado.Name = "Estado";
-            this.Estado.Width = 140;
+            this.Estado.Width = 653;
             // 
             // label10
             // 
@@ -363,7 +376,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1223, 523);
+            this.ClientSize = new System.Drawing.Size(1177, 523);
             this.Controls.Add(this.txtIndice);
             this.Controls.Add(this.btnLimpiarCombo);
             this.Controls.Add(this.btnBuscar);

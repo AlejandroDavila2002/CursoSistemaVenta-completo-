@@ -177,6 +177,12 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="modales\mdProductos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdProductos.Designer.cs">
+      <DependentUpon>mdProductos.cs</DependentUpon>
+    </Compile>
     <Compile Include="modales\mdProveedores.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -228,6 +234,9 @@
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdProductos.resx">
+      <DependentUpon>mdProductos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="modales\mdProveedores.resx">
       <DependentUpon>mdProveedores.cs</DependentUpon>
     </EmbeddedResource>
@@ -278,6 +287,7 @@
     <None Include="Resources\icons8-checked-checkbox-40.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\icons8-borrar-para-siempre-25.png" />
     <Content Include="Resources\icons8-pdf-25.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

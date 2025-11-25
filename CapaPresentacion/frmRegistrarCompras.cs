@@ -409,9 +409,7 @@ namespace CapaPresentacion
             txtVentaProducto.SelectAll();
         }
 
-
-
-        private void iconButton2_Click(object sender, EventArgs e)
+        private void btnRegistrar_Click(object sender, EventArgs e)
         {
             if (Convert.ToUInt32(txtIdProveedor.Text) == 0)
             {
@@ -419,20 +417,20 @@ namespace CapaPresentacion
                 return;
             }
 
-            if(dgvData.Rows.Count < 1)
+            if (dgvData.Rows.Count < 1)
             {
                 MessageBox.Show("Debe ingresar productos en la compra", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             DataTable DetalleCompra = new DataTable();
-            DetalleCompra.Columns.Add("IdProducto",typeof(int));
+            DetalleCompra.Columns.Add("IdProducto", typeof(int));
             DetalleCompra.Columns.Add("PrecioCompra", typeof(decimal));
-            DetalleCompra.Columns.Add("PrecioVenta", typeof (decimal));
+            DetalleCompra.Columns.Add("PrecioVenta", typeof(decimal));
             DetalleCompra.Columns.Add("Cantidad", typeof(int));
             DetalleCompra.Columns.Add("MontoTotal", typeof(decimal));
 
-            foreach(DataGridViewRow row in dgvData.Rows)
+            foreach (DataGridViewRow row in dgvData.Rows)
             {
                 DetalleCompra.Rows.Add(
                 new object[]
@@ -446,7 +444,7 @@ namespace CapaPresentacion
 
 
                 });
-   
+
             }
 
             int idCorrelativo = new CN_Compra().ObtenerCorrelativo();
@@ -467,8 +465,8 @@ namespace CapaPresentacion
 
             if (respuesta)
             {
-                var result = MessageBox.Show("Numero de compra generada" + numeroDocumento + "\n\nDesea copiar al portapapeles??","Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                  
+                var result = MessageBox.Show("Numero de compra generada" + numeroDocumento + "\n\nDesea copiar al portapapeles??", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
                 if (result == DialogResult.Yes)
                 {
                     Clipboard.SetText(numeroDocumento);
@@ -482,14 +480,11 @@ namespace CapaPresentacion
             }
             else
             {
-                
+
             }
-
-
-
         }
-    }
 
+    }
 }
 
 

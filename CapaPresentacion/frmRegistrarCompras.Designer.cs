@@ -67,7 +67,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.txtTotalaPagar = new System.Windows.Forms.TextBox();
-            this.iconButton2 = new FontAwesome.Sharp.IconButton();
+            this.btnRegistrar = new FontAwesome.Sharp.IconButton();
             this.btnAgregar = new FontAwesome.Sharp.IconButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -476,25 +476,25 @@
             this.txtTotalaPagar.TabIndex = 33;
             this.txtTotalaPagar.Text = "0";
             // 
-            // iconButton2
+            // btnRegistrar
             // 
-            this.iconButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.iconButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.iconButton2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.iconButton2.IconChar = FontAwesome.Sharp.IconChar.Tag;
-            this.iconButton2.IconColor = System.Drawing.Color.DodgerBlue;
-            this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            this.iconButton2.IconSize = 38;
-            this.iconButton2.Location = new System.Drawing.Point(1019, 581);
-            this.iconButton2.Name = "iconButton2";
-            this.iconButton2.Size = new System.Drawing.Size(99, 43);
-            this.iconButton2.TabIndex = 34;
-            this.iconButton2.Text = "Registrar";
-            this.iconButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.iconButton2.UseCompatibleTextRendering = true;
-            this.iconButton2.UseVisualStyleBackColor = false;
-            this.iconButton2.Click += new System.EventHandler(this.iconButton2_Click);
+            this.btnRegistrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRegistrar.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btnRegistrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegistrar.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnRegistrar.IconChar = FontAwesome.Sharp.IconChar.Tag;
+            this.btnRegistrar.IconColor = System.Drawing.Color.DodgerBlue;
+            this.btnRegistrar.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            this.btnRegistrar.IconSize = 38;
+            this.btnRegistrar.Location = new System.Drawing.Point(1019, 581);
+            this.btnRegistrar.Name = "btnRegistrar";
+            this.btnRegistrar.Size = new System.Drawing.Size(99, 43);
+            this.btnRegistrar.TabIndex = 34;
+            this.btnRegistrar.Text = "Registrar";
+            this.btnRegistrar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnRegistrar.UseCompatibleTextRendering = true;
+            this.btnRegistrar.UseVisualStyleBackColor = false;
+            this.btnRegistrar.Click += new System.EventHandler(this.btnRegistrar_Click);
             // 
             // btnAgregar
             // 
@@ -520,7 +520,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1140, 645);
-            this.Controls.Add(this.iconButton2);
+            this.Controls.Add(this.btnRegistrar);
             this.Controls.Add(this.txtTotalaPagar);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.btnAgregar);
@@ -585,6 +585,6 @@
         private FontAwesome.Sharp.IconButton btnAgregar;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox txtTotalaPagar;
-        private FontAwesome.Sharp.IconButton iconButton2;
+        private FontAwesome.Sharp.IconButton btnRegistrar;
     }
 }

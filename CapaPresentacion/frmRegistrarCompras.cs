@@ -2,6 +2,7 @@
 using CapaNegocio;
 using CapaPresentacion.utilidades;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.Vml;
 using System;
 using System.Collections.Generic;
@@ -171,7 +172,7 @@ namespace CapaPresentacion
                 });
 
 
-                CarcularTotal();
+                CalcularTotal();
                 limpiarProducto();
                 txtCodigoProducto.Select();
 
@@ -191,7 +192,7 @@ namespace CapaPresentacion
             txtCantidad.Value = 1;
         }
 
-        private void CarcularTotal()
+        private void CalcularTotal()
         {
             decimal total = 0;
 
@@ -234,7 +235,7 @@ namespace CapaPresentacion
                 if (indice >= 0)
                 {
                     dgvData.Rows.RemoveAt(indice);
-                    CarcularTotal();
+                    CalcularTotal();
 
                 }
 
@@ -410,10 +411,84 @@ namespace CapaPresentacion
 
 
 
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToUInt32(txtIdProveedor.Text) == 0)
+            {
+                MessageBox.Show("Debe seleccionar un proveedor", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if(dgvData.Rows.Count < 1)
+            {
+                MessageBox.Show("Debe ingresar productos en la compra", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DataTable DetalleCompra = new DataTable();
+            DetalleCompra.Columns.Add("IdProducto",typeof(int));
+            DetalleCompra.Columns.Add("PrecioCompra", typeof(decimal));
+            DetalleCompra.Columns.Add("PrecioVenta", typeof (decimal));
+            DetalleCompra.Columns.Add("Cantidad", typeof(int));
+            DetalleCompra.Columns.Add("MontoTotal", typeof(decimal));
+
+            foreach(DataGridViewRow row in dgvData.Rows)
+            {
+                DetalleCompra.Rows.Add(
+                new object[]
+                {
+                    Convert.ToUInt32( row.Cells["IdProducto"].Value.ToString()),
+                    row.Cells["PrecioCompra"].Value.ToString(),
+                    row.Cells["PrecioVenta"].Value.ToString(),
+                    row.Cells["Cantidad"].Value.ToString(),
+                    row.Cells["Subtotal"].Value.ToString(),
 
 
+
+                });
+   
+            }
+
+            int idCorrelativo = new CN_Compra().ObtenerCorrelativo();
+            string numeroDocumento = string.Format("{0:00000}", idCorrelativo);
+
+            Compra oCompra = new Compra()
+            {
+                oUsuario = new Usuario() { IdUsuario = _usuarioActual.IdUsuario },
+                oProveedor = new Proveedor() { IdProveedor = Convert.ToInt32(txtIdProveedor.Text) },
+                TipoDocumento = ((OpcionCombo)cboTipoDocumento.SelectedItem).Texto,
+                NumeroDocumento = numeroDocumento,
+                MontoTotal = Convert.ToDecimal(txtTotalaPagar.Text),
+
+            };
+
+            string Mensaje = string.Empty;
+            bool respuesta = new CN_Compra().RegistrarComprar(oCompra, DetalleCompra, out Mensaje);
+
+            if (respuesta)
+            {
+                var result = MessageBox.Show("Numero de compra generada" + numeroDocumento + "\n\nDesea copiar al portapapeles??","Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                  
+                if (result == DialogResult.Yes)
+                {
+                    Clipboard.SetText(numeroDocumento);
+                }
+
+                txtIdProveedor.Text = "0";
+                txtDocumentoProveedor.Text = "";
+                txtNombreProducto.Text = "";
+                dgvData.Rows.Clear();
+                CalcularTotal();
+            }
+            else
+            {
+                
+            }
+
+
+
+        }
     }
-
 
 }
 

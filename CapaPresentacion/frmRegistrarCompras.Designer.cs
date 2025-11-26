@@ -42,7 +42,7 @@
             this.btnBuscarProveedor = new FontAwesome.Sharp.IconButton();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.txtDocumentoProveedor = new System.Windows.Forms.TextBox();
+            this.txtDocumento = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtCantidad = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
@@ -145,7 +145,7 @@
             this.groupBox2.Controls.Add(this.btnBuscarProveedor);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.txtDocumentoProveedor);
+            this.groupBox2.Controls.Add(this.txtDocumento);
             this.groupBox2.Location = new System.Drawing.Point(427, 51);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(690, 75);
@@ -204,12 +204,12 @@
             this.label6.TabIndex = 1;
             this.label6.Text = "Numero Documento";
             // 
-            // txtDocumentoProveedor
+            // txtDocumento
             // 
-            this.txtDocumentoProveedor.Location = new System.Drawing.Point(12, 35);
-            this.txtDocumentoProveedor.Name = "txtDocumentoProveedor";
-            this.txtDocumentoProveedor.Size = new System.Drawing.Size(187, 20);
-            this.txtDocumentoProveedor.TabIndex = 0;
+            this.txtDocumento.Location = new System.Drawing.Point(12, 35);
+            this.txtDocumento.Name = "txtDocumento";
+            this.txtDocumento.Size = new System.Drawing.Size(187, 20);
+            this.txtDocumento.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -556,7 +556,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtDocumentoProveedor;
+        private System.Windows.Forms.TextBox txtDocumento;
         private FontAwesome.Sharp.IconButton btnBuscarProveedor;
         private System.Windows.Forms.TextBox txtRazonSocialProveedor;
         private System.Windows.Forms.TextBox txtIdProveedor;

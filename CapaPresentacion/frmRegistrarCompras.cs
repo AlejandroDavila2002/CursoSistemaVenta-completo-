@@ -51,13 +51,13 @@ namespace CapaPresentacion
                 if (mdProveedores._Proveedor != null)
                 {
                     txtIdProveedor.Text = mdProveedores._Proveedor.IdProveedor.ToString();
-                    txtDocumentoProveedor.Text = mdProveedores._Proveedor.Documento;
+                    txtDocumento.Text = mdProveedores._Proveedor.Documento;
                     txtRazonSocialProveedor.Text = mdProveedores._Proveedor.RazonSocial;
                 }
                 else
                 {
                     txtIdProveedor.Text = "0";
-                    txtDocumentoProveedor.Text = "";
+                    txtDocumento.Text = "";
                     txtRazonSocialProveedor.Text = "";
 
                     MessageBox.Show("No se seleccionó ningún proveedor", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -473,7 +473,7 @@ namespace CapaPresentacion
                 }
 
                 txtIdProveedor.Text = "0";
-                txtDocumentoProveedor.Text = "";
+                txtDocumento.Text = "";
                 txtNombreProducto.Text = "";
                 dgvData.Rows.Clear();
                 CalcularTotal();

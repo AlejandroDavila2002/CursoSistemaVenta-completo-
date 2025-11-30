@@ -32,10 +32,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnBuscar = new FontAwesome.Sharp.IconButton();
             this.label6 = new System.Windows.Forms.Label();
             this.txtBusqueda = new System.Windows.Forms.TextBox();
-            this.btnLimpiar = new FontAwesome.Sharp.IconButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtUsuario = new System.Windows.Forms.TextBox();
@@ -52,7 +50,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtTotalaPagar = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.btnExportarPDF = new FontAwesome.Sharp.IconButton();
             this.dgvData = new System.Windows.Forms.DataGridView();
             this.IdProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,6 +58,9 @@
             this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnExportarPDF = new FontAwesome.Sharp.IconButton();
+            this.btnLimpiar = new FontAwesome.Sharp.IconButton();
+            this.btnBuscar = new FontAwesome.Sharp.IconButton();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
@@ -90,25 +90,6 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Detalle Compra:";
             // 
-            // btnBuscar
-            // 
-            this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
-            this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnBuscar.ForeColor = System.Drawing.Color.Black;
-            this.btnBuscar.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.btnBuscar.IconColor = System.Drawing.Color.Black;
-            this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnBuscar.IconSize = 24;
-            this.btnBuscar.Location = new System.Drawing.Point(893, 39);
-            this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(66, 22);
-            this.btnBuscar.TabIndex = 34;
-            this.btnBuscar.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBuscar.UseVisualStyleBackColor = false;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -127,24 +108,6 @@
             this.txtBusqueda.Name = "txtBusqueda";
             this.txtBusqueda.Size = new System.Drawing.Size(242, 22);
             this.txtBusqueda.TabIndex = 32;
-            // 
-            // btnLimpiar
-            // 
-            this.btnLimpiar.BackColor = System.Drawing.SystemColors.Control;
-            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnLimpiar.ForeColor = System.Drawing.Color.Black;
-            this.btnLimpiar.IconChar = FontAwesome.Sharp.IconChar.Eraser;
-            this.btnLimpiar.IconColor = System.Drawing.Color.Black;
-            this.btnLimpiar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnLimpiar.IconSize = 24;
-            this.btnLimpiar.Location = new System.Drawing.Point(963, 39);
-            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(2);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(66, 22);
-            this.btnLimpiar.TabIndex = 35;
-            this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnLimpiar.UseVisualStyleBackColor = false;
             // 
             // groupBox3
             // 
@@ -231,10 +194,11 @@
             // 
             // nrmDocumento
             // 
-            this.nrmDocumento.Location = new System.Drawing.Point(713, 35);
+            this.nrmDocumento.Location = new System.Drawing.Point(914, 35);
             this.nrmDocumento.Name = "nrmDocumento";
             this.nrmDocumento.Size = new System.Drawing.Size(68, 20);
             this.nrmDocumento.TabIndex = 29;
+            this.nrmDocumento.Visible = false;
             // 
             // txtRazonSocial
             // 
@@ -246,7 +210,7 @@
             // label
             // 
             this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(174, 16);
+            this.label.Location = new System.Drawing.Point(172, 16);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(73, 13);
             this.label.TabIndex = 2;
@@ -300,27 +264,6 @@
             this.label12.Size = new System.Drawing.Size(101, 16);
             this.label12.TabIndex = 40;
             this.label12.Text = "Total a pagar";
-            // 
-            // btnExportarPDF
-            // 
-            this.btnExportarPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExportarPDF.BackColor = System.Drawing.Color.White;
-            this.btnExportarPDF.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnExportarPDF.FlatAppearance.BorderSize = 0;
-            this.btnExportarPDF.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnExportarPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExportarPDF.IconChar = FontAwesome.Sharp.IconChar.FilePdf;
-            this.btnExportarPDF.IconColor = System.Drawing.Color.Red;
-            this.btnExportarPDF.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnExportarPDF.IconSize = 28;
-            this.btnExportarPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExportarPDF.Location = new System.Drawing.Point(931, 678);
-            this.btnExportarPDF.Name = "btnExportarPDF";
-            this.btnExportarPDF.Size = new System.Drawing.Size(103, 30);
-            this.btnExportarPDF.TabIndex = 63;
-            this.btnExportarPDF.Text = "Exportar PDF";
-            this.btnExportarPDF.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExportarPDF.UseVisualStyleBackColor = false;
             // 
             // dgvData
             // 
@@ -404,6 +347,66 @@
             this.btnEliminar.FillWeight = 30F;
             this.btnEliminar.HeaderText = "";
             this.btnEliminar.Name = "btnEliminar";
+            // 
+            // btnExportarPDF
+            // 
+            this.btnExportarPDF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExportarPDF.BackColor = System.Drawing.Color.White;
+            this.btnExportarPDF.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExportarPDF.FlatAppearance.BorderSize = 0;
+            this.btnExportarPDF.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnExportarPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportarPDF.IconChar = FontAwesome.Sharp.IconChar.FilePdf;
+            this.btnExportarPDF.IconColor = System.Drawing.Color.Red;
+            this.btnExportarPDF.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnExportarPDF.IconSize = 28;
+            this.btnExportarPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExportarPDF.Location = new System.Drawing.Point(931, 678);
+            this.btnExportarPDF.Name = "btnExportarPDF";
+            this.btnExportarPDF.Size = new System.Drawing.Size(103, 30);
+            this.btnExportarPDF.TabIndex = 63;
+            this.btnExportarPDF.Text = "Exportar PDF";
+            this.btnExportarPDF.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExportarPDF.UseVisualStyleBackColor = false;
+            this.btnExportarPDF.Click += new System.EventHandler(this.btnExportarPDF_Click);
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.BackColor = System.Drawing.SystemColors.Control;
+            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnLimpiar.ForeColor = System.Drawing.Color.Black;
+            this.btnLimpiar.IconChar = FontAwesome.Sharp.IconChar.Eraser;
+            this.btnLimpiar.IconColor = System.Drawing.Color.Black;
+            this.btnLimpiar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnLimpiar.IconSize = 24;
+            this.btnLimpiar.Location = new System.Drawing.Point(963, 39);
+            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(66, 22);
+            this.btnLimpiar.TabIndex = 35;
+            this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnLimpiar.UseVisualStyleBackColor = false;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
+            // btnBuscar
+            // 
+            this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnBuscar.ForeColor = System.Drawing.Color.Black;
+            this.btnBuscar.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.btnBuscar.IconColor = System.Drawing.Color.Black;
+            this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnBuscar.IconSize = 24;
+            this.btnBuscar.Location = new System.Drawing.Point(893, 39);
+            this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(66, 22);
+            this.btnBuscar.TabIndex = 34;
+            this.btnBuscar.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // frmDetalleCompra
             // 

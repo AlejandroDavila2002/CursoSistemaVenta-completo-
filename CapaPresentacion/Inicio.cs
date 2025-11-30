@@ -135,7 +135,7 @@ namespace CapaPresentacion
         // Evento para abrir el formulario de registro de ventas
         private void submenuregistrarVenta_Click_1(object sender, EventArgs e)
         {
-            frmRegistrarVentas formulario = new frmRegistrarVentas();
+            frmRegistrarVentas formulario = new frmRegistrarVentas(UsuarioActual);
 
             int anchoNecesario = formulario.Width;
             int altoNecesario = formulario.Height + contenedor.Location.Y;

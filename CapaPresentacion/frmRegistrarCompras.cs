@@ -89,6 +89,8 @@ namespace CapaPresentacion
                     txtCodigoProducto.Text = "";
                     txtCodigoProducto.BackColor = Color.White;
                     txtNombreProducto.Text = "";
+                    txtCompraProducto.Text = "";
+                    txtVentaProducto.Text = "";
                     MessageBox.Show("No se seleccionó ningún producto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -480,6 +482,7 @@ namespace CapaPresentacion
             }
             else
             {
+
 
             }
         }

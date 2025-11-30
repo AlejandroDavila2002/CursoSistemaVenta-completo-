@@ -28,7 +28,7 @@ namespace CapaNegocio
         {
             Compra oCompra = objcd_Compra.ObtenerCompra(NumeroDocumento);
 
-            if (oCompra.IdCompra != 0)
+            if (oCompra != null && oCompra.IdCompra != 0)
             {
                 List<Detalle_Compra> oDetalle_Compras = objcd_Compra.ObtenerDetalleCompra(oCompra.IdCompra);
 
@@ -42,3 +42,6 @@ namespace CapaNegocio
 
     }
 }
+
+
+

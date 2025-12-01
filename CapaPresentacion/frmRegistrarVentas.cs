@@ -2,6 +2,7 @@
 using CapaNegocio;
 using CapaPresentacion.modales;
 using CapaPresentacion.utilidades;
+using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,7 +45,7 @@ namespace CapaPresentacion
             using (var modal = new mdCliente())
             {
                 var result = modal.ShowDialog();
-                if(result == DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
                     txtDocumento.Text = modal._Cliente.Documento.ToString();
                     txtNombreCliente.Text = modal._Cliente.NombreCompleto.ToString();
@@ -120,25 +121,25 @@ namespace CapaPresentacion
             decimal precio = 0;
             bool productoExiste = false;
 
-            if(int.Parse(txtIdProducto.Text) == 0)
+            if (int.Parse(txtIdProducto.Text) == 0)
             {
                 MessageBox.Show("Debe seleccionar un mensaje", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if(!decimal.TryParse(txtPrecio.Text, out precio))
+            if (!decimal.TryParse(txtPrecio.Text, out precio))
             {
                 MessageBox.Show("Precio o formato de venta incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if(Convert.ToInt32(txtStock.Text) < Convert.ToInt32(txtCantidad.Text))
+            if (Convert.ToInt32(txtStock.Text) < Convert.ToInt32(txtCantidad.Text))
             {
                 MessageBox.Show("La cantidad no puede ser mayor al Stock", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            foreach(DataGridViewRow row in dgvData.Rows)
+            foreach (DataGridViewRow row in dgvData.Rows)
             {
                 if (row.Cells["IdProducto"].Value.ToString() == txtIdProducto.Text)
                 {
@@ -150,20 +151,27 @@ namespace CapaPresentacion
 
             if (!productoExiste)
             {
-                dgvData.Rows.Add(new object[]
+                bool resultado = new CN_Venta().RestarStock(int.Parse(txtIdProducto.Text), Convert.ToInt32(txtCantidad.Value));
+
+                if (resultado)
                 {
+                    dgvData.Rows.Add(new object[]
+                    {
                     txtIdProducto.Text,
                     txtNombreProducto.Text,
                     precio.ToString("0.00"),
                     txtCantidad.Value.ToString(),
                     (txtCantidad.Value * precio).ToString("0.00")
-                });
+                    });
 
-                CalcularTotal();
-                LImpiarProducto();
+                    CalcularTotal();
+                    LImpiarProducto();
+                }
+
+
             }
 
-            
+
         }
 
         private void CalcularTotal()
@@ -220,8 +228,16 @@ namespace CapaPresentacion
 
                 if (indice >= 0)
                 {
-                    dgvData.Rows.RemoveAt(indice);
-                    CalcularTotal();
+                    bool resultado = new CN_Venta().sumarStock(
+                        Convert.ToInt32(dgvData.Rows[indice].Cells["IdProducto"].Value.ToString()),
+                        Convert.ToInt32(dgvData.Rows[indice].Cells["Cantidad"].Value.ToString()));
+
+                    if (resultado)
+                    {
+                        dgvData.Rows.RemoveAt(indice);
+                        CalcularTotal();
+                    }
+
 
                 }
 
@@ -308,6 +324,226 @@ namespace CapaPresentacion
         {
             // A veces el clic anula la selección del Enter, esto lo fuerza de nuevo
             txtPrecio.SelectAll();
+        }
+
+
+
+        private void txtTotalapagar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // 1. Si es un dígito (numero), lo dejamos pasar
+            if (Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = false;
+                return;
+            }
+
+            // 2. Si es una tecla de control (como Borrar/Backspace), la dejamos pasar
+            if (Char.IsControl(e.KeyChar))
+            {
+                e.Handled = false;
+                return;
+            }
+
+            // 3. Verificamos si es un punto decimal
+            if (e.KeyChar.ToString() == ".")
+            {
+                // A. Si la caja de texto YA tiene un punto, bloqueamos este nuevo punto
+                //    (para evitar "15.5.5")
+                if (txtTotalapagar.Text.Contains("."))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // B. Si el punto es el PRIMER caracter, lo bloqueamos (opcional, gusto personal)
+                //    (para evitar que escriban ".50")
+                if (txtTotalapagar.Text.Trim().Length == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Si pasó las validaciones anteriores, dejamos pasar el punto
+                e.Handled = false;
+                return;
+            }
+
+            // 4. Si no fue nada de lo anterior (letras, simbolos), LO BLOQUEAMOS
+            e.Handled = true;
+        }
+
+        private void txtTotalapagar_Leave(object sender, EventArgs e)
+        {
+            // Si el texto está vacío, pon 0.00
+            if (string.IsNullOrEmpty(txtTotalapagar.Text))
+            {
+                txtTotalapagar.Text = "0.00";
+            }
+            else
+            {
+                decimal valor;
+                // Intentamos convertir a decimal
+                if (decimal.TryParse(txtTotalapagar.Text, out valor))
+                {
+                    // Si funciona, le damos formato de 2 decimales
+                    txtTotalapagar.Text = valor.ToString("0.00");
+                }
+                else
+                {
+                    // Si escribió algo raro que se pasó el filtro (muy difícil), lo limpiamos
+                    txtTotalapagar.Text = "0.00";
+                }
+            }
+        }
+
+        private void txtTotalapagar_Enter(object sender, EventArgs e)
+        {
+            // Selecciona todo el texto al recibir el foco
+            txtTotalapagar.SelectAll();
+        }
+
+        private void txtTotalapagar_MouseClick(object sender, MouseEventArgs e)
+        {
+            // A veces el clic anula la selección del Enter, esto lo fuerza de nuevo
+            txtTotalapagar.SelectAll();
+        }
+
+
+
+
+        private void CalcularCambio()
+        {
+            if (txtTotalapagar.Text.Trim() == "")
+            {
+                MessageBox.Show("No existen productos en la venta", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            decimal pagocon = 0;
+            decimal total = Convert.ToDecimal(txtTotalapagar.Text);
+
+            if (txtPagocon.Text.Trim() == "")
+            {
+                txtPagocon.Text = "0";
+            }
+
+            if (decimal.TryParse(txtPagocon.Text, out pagocon))
+            {
+                if (pagocon < total)
+                {
+                    MessageBox.Show("El monto con el que se paga no puede ser menor al total a pagar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    txtCambio.Text = "0.00";
+                }
+                else
+                {
+                    decimal cambio = pagocon - total;
+                    txtCambio.Text = cambio.ToString("0.00");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Monto con el que se paga incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
+
+        }
+
+        private void txtPagocon_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                CalcularCambio();
+            }
+        }
+
+        private void btnRegistrar_Click(object sender, EventArgs e)
+        {
+            if (txtDocumento.Text.Trim() == "")
+            {
+                MessageBox.Show("Debe ingresar el documento del cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if (txtNombreCliente.Text.Trim() == "")
+            {
+                MessageBox.Show("Debe ingresar el nombre del cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
+            if (dgvData.Rows.Count < 1)
+            {
+                MessageBox.Show("Debe ingresar productos a la venta", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+
+
+            DataTable detalleVenta = new DataTable();
+            detalleVenta.Columns.Add("IdProducto", typeof(int));
+            detalleVenta.Columns.Add("Precio", typeof(decimal));
+            detalleVenta.Columns.Add("Cantidad", typeof(int));
+            detalleVenta.Columns.Add("Subtotal", typeof(decimal));
+
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                detalleVenta.Rows.Add(
+                    Convert.ToInt32(row.Cells["IdProducto"].Value.ToString()),
+                    Convert.ToDecimal(row.Cells["Precio"].Value.ToString()),
+                    Convert.ToInt32(row.Cells["Cantidad"].Value.ToString()),
+                    Convert.ToDecimal(row.Cells["Subtotal"].Value.ToString())
+                );
+            }
+
+
+            int idCorrelativo = new CN_Venta().ObtenerCorrelativo();
+            string NumeroDocumento = string.Format("{0:00000}", idCorrelativo);
+            CalcularCambio();
+
+            Venta oVenta = new Venta()
+            {
+                oUsuario = new Usuario() { IdUsuario = _UsuarioActual.IdUsuario },
+                TipoDocumento = ((OpcionCombo)cboTipoDocumento.SelectedItem).Valor.ToString(),
+                NumeroDocumento = NumeroDocumento,
+                DocumentoCliente = txtDocumento.Text.Trim(),
+                NombreCliente = txtNombreCliente.Text.Trim(),
+                MontoPago = Convert.ToDecimal(txtPagocon.Text),
+                MontoCambio = Convert.ToDecimal(txtCambio.Text),
+                MontoTotal = Convert.ToDecimal(txtTotalapagar.Text)
+            };
+
+            string mensaje = string.Empty;
+            bool resultado = new CN_Venta().RegistrarVenta(oVenta, detalleVenta, out mensaje);
+
+            if (resultado)
+            {
+                // 1. Mostrar el mensaje y capturar la respuesta (Si/No)
+                var result = MessageBox.Show(
+                    "Venta registrada exitosamente: \n" + NumeroDocumento + "\n\n¿Desea copiar al portapapeles?",
+                    "Mensaje",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information); // Usé 'Information' para éxito, queda mejor que 'Exclamation'
+
+                // 2. Lógica para copiar al portapapeles si el usuario dice "Sí"
+                if (result == DialogResult.Yes)
+                {
+                    Clipboard.SetText(NumeroDocumento);
+                }
+
+                // 3. Reiniciar el formulario para una nueva venta
+                txtDocumento.Text = "";
+                txtNombreCliente.Text = "";
+                dgvData.Rows.Clear();
+                CalcularTotal();
+                txtPagocon.Text = "";
+                txtCambio.Text = "";
+
+            }
+            else // Fíjate que el 'if' se cerró justo arriba con '}'
+            {
+                // Lógica si algo falló
+                MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
+
         }
 
     }

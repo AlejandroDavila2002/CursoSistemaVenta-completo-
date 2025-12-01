@@ -123,7 +123,7 @@ namespace CapaPresentacion
 
             if (int.Parse(txtIdProducto.Text) == 0)
             {
-                MessageBox.Show("Debe seleccionar un mensaje", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Debe seleccionar un producto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -169,6 +169,10 @@ namespace CapaPresentacion
                 }
 
 
+            }
+            else 
+            {
+                MessageBox.Show("El producto ya se encuentra agregado. Si necesita más cantidad, elimínelo y vuelva a agregarlo con la cantidad total.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
 
@@ -467,12 +471,37 @@ namespace CapaPresentacion
             if (txtNombreCliente.Text.Trim() == "")
             {
                 MessageBox.Show("Debe ingresar el nombre del cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
 
             if (dgvData.Rows.Count < 1)
             {
                 MessageBox.Show("Debe ingresar productos a la venta", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
+            }
+
+
+            // se conservarán estos 3 bloques de validacion para mayor seguridad, por ahora. 20/11/2025
+            if (string.IsNullOrWhiteSpace(txtPagocon.Text))
+            {
+                MessageBox.Show("Debe ingresar con cuánto paga el cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return; // ESTO DETIENE EL GUARDADO
+            }
+
+            // 2. Validar que el pago cubra el total
+            decimal pagoCon;
+            decimal total = Convert.ToDecimal(txtTotalapagar.Text);
+
+            if (!decimal.TryParse(txtPagocon.Text, out pagoCon))
+            {
+                MessageBox.Show("Formato de moneda incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // 3. Validar que el pago no sea menor al total
+            if (pagoCon < total)
+            {
+                MessageBox.Show("El monto de pago no puede ser menor al total a pagar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return; // ESTO DETIENE EL GUARDADO
             }
 
 

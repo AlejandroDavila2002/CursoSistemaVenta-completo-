@@ -565,8 +565,16 @@ namespace CapaPresentacion
                 txtPagocon.Text = "";
                 txtCambio.Text = "";
 
+                txtCodigoProducto.Text = "";
+                txtNombreProducto.Text = "";
+                txtPrecio.Text = "0.00";
+                txtStock.Text = "0";
+                txtCantidad.Value = 1;
+
+
+
             }
-            else // Fíjate que el 'if' se cerró justo arriba con '}'
+            else
             {
                 // Lógica si algo falló
                 MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

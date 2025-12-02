@@ -35,5 +35,19 @@ namespace CapaNegocio
         }
 
 
+        public Venta ObtenerVenta(string NumeroDocumento)
+        {
+            Venta oVenta = objcd_Venta.ObtenerVenta(NumeroDocumento);
+
+            if (oVenta.IdVenta != 0)
+            {
+                List<Detalle_Venta> oListaDetalleVenta = objcd_Venta.ObtenerDetalleVenta(oVenta.IdVenta);
+                oVenta.oDetalleVenta = oListaDetalleVenta;
+            }
+
+            return oVenta;
+        }
+
+
     }
 }

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CapaDatos
 {
@@ -135,6 +136,96 @@ namespace CapaDatos
             }
 
             return Resultado;
+        }
+
+        public Venta ObtenerVenta(string NumeroDocumento)
+        {
+            Venta obj = new Venta();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("select v.IdVenta, u.NombreCompleto,"); 
+                    query.AppendLine("v.DocumentoCliente, v.NombreCliente,");
+                    query.AppendLine("v.TipoDocumento, v.NumeroDocumento,");
+                    query.AppendLine("v.MontoPago, v.MontoCambio, v.MontoTotal,");
+                    query.AppendLine("convert(char(10),v.FechaRegistro,103)[FechaRegistro]");
+                    query.AppendLine("from VENTA v");
+                    query.AppendLine("inner join USUARIO u on u.IdUsuario = v.IdUsuario");
+                    query.AppendLine("where v.NumeroDocumento = @NumeroDocumento");
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@NumeroDocumento", NumeroDocumento);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                       while (reader.Read())
+                        {
+                            obj.IdVenta = Convert.ToInt32(reader["IdVenta"]);
+                            obj.oUsuario = new Usuario() {NombreCompleto = reader["NombreCompleto"].ToString() };
+                            obj.DocumentoCliente = reader["DocumentoCliente"].ToString();
+                            obj.NombreCliente = reader["NombreCliente"].ToString();
+                            obj.TipoDocumento = reader["TipoDocumento"].ToString();
+                            obj.NumeroDocumento = reader["NumeroDocumento"].ToString();
+                            obj.MontoPago = Convert.ToDecimal(reader["MontoPago"]);
+                            obj.MontoCambio = Convert.ToDecimal(reader["MontoCambio"]);
+                            obj.MontoTotal = Convert.ToDecimal(reader["MontoTotal"]);
+                            obj.FechaRegistro = reader["FechaRegistro"].ToString();
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    obj = new Venta(); // si llega aqui es porque hubo un error y retornamos un objeto vacio.
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            return obj;
+        }
+
+        public List<Detalle_Venta> ObtenerDetalleVenta(int IdVenta) 
+        {
+            List<Detalle_Venta> oLista = new List<Detalle_Venta>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("select p.IdProducto, p.Nombre, p.PrecioCompra, dv.PrecioVenta, dv.Cantidad, dv.SubTotal");
+                    query.AppendLine("from DETALLE_VENTA dv inner join PRODUCTO p on p.IdProducto");
+                    query.AppendLine("= dv.IdProducto where dv.IdVenta = @IdVenta");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@IdVenta", IdVenta);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            oLista.Add(new Detalle_Venta()
+                            {
+                                oProducto = new Producto() { 
+                                IdProducto = Convert.ToInt32(reader["IdProducto"]),
+                                NombreProducto = reader["Nombre"].ToString(),
+                                PrecioCompra = Convert.ToDecimal(reader["PrecioCompra"])},
+                                PrecioVenta = Convert.ToDecimal(reader["PrecioVenta"]),
+                                Cantidad = Convert.ToInt32(reader["Cantidad"]),
+                                SubTotal = Convert.ToDecimal(reader["SubTotal"])
+                            });
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    oLista = new List<Detalle_Venta>();
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            return oLista;
         }
     }
 

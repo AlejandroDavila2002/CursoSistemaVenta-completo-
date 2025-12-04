@@ -124,7 +124,7 @@ namespace CapaPresentacion
                     {
                         cboTasaDeCambio.Items.Add($"{tasa.NombreCompleto} ({tasa.MonedaAbreviacion})");
                     }
-                    cboTasaDeCambio.SelectedIndex = 0; // Seleccionar el primer elemento para disparar el evento Changed
+                    cboTasaDeCambio.SelectedIndex = 4; // Seleccionar el primer elemento para disparar el evento Changed
                     cboTasaDeCambio.Enabled = true;
                     txtMonto.Enabled = true;
                     // Uso btnBuscar ya que es la variable declarada en la línea 105, aunque el evento se llama btnAgregar_Click

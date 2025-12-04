@@ -226,17 +226,47 @@ namespace CapaPresentacion
         }
 
 
-        // Evento para abrir el formulario de reportes
-        private void menureportes_Click(object sender, EventArgs e)
+        // Eventos para abrir los formularios de reportes
+        private void reportesDeVentasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmReportes formulario = new frmReportes();
+
+            frmReporteVentas formulario = new frmReporteVentas();
 
             int anchoNecesario = formulario.Width;
             int altoNecesario = formulario.Height + contenedor.Location.Y;
 
             this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
-            AbrirFormulario(menureportes, new frmReportes());
+
+            AbrirFormulario(menureportes, formulario);
+
         }
+
+        private void reportesDeComprasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            frmReporteCompras formulario = new frmReporteCompras();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menureportes, formulario);
+        }
+
+        private void reportesDeInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmReporteInventario formulario = new frmReporteInventario();
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menureportes, formulario);
+        }
+
+        // ---------------------------------------------------------------------------------------
 
         private void menusistemaCambiario_Click(object sender, EventArgs e)
         {
@@ -258,6 +288,6 @@ namespace CapaPresentacion
             AbrirFormulario(menumantenedor, formulario);
         }
 
-        
+       
     }
 }

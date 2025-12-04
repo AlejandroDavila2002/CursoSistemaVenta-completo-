@@ -33,6 +33,21 @@ namespace CapaPresentacion
 
         private void frmProducto_Load(object sender, EventArgs e)
         {
+            // 1. Primero, establece el comportamiento general para TODAS las columnas
+            dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // 2. Luego, "bloquea" o cambia el comportamiento SOLO de la columna del botón
+            // Asumiendo que tu columna se llama "btnSeleccionar" en el diseño
+            if (dgvData.Columns.Contains("btnSeleccionar"))
+            {
+                // Opción A: Ancho fijo (recomendado para botones de iconos)
+                dgvData.Columns["btnSeleccionar"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dgvData.Columns["btnSeleccionar"].Width = 40; // Ajusta este número según el tamaño de tu icono/texto
+
+                // Opción B: Ajustar al contenido (si el botón tiene texto variable)
+                // dgvData.Columns["btnSeleccionar"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            }
+
             cboEstado.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Activo" });
             cboEstado.Items.Add(new OpcionCombo() { Valor = 0, Texto = "No Activo" });
             cboEstado.DisplayMember = "Texto";
@@ -403,6 +418,11 @@ namespace CapaPresentacion
                 }
             }
 
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
 
         }
     }

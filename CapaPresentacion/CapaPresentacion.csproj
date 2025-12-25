@@ -7,7 +7,7 @@
     <ProjectGuid>{26DC9809-402F-48DE-B1B1-5EF727288D2F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CapaPresentacion</RootNamespace>
-    <AssemblyName>CapaPresentacion</AssemblyName>
+    <AssemblyName>SistemaVentasDemo</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,6 +46,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
@@ -335,6 +338,7 @@
     <None Include="Resources\PlantillaVenta.html" />
     <None Include="Resources\PlantillaCompra.html" />
     <None Include="Resources\icons8-borrar-para-siempre-25.png" />
+    <Content Include="favicon.ico" />
     <Content Include="Resources\icons8-pdf-25.png" />
   </ItemGroup>
   <ItemGroup>

@@ -35,6 +35,7 @@ namespace CapaPresentacion
         {
             // 1. Primero, establece el comportamiento general para TODAS las columnas
             dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             // 2. Luego, "bloquea" o cambia el comportamiento SOLO de la columna del botón
             // Asumiendo que tu columna se llama "btnSeleccionar" en el diseño
@@ -105,13 +106,26 @@ namespace CapaPresentacion
         {
             string Mensaje = string.Empty;
 
+            if (!decimal.TryParse(txtPrecioCompra.Text, out decimal precioCompra)) precioCompra = 0;
+            if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta)) precioVenta = 0;
+
+            int stockIngresado = 0;
+            if (!int.TryParse(txtStock.Text, out stockIngresado))
+            {
+                MessageBox.Show("El formato del stock no es correcto. Debe ser un número entero.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             Producto objProducto = new Producto()
             {
-             IdProducto = int.TryParse(txtId.Text, out int id) ? id : 0,
-             Codigo = txtCodigo.Text,
-             NombreProducto = txtNombreProducto.Text,
-             Descripcion = txtDescripcion.Text,         
-             oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(((OpcionCombo)cboCategoria.SelectedItem).Valor) },
+                IdProducto = int.TryParse(txtId.Text, out int id) ? id : 0,
+                Codigo = txtCodigo.Text,
+                NombreProducto = txtNombreProducto.Text,
+                Descripcion = txtDescripcion.Text,
+                oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(((OpcionCombo)cboCategoria.SelectedItem).Valor) },
+                Stock = stockIngresado,
+                PrecioCompra = precioCompra,
+                PrecioVenta = precioVenta,
              Estado = Convert.ToInt32(((OpcionCombo)cboEstado.SelectedItem).Valor) == 1 ? true : false
             };
 
@@ -129,9 +143,9 @@ namespace CapaPresentacion
                     txtDescripcion.Text,
                     ((OpcionCombo)cboCategoria.SelectedItem).Valor.ToString(),
                     ((OpcionCombo)cboCategoria.SelectedItem).Texto.ToString(),
-                    "0",
-                    "0.00",
-                    "0.00",
+                    stockIngresado.ToString(),
+                    precioCompra.ToString("0.00"), // Precio Compra con 2 decimales
+                    precioVenta.ToString("0.00"),  // Precio Venta con 2 decimales
                     ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),
                     ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),
                     });
@@ -155,6 +169,9 @@ namespace CapaPresentacion
                     row.Cells["Descripcion"].Value = txtDescripcion.Text;
                     row.Cells["IdCategoria"].Value = ((OpcionCombo)cboCategoria.SelectedItem).Valor.ToString();
                     row.Cells["Categoria"].Value = ((OpcionCombo)cboCategoria.SelectedItem).Texto.ToString();
+                    row.Cells["Stock"].Value = stockIngresado;
+                    row.Cells["PrecioCompra"].Value = precioCompra.ToString("0.00");
+                    row.Cells["PrecioVenta"].Value = precioVenta.ToString("0.00");
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString();
                     Limpiar();
@@ -176,6 +193,9 @@ namespace CapaPresentacion
             txtNombreProducto.Text = "";
             txtDescripcion.Text = "";
             cboCategoria.SelectedIndex = 0;
+            txtStock.Text = "0";
+            txtPrecioCompra.Text = "0.00"; // Resetear precio
+            txtPrecioVenta.Text = "0.00";  // Resetear precio
             cboEstado.SelectedIndex = 0;
 
           
@@ -212,6 +232,9 @@ namespace CapaPresentacion
                     txtCodigo.Text = dgvData.Rows[Indice].Cells["Codigo"].Value.ToString();
                     txtNombreProducto.Text = dgvData.Rows[Indice].Cells["NombreProducto"].Value.ToString();
                     txtDescripcion.Text = dgvData.Rows[Indice].Cells["Descripcion"].Value.ToString();
+                    txtStock.Text = dgvData.Rows[Indice].Cells["Stock"].Value.ToString();
+                    txtPrecioCompra.Text = dgvData.Rows[Indice].Cells["PrecioCompra"].Value.ToString();
+                    txtPrecioVenta.Text = dgvData.Rows[Indice].Cells["PrecioVenta"].Value.ToString();
 
                     foreach (OpcionCombo oc in cboCategoria.Items)
                     {
@@ -419,6 +442,43 @@ namespace CapaPresentacion
             }
 
 
+        }
+
+        private void txtStock_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Solo permitir números y la tecla de borrado
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtPrecio_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = false;
+            }
+            else if (e.KeyChar.ToString() == ".")
+            {
+                // Solo permitir un punto decimal
+                if (((TextBox)sender).Text.Contains("."))
+                {
+                    e.Handled = true;
+                }
+                else
+                {
+                    e.Handled = false;
+                }
+            }
+            else if (Char.IsControl(e.KeyChar))
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true; // Ignorar cualquier otra tecla (letras, símbolos)
+            }
         }
 
         private void label12_Click(object sender, EventArgs e)

@@ -64,22 +64,36 @@ namespace CapaPresentacion.modales
             string filtroTexto = txtBusqueda.Text.Trim().ToUpper();
             string columnaFiltro = ((OpcionCombo)cboBusqueda.SelectedItem).Valor.ToString();
 
-            // Determinar qué estado queremos ver según el CheckBox
-            // Si el check está marcado, buscamos "No Activo", si no, "Activo"
+            // 1. Estado Deseado (Activo / Inactivo)
             string estadoDeseado = chkMostrarInactivos.Checked ? "No Activo" : "Activo";
 
             foreach (DataGridViewRow row in dgvData.Rows)
             {
-                // 1. Verificamos si coincide con el texto del buscador (si hay texto)
+                // A. Filtro de Texto
                 bool coincideTexto = row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(filtroTexto);
 
-                // 2. Verificamos si coincide con el estado (Activo o No Activo)
-                // Asumo que la columna con el texto "Activo"/"No Activo" se llama "Estado"
+                // B. Filtro de Estado
                 string estadoFila = row.Cells["Estado"].Value.ToString();
                 bool coincideEstado = (estadoFila == estadoDeseado);
 
-                // 3. La fila es visible SOLO si cumple AMBAS condiciones
-                if (coincideTexto && coincideEstado)
+                // C. Filtro de Stock (NUEVO)
+                // Obtenemos el valor del stock de la celda
+                int stock = Convert.ToInt32(row.Cells["Stock"].Value);
+                bool coincideStock = false;
+
+                if (chkAgotados.Checked)
+                {
+                    // Si el check está MARCADO: Mostrar SOLO los que tienen stock 0
+                    coincideStock = (stock <= 0);
+                }
+                else
+                {
+                    // Si el check está DESMARCADO: Mostrar SOLO los que tienen stock disponible
+                    coincideStock = (stock > 0);
+                }
+
+                // 3. Resultado Final: Debe cumplir LAS TRES condiciones
+                if (coincideTexto && coincideEstado && coincideStock)
                 {
                     row.Visible = true;
                 }
@@ -88,9 +102,9 @@ namespace CapaPresentacion.modales
                     row.Visible = false;
                 }
             }
-        }   
-       
-        
+        }
+
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             AplicarFiltro();
@@ -102,6 +116,10 @@ namespace CapaPresentacion.modales
             AplicarFiltro();
         }
 
+        private void chkAgotados_CheckedChanged(object sender, EventArgs e)
+        {
+            AplicarFiltro();
+        }
 
 
         private void btnLimpiarCombo_Click(object sender, EventArgs e)

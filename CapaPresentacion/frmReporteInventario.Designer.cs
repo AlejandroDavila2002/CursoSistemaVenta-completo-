@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(1236, 520);
             this.Name = "frmReporteInventario";
             this.Text = "frmReporteInventario";
+            this.Load += new System.EventHandler(this.frmReporteInventario_Load);
             this.ResumeLayout(false);
 
         }

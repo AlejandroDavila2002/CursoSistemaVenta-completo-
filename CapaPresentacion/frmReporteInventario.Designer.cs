@@ -57,29 +57,31 @@
             this.ProductosBajo = new System.Windows.Forms.Label();
             this.iconPictureBox4 = new FontAwesome.Sharp.IconPictureBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.ProductosAgotados = new System.Windows.Forms.Label();
             this.iconPictureBox5 = new FontAwesome.Sharp.IconPictureBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.btnExportarPDF = new FontAwesome.Sharp.IconButton();
             this.btnExportarExcel = new FontAwesome.Sharp.IconButton();
             this.dgvDataProducto = new System.Windows.Forms.DataGridView();
-            this.dgvDataCosto = new System.Windows.Forms.DataGridView();
-            this.dgvDataAccion = new System.Windows.Forms.DataGridView();
-            this.COSTOUNT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TOTALCOSTO = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dvgDataVenta = new System.Windows.Forms.DataGridView();
-            this.PRECIOVENTA = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TOTALVENTA = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ESTADO = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ACCION = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IMG = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CODIGO = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PRODUCTO = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.STOCK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvDataCosto = new System.Windows.Forms.DataGridView();
+            this.COSTOUNT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TOTALCOSTO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvDataAccion = new System.Windows.Forms.DataGridView();
+            this.ESTADO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ACCION = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dvgDataVenta = new System.Windows.Forms.DataGridView();
+            this.PRECIOVENTA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TOTALVENTA = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label14 = new System.Windows.Forms.Label();
             this.txtBusqueda = new System.Windows.Forms.TextBox();
             this.cboBusquedaCategorias = new System.Windows.Forms.ComboBox();
             this.cboBusquedaPorStock = new System.Windows.Forms.ComboBox();
+            this.btnLimpiarCombo = new FontAwesome.Sharp.IconButton();
+            this.btnBuscar = new FontAwesome.Sharp.IconButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -329,6 +331,15 @@
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(8, 82);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(102, 13);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Productos sin Stock";
+            // 
             // ProductosAgotados
             // 
             this.ProductosAgotados.AutoSize = true;
@@ -351,15 +362,6 @@
             this.iconPictureBox5.Size = new System.Drawing.Size(32, 32);
             this.iconPictureBox5.TabIndex = 0;
             this.iconPictureBox5.TabStop = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 82);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(102, 13);
-            this.label11.TabIndex = 4;
-            this.label11.Text = "Productos sin Stock";
             // 
             // btnExportarPDF
             // 
@@ -440,6 +442,26 @@
             this.dgvDataProducto.Size = new System.Drawing.Size(683, 481);
             this.dgvDataProducto.TabIndex = 65;
             // 
+            // IMG
+            // 
+            this.IMG.HeaderText = "IMG";
+            this.IMG.Name = "IMG";
+            // 
+            // CODIGO
+            // 
+            this.CODIGO.HeaderText = "CODIGO";
+            this.CODIGO.Name = "CODIGO";
+            // 
+            // PRODUCTO
+            // 
+            this.PRODUCTO.HeaderText = "PRODUCTO";
+            this.PRODUCTO.Name = "PRODUCTO";
+            // 
+            // STOCK
+            // 
+            this.STOCK.HeaderText = "STOCK";
+            this.STOCK.Name = "STOCK";
+            // 
             // dgvDataCosto
             // 
             this.dgvDataCosto.AllowUserToAddRows = false;
@@ -474,6 +496,18 @@
             this.dgvDataCosto.RowTemplate.Height = 28;
             this.dgvDataCosto.Size = new System.Drawing.Size(343, 481);
             this.dgvDataCosto.TabIndex = 66;
+            // 
+            // COSTOUNT
+            // 
+            this.COSTOUNT.HeaderText = "COSTO UNT";
+            this.COSTOUNT.Name = "COSTOUNT";
+            this.COSTOUNT.Width = 150;
+            // 
+            // TOTALCOSTO
+            // 
+            this.TOTALCOSTO.HeaderText = "TOTAL COSTO";
+            this.TOTALCOSTO.Name = "TOTALCOSTO";
+            this.TOTALCOSTO.Width = 150;
             // 
             // dgvDataAccion
             // 
@@ -511,17 +545,15 @@
             this.dgvDataAccion.Size = new System.Drawing.Size(247, 481);
             this.dgvDataAccion.TabIndex = 67;
             // 
-            // COSTOUNT
+            // ESTADO
             // 
-            this.COSTOUNT.HeaderText = "COSTO UNT";
-            this.COSTOUNT.Name = "COSTOUNT";
-            this.COSTOUNT.Width = 150;
+            this.ESTADO.HeaderText = "ESTADO";
+            this.ESTADO.Name = "ESTADO";
             // 
-            // TOTALCOSTO
+            // ACCION
             // 
-            this.TOTALCOSTO.HeaderText = "TOTAL COSTO";
-            this.TOTALCOSTO.Name = "TOTALCOSTO";
-            this.TOTALCOSTO.Width = 150;
+            this.ACCION.HeaderText = "ACCION";
+            this.ACCION.Name = "ACCION";
             // 
             // dvgDataVenta
             // 
@@ -570,36 +602,6 @@
             this.TOTALVENTA.Name = "TOTALVENTA";
             this.TOTALVENTA.Width = 150;
             // 
-            // ESTADO
-            // 
-            this.ESTADO.HeaderText = "ESTADO";
-            this.ESTADO.Name = "ESTADO";
-            // 
-            // ACCION
-            // 
-            this.ACCION.HeaderText = "ACCION";
-            this.ACCION.Name = "ACCION";
-            // 
-            // IMG
-            // 
-            this.IMG.HeaderText = "IMG";
-            this.IMG.Name = "IMG";
-            // 
-            // CODIGO
-            // 
-            this.CODIGO.HeaderText = "CODIGO";
-            this.CODIGO.Name = "CODIGO";
-            // 
-            // PRODUCTO
-            // 
-            this.PRODUCTO.HeaderText = "PRODUCTO";
-            this.PRODUCTO.Name = "PRODUCTO";
-            // 
-            // STOCK
-            // 
-            this.STOCK.HeaderText = "STOCK";
-            this.STOCK.Name = "STOCK";
-            // 
             // label14
             // 
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -642,11 +644,51 @@
             this.cboBusquedaPorStock.Size = new System.Drawing.Size(161, 21);
             this.cboBusquedaPorStock.TabIndex = 72;
             // 
+            // btnLimpiarCombo
+            // 
+            this.btnLimpiarCombo.AllowDrop = true;
+            this.btnLimpiarCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLimpiarCombo.BackColor = System.Drawing.SystemColors.Control;
+            this.btnLimpiarCombo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiarCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimpiarCombo.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.btnLimpiarCombo.IconChar = FontAwesome.Sharp.IconChar.Broom;
+            this.btnLimpiarCombo.IconColor = System.Drawing.Color.Black;
+            this.btnLimpiarCombo.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnLimpiarCombo.IconSize = 24;
+            this.btnLimpiarCombo.Location = new System.Drawing.Point(686, 169);
+            this.btnLimpiarCombo.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLimpiarCombo.Name = "btnLimpiarCombo";
+            this.btnLimpiarCombo.Size = new System.Drawing.Size(48, 23);
+            this.btnLimpiarCombo.TabIndex = 74;
+            this.btnLimpiarCombo.UseVisualStyleBackColor = false;
+            // 
+            // btnBuscar
+            // 
+            this.btnBuscar.AllowDrop = true;
+            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBuscar.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.btnBuscar.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.btnBuscar.IconColor = System.Drawing.Color.Black;
+            this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnBuscar.IconSize = 24;
+            this.btnBuscar.Location = new System.Drawing.Point(634, 169);
+            this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(48, 23);
+            this.btnBuscar.TabIndex = 73;
+            this.btnBuscar.UseVisualStyleBackColor = false;
+            // 
             // frmReporteInventario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1636, 693);
+            this.Controls.Add(this.btnLimpiarCombo);
+            this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.cboBusquedaPorStock);
             this.Controls.Add(this.cboBusquedaCategorias);
             this.Controls.Add(this.txtBusqueda);
@@ -737,5 +779,7 @@
         private System.Windows.Forms.TextBox txtBusqueda;
         private System.Windows.Forms.ComboBox cboBusquedaCategorias;
         private System.Windows.Forms.ComboBox cboBusquedaPorStock;
+        private FontAwesome.Sharp.IconButton btnLimpiarCombo;
+        private FontAwesome.Sharp.IconButton btnBuscar;
     }
 }

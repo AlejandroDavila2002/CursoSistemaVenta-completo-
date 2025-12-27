@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proveedor.cs" />
     <Compile Include="ReporteCompras.cs" />
+    <Compile Include="ReporteInventario.cs" />
     <Compile Include="ReporteVenta.cs" />
     <Compile Include="Rol.cs" />
     <Compile Include="TasaCambio.cs" />

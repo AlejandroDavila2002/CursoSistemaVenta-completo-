@@ -22,7 +22,7 @@ namespace CapaPresentacion.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace CapaPresentacion.Properties {
         ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CapaPresentacion.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace CapaPresentacion.Properties {
         ///   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_alerta_32 {
+        public static System.Drawing.Bitmap icons8_alerta_32 {
             get {
                 object obj = ResourceManager.GetObject("icons8-alerta-32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_alerta_321 {
+        public static System.Drawing.Bitmap icons8_alerta_321 {
             get {
                 object obj = ResourceManager.GetObject("icons8-alerta-321", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_basura_32 {
+        public static System.Drawing.Bitmap icons8_basura_32 {
             get {
                 object obj = ResourceManager.GetObject("icons8_basura_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_borrar_25 {
+        public static System.Drawing.Bitmap icons8_borrar_25 {
             get {
                 object obj = ResourceManager.GetObject("icons8_borrar_25", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +103,7 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_checked_checkbox_40 {
+        public static System.Drawing.Bitmap icons8_checked_checkbox_40 {
             get {
                 object obj = ResourceManager.GetObject("icons8_checked_checkbox_40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +113,7 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_comprobado_20 {
+        public static System.Drawing.Bitmap icons8_comprobado_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_comprobado_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -146,9 +146,19 @@ namespace CapaPresentacion.Properties {
         ///&lt;body&gt;
         ///    &lt;tab [resto de la cadena truncado]&quot;;.
         /// </summary>
-        internal static string PlantillaCompra {
+        public static string PlantillaCompra {
             get {
                 return ResourceManager.GetString("PlantillaCompra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Byte[].
+        /// </summary>
+        public static byte[] PlantillaInventario {
+            get {
+                object obj = ResourceManager.GetObject("PlantillaInventario", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -178,7 +188,7 @@ namespace CapaPresentacion.Properties {
         ///&lt;body&gt;
         ///    &lt;tab [resto de la cadena truncado]&quot;;.
         /// </summary>
-        internal static string PlantillaVenta {
+        public static string PlantillaVenta {
             get {
                 return ResourceManager.GetString("PlantillaVenta", resourceCulture);
             }

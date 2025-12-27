@@ -113,6 +113,46 @@ namespace CapaDatos
             return lista;
         }
 
+     
+        public List<ReporteInventario> ObtenerInventario()
+        {
+            List<ReporteInventario> lista = new List<ReporteInventario>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            { // Usa tu cadena de conexión
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_REPORTE_INVENTARIO", oconexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new ReporteInventario()
+                            {
+                                Codigo = dr["Codigo"].ToString(),
+                                Producto = dr["Producto"].ToString(),
+                                Categoria = dr["Categoria"].ToString(),
+                                Stock = Convert.ToInt32(dr["Stock"]),
+                                CostoUnitario = Convert.ToDecimal(dr["CostoUnitario"]),
+                                TotalCosto = Convert.ToDecimal(dr["TotalCosto"]),
+                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                TotalVenta = Convert.ToDecimal(dr["TotalVenta"]),
+                                Estado = Convert.ToBoolean(dr["Estado"]) ? "Activo" : "No Activo"
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<ReporteInventario>();
+                }
+            }
+            return lista;
+        }
+
+
+
     }
 
 }

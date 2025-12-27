@@ -382,6 +382,7 @@
             this.btnExportarPDF.Text = "Exportar PDF";
             this.btnExportarPDF.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnExportarPDF.UseVisualStyleBackColor = false;
+            this.btnExportarPDF.Click += new System.EventHandler(this.btnDescargarPDF_Click);
             // 
             // btnExportarExcel
             // 
@@ -402,6 +403,7 @@
             this.btnExportarExcel.Text = "Exportar Excel";
             this.btnExportarExcel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnExportarExcel.UseVisualStyleBackColor = false;
+            this.btnExportarExcel.Click += new System.EventHandler(this.btnExportarExcel_Click);
             // 
             // dgvDataProducto
             // 
@@ -441,6 +443,7 @@
             this.dgvDataProducto.RowTemplate.Height = 28;
             this.dgvDataProducto.Size = new System.Drawing.Size(683, 481);
             this.dgvDataProducto.TabIndex = 65;
+            this.dgvDataProducto.Scroll += new System.Windows.Forms.ScrollEventHandler(this.dgvDataProducto_Scroll);
             // 
             // IMG
             // 
@@ -647,7 +650,6 @@
             // btnLimpiarCombo
             // 
             this.btnLimpiarCombo.AllowDrop = true;
-            this.btnLimpiarCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLimpiarCombo.BackColor = System.Drawing.SystemColors.Control;
             this.btnLimpiarCombo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLimpiarCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -662,11 +664,12 @@
             this.btnLimpiarCombo.Size = new System.Drawing.Size(48, 23);
             this.btnLimpiarCombo.TabIndex = 74;
             this.btnLimpiarCombo.UseVisualStyleBackColor = false;
+            this.btnLimpiarCombo.AutoSizeChanged += new System.EventHandler(this.btnLimpiarCombo_AutoSizeChanged);
+            this.btnLimpiarCombo.Click += new System.EventHandler(this.btnLimpiarCombo_AutoSizeChanged);
             // 
             // btnBuscar
             // 
             this.btnBuscar.AllowDrop = true;
-            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -681,6 +684,8 @@
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
             this.btnBuscar.TabIndex = 73;
             this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.AutoSizeChanged += new System.EventHandler(this.btnLimpiarCombo_AutoSizeChanged);
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // frmReporteInventario
             // 

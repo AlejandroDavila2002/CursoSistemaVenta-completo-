@@ -21,5 +21,10 @@ namespace CapaNegocio
         {
             return objReporte.Venta(FechaInicio, FechaFin);
         }
+
+        public List<ReporteInventario> ObtenerInventario()
+        {
+            return objReporte.ObtenerInventario();
+        }
     }
 }

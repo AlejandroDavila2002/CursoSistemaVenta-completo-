@@ -61,6 +61,10 @@ namespace CapaNegocio
             return objDetallesNegocio.ActualizarLogo(imagen, out Mensaje);
         }
 
+        public Detalles_Negocio ObtenerDatos()
+        {
+            return objDetallesNegocio.ObtenerDetallesNegocio();
+        }
     }
 }
  

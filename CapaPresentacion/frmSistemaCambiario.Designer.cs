@@ -191,7 +191,10 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.btnaceptar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximumSize = new System.Drawing.Size(649, 326);
+            this.MinimizeBox = false;
             this.Name = "frmSistemaCambiario";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmSistemaCambiario";
             this.Load += new System.EventHandler(this.frmSistemaCambiario_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvtasasdecambio)).EndInit();

@@ -339,6 +339,7 @@
     <None Include="Resources\PlantillaCompra.html" />
     <None Include="Resources\icons8-borrar-para-siempre-25.png" />
     <Content Include="favicon.ico" />
+    <None Include="Resources\icons8-alerta-32.png" />
     <Content Include="Resources\icons8-pdf-25.png" />
   </ItemGroup>
   <ItemGroup>

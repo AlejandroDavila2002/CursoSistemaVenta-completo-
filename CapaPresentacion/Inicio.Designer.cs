@@ -43,6 +43,9 @@
             this.menucliente = new FontAwesome.Sharp.IconMenuItem();
             this.menuproveedores = new FontAwesome.Sharp.IconMenuItem();
             this.menureportes = new FontAwesome.Sharp.IconMenuItem();
+            this.reportesDeComprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportesDeVentasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportesDeInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menusistema_cambiario = new FontAwesome.Sharp.IconMenuItem();
             this.menuacerdade = new FontAwesome.Sharp.IconMenuItem();
             this.menutitulo = new System.Windows.Forms.MenuStrip();
@@ -50,9 +53,7 @@
             this.contenedor = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.lblUsuario = new System.Windows.Forms.Label();
-            this.reportesDeVentasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reportesDeComprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reportesDeInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbltasa = new System.Windows.Forms.Label();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -254,6 +255,27 @@
             this.menureportes.Text = "Reportes";
             this.menureportes.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             // 
+            // reportesDeComprasToolStripMenuItem
+            // 
+            this.reportesDeComprasToolStripMenuItem.Name = "reportesDeComprasToolStripMenuItem";
+            this.reportesDeComprasToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.reportesDeComprasToolStripMenuItem.Text = "Reportes de Compras";
+            this.reportesDeComprasToolStripMenuItem.Click += new System.EventHandler(this.reportesDeComprasToolStripMenuItem_Click);
+            // 
+            // reportesDeVentasToolStripMenuItem
+            // 
+            this.reportesDeVentasToolStripMenuItem.Name = "reportesDeVentasToolStripMenuItem";
+            this.reportesDeVentasToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.reportesDeVentasToolStripMenuItem.Text = "Reportes de Ventas";
+            this.reportesDeVentasToolStripMenuItem.Click += new System.EventHandler(this.reportesDeVentasToolStripMenuItem_Click);
+            // 
+            // reportesDeInventarioToolStripMenuItem
+            // 
+            this.reportesDeInventarioToolStripMenuItem.Name = "reportesDeInventarioToolStripMenuItem";
+            this.reportesDeInventarioToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.reportesDeInventarioToolStripMenuItem.Text = "Reportes de Inventario";
+            this.reportesDeInventarioToolStripMenuItem.Click += new System.EventHandler(this.reportesDeInventarioToolStripMenuItem_Click);
+            // 
             // menusistema_cambiario
             // 
             this.menusistema_cambiario.AutoSize = false;
@@ -325,7 +347,7 @@
             this.label2.BackColor = System.Drawing.Color.SteelBlue;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(958, 24);
+            this.label2.Location = new System.Drawing.Point(959, 13);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 16);
             this.label2.TabIndex = 4;
@@ -339,39 +361,32 @@
             this.lblUsuario.BackColor = System.Drawing.Color.SteelBlue;
             this.lblUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUsuario.ForeColor = System.Drawing.Color.White;
-            this.lblUsuario.Location = new System.Drawing.Point(1029, 24);
+            this.lblUsuario.Location = new System.Drawing.Point(1030, 13);
             this.lblUsuario.Name = "lblUsuario";
             this.lblUsuario.Size = new System.Drawing.Size(78, 16);
             this.lblUsuario.TabIndex = 5;
             this.lblUsuario.Text = "lblUsuario";
             this.lblUsuario.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // reportesDeVentasToolStripMenuItem
+            // lbltasa
             // 
-            this.reportesDeVentasToolStripMenuItem.Name = "reportesDeVentasToolStripMenuItem";
-            this.reportesDeVentasToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.reportesDeVentasToolStripMenuItem.Text = "Reportes de Ventas";
-            this.reportesDeVentasToolStripMenuItem.Click += new System.EventHandler(this.reportesDeVentasToolStripMenuItem_Click);
-            // 
-            // reportesDeComprasToolStripMenuItem
-            // 
-            this.reportesDeComprasToolStripMenuItem.Name = "reportesDeComprasToolStripMenuItem";
-            this.reportesDeComprasToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.reportesDeComprasToolStripMenuItem.Text = "Reportes de Compras";
-            this.reportesDeComprasToolStripMenuItem.Click += new System.EventHandler(this.reportesDeComprasToolStripMenuItem_Click);
-            // 
-            // reportesDeInventarioToolStripMenuItem
-            // 
-            this.reportesDeInventarioToolStripMenuItem.Name = "reportesDeInventarioToolStripMenuItem";
-            this.reportesDeInventarioToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.reportesDeInventarioToolStripMenuItem.Text = "Reportes de Inventario";
-            this.reportesDeInventarioToolStripMenuItem.Click += new System.EventHandler(this.reportesDeInventarioToolStripMenuItem_Click);
+            this.lbltasa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbltasa.BackColor = System.Drawing.Color.SteelBlue;
+            this.lbltasa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbltasa.ForeColor = System.Drawing.Color.White;
+            this.lbltasa.Location = new System.Drawing.Point(959, 31);
+            this.lbltasa.Name = "lbltasa";
+            this.lbltasa.Size = new System.Drawing.Size(65, 16);
+            this.lbltasa.TabIndex = 6;
+            this.lbltasa.Text = "toolStripStatusLabel";
+            this.lbltasa.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // Inicio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1243, 659);
+            this.Controls.Add(this.lbltasa);
             this.Controls.Add(this.lblUsuario);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.menu);
@@ -418,6 +433,7 @@
         private System.Windows.Forms.ToolStripMenuItem reportesDeVentasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportesDeComprasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportesDeInventarioToolStripMenuItem;
+        private System.Windows.Forms.Label lbltasa;
     }
 }
 

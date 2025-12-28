@@ -48,6 +48,17 @@ namespace CapaPresentacion
 
 
                 lblUsuario.Text = UsuarioActual.NombreCompleto;
+
+            CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
+            UsuarioActual.oTasaGeneral = cnRegistro.ObtenerTasaGeneral(UsuarioActual.IdUsuario);
+
+            // OPCIONAL: Mostrar la tasa en la barra de estado o un Label del formulario principal
+            if (UsuarioActual.oTasaGeneral != null)
+            {
+                // Supongamos que tienes un toolStripStatusLabel llamado lbltasa
+                lbltasa.Text = $"Tasa Actual: 1 {UsuarioActual.oTasaGeneral.MonedaAbreviacion} = {UsuarioActual.oTasaGeneral.Valor:N2} VES";
+                lbltasa.ForeColor = Color.DarkGreen;
+            }
         }
 
 

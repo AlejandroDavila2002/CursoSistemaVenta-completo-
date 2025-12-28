@@ -276,13 +276,13 @@ namespace CapaPresentacion
 
             try
             {
-                // 1. Obtener datos del negocio y Logo
+                // 1. Obtener datos del negocio y Logo desde Capa Negocio
                 bool obtenido = false;
                 CN_DetallesNegocio negocio = new CN_DetallesNegocio();
                 byte[] byteImage = negocio.obtenerLogo(out obtenido);
                 Detalles_Negocio datosNegocio = negocio.ObtenerDatos();
 
-                // 2. Cargar la plantilla HTML desde recursos (Manejo de error byte[] a string)
+                // 2. Cargar la plantilla HTML desde los Recursos del proyecto
                 string texto_html = string.Empty;
                 var recurso = Properties.Resources.PlantillaInventario;
 
@@ -291,42 +291,48 @@ namespace CapaPresentacion
                 else
                     texto_html = recurso.ToString();
 
-                // 3. Preparar el logo en Base64
-                string base64Logo = obtenido ? Convert.ToBase64String(byteImage) : "";
+                // 3. Preparar el logo (IMPORTANTE: Limpieza de cadena Base64)
+                string logoFullSource = "";
+                if (obtenido && byteImage != null && byteImage.Length > 0)
+                {
+                    // Convertimos a Base64 y eliminamos saltos de línea (\n, \r) que iTextSharp no procesa bien
+                    string base64String = Convert.ToBase64String(byteImage).Replace("\n", "").Replace("\r", "");
+                    logoFullSource = "data:image/png;base64," + base64String;
+                }
 
-                // 4. Generar dinámicamente las filas de la tabla
-                string filas = string.Empty;
+                // 4. Generar dinámicamente las filas de la tabla principal
+                StringBuilder filas = new StringBuilder();
                 foreach (DataGridViewRow row in dgvDataProducto.Rows)
                 {
                     if (row.Visible)
                     {
                         int i = row.Index;
-                        filas += "<tr>";
-                        filas += $"<td class='text-center'>{row.Cells["CODIGO"].Value}</td>";
-                        filas += $"<td>{row.Cells["PRODUCTO"].Value}</td>";
-                        filas += $"<td class='text-center'>{row.Cells["STOCK"].Value}</td>";
-                        filas += $"<td class='text-right'>{dgvDataCosto.Rows[i].Cells["COSTOUNT"].Value}</td>";
-                        filas += $"<td class='text-right'>{dgvDataCosto.Rows[i].Cells["TOTALCOSTO"].Value}</td>";
-                        filas += $"<td class='text-right'>{dvgDataVenta.Rows[i].Cells["PRECIOVENTA"].Value}</td>";
-                        filas += $"<td class='text-right'>{dvgDataVenta.Rows[i].Cells["TOTALVENTA"].Value}</td>";
-                        filas += "</tr>";
+                        filas.Append("<tr>");
+                        filas.Append($"<td class='text-center'>{row.Cells["CODIGO"].Value}</td>");
+                        filas.Append($"<td>{row.Cells["PRODUCTO"].Value}</td>");
+                        filas.Append($"<td class='text-center'>{row.Cells["STOCK"].Value}</td>");
+                        filas.Append($"<td class='text-right'>{dgvDataCosto.Rows[i].Cells["COSTOUNT"].Value}</td>");
+                        filas.Append($"<td class='text-right'>{dgvDataCosto.Rows[i].Cells["TOTALCOSTO"].Value}</td>");
+                        filas.Append($"<td class='text-right'>{dvgDataVenta.Rows[i].Cells["PRECIOVENTA"].Value}</td>");
+                        filas.Append($"<td class='text-right'>{dvgDataVenta.Rows[i].Cells["TOTALVENTA"].Value}</td>");
+                        filas.Append("</tr>");
                     }
                 }
 
-                // 5. Reemplazos masivos en la plantilla
-                texto_html = texto_html.Replace("{{logo}}", base64Logo)
+                // 5. Reemplazos masivos en la plantilla HTML
+                texto_html = texto_html.Replace("{{logo}}", logoFullSource)
                                        .Replace("{{nombrenegocio}}", datosNegocio.Nombre.ToUpper())
                                        .Replace("{{rifnegocio}}", datosNegocio.RUC)
                                        .Replace("{{direccionnegocio}}", datosNegocio.Direccion)
                                        .Replace("{{fecha}}", DateTime.Now.ToString("dd/MM/yyyy"))
-                                       .Replace("{{filas}}", filas)
+                                       .Replace("{{filas}}", filas.ToString())
                                        .Replace("{{totalprods}}", totalproductos.Text)
                                        .Replace("{{vcosto}}", valorInventario_Costo.Text)
                                        .Replace("{{vventa}}", valorInventario_Venta.Text)
                                        .Replace("{{sbajo}}", ProductosBajo.Text)
                                        .Replace("{{sagotado}}", ProductosAgotados.Text);
 
-                // 6. Configuración y Guardado del PDF
+                // 6. Configuración del Guardado y Generación del PDF
                 SaveFileDialog savefile = new SaveFileDialog();
                 savefile.FileName = $"ReporteInventario_{DateTime.Now:ddMMyyyy_HHmm}.pdf";
                 savefile.Filter = "Pdf Files|*.pdf";
@@ -335,13 +341,14 @@ namespace CapaPresentacion
                 {
                     using (FileStream stream = new FileStream(savefile.FileName, FileMode.Create))
                     {
-                        // Usamos Orientación Horizontal (Rotate) para que quepan todas las columnas
+                        // Configuramos el documento en A4 Horizontal (Rotate)
                         Document pdfDoc = new Document(PageSize.A4.Rotate(), 25, 25, 25, 25);
                         PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
                         pdfDoc.Open();
 
                         using (StringReader sr = new StringReader(texto_html))
                         {
+                            // XMLWorkerHelper parsea el HTML y el CSS a iTextSharp
                             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
                         }
 
@@ -356,6 +363,7 @@ namespace CapaPresentacion
                 MessageBox.Show("Error al generar el PDF: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 
 }

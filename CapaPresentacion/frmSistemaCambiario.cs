@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 using System.Drawing;
 
 
-
-
-
 // (nota, debes enlazar los datos de las tasas segun el IdUsuario a una variable general para que sea utilizada por el sistema )
 //(nota cuando guardas un dato de alguna tasa, te sale un error emergente, debes corregirlo) 
 namespace CapaPresentacion
@@ -36,11 +33,6 @@ namespace CapaPresentacion
             dgvtasasdecambio.CellContentClick += dgvtasasdecambio_CellContentClick;
             // SetupTimer(); // Si tienes un Timer para actualización automática
         }
-
-
-        // ==============================================================================
-        // MÉTODOS DE INICIALIZACIÓN Y CARGA
-        // ==============================================================================
 
         // CAMBIO 1: Convertido a "async void"
         private async void frmSistemaCambiario_Load(object sender, EventArgs e)
@@ -312,91 +304,69 @@ namespace CapaPresentacion
         /// </summary>
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            // La tabla contiene tanto el historial como las nuevas entradas.
             if (dgvtasasdecambio.Rows.Count == 0 || (dgvtasasdecambio.Rows.Count == 1 && dgvtasasdecambio.Rows[0].IsNewRow))
             {
                 MessageBox.Show("No hay registros en la tabla para confirmar y guardar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            Usuario usuarioSesion = oUsuarioActual;
-
-            if (usuarioSesion == null || usuarioSesion.IdUsuario <= 0)
+            if (oUsuarioActual == null || oUsuarioActual.IdUsuario <= 0)
             {
-                MessageBox.Show("Error de Sesión: No se pudo obtener el usuario logueado o su ID es inválido. Cierre e inicie sesión de nuevo.", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error de Sesión: No se pudo obtener el usuario logueado. Cierre e inicie sesión de nuevo.", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
             int registrosGuardados = 0;
-            // Calcular registros totales sin contar la fila nueva
-            int registrosTotales = dgvtasasdecambio.Rows.Count - (dgvtasasdecambio.AllowUserToAddRows ? 1 : 0);
-            int idUsuario = usuarioSesion.IdUsuario;
+            int idUsuario = oUsuarioActual.IdUsuario;
 
-            // Recorrer el DataGridView
             foreach (DataGridViewRow row in dgvtasasdecambio.Rows)
             {
                 if (row.IsNewRow) continue;
 
                 try
                 {
-                    // Extracción de datos para la Capa de Datos
                     string displayMoneda = row.Cells["Moneda"].Value.ToString();
-                    // Obtiene la abreviación (ej: "EUR" de "Euro (EUR)")
                     string abreviacion = displayMoneda.Split('(').Last().TrimEnd(')');
 
-                    if (!_tasasActuales.ContainsKey(abreviacion))
-                    {
-                        throw new Exception($"No se encontró la tasa original BCV para la abreviación '{abreviacion}'.");
-                    }
+                    if (!_tasasActuales.ContainsKey(abreviacion)) continue;
                     TasaCambio tasaOriginal = _tasasActuales[abreviacion];
 
-                    // Intentar obtener el monto del DataGridView
-                    if (decimal.TryParse(row.Cells["Monto"].Value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal montoOperacion))
+                    // CORRECCIÓN DE DECIMALES: Reemplazamos coma por punto para asegurar el parseo correcto
+                    string valorTexto = row.Cells["Monto"].Value.ToString().Replace(",", ".");
+
+                    if (decimal.TryParse(valorTexto, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal montoOperacion))
                     {
-                        // 4. Llamar a la Capa de Negocio
-                        // Se asume que la CN solo guarda si el registro es nuevo o si se actualizó el monto
-                        bool resultado = cnRegistro.GuardarRegistroIndividual(usuarioSesion, tasaOriginal, montoOperacion);
+                        bool resultado = cnRegistro.GuardarRegistroIndividual(oUsuarioActual, tasaOriginal, montoOperacion);
 
                         if (resultado)
                         {
                             registrosGuardados++;
-                            // Opcional: Cambiar el color de fondo a LightGray para indicar que ya se guardó
                             row.DefaultCellStyle.BackColor = Color.LightGray;
-                        }
-                        else
-                        {
-                            // Si retorna false, podría ser que el registro ya existía y no se modificó
-                            MessageBox.Show($"Advertencia: No se pudo guardar el registro para {displayMoneda}. Podría ser un registro duplicado sin cambios o un fallo de BD.", "Alerta de BD", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            // SINCRONIZACIÓN: Si esta moneda es la Tasa General actual, actualizamos el valor en memoria
+                            if (oUsuarioActual.oTasaGeneral != null && oUsuarioActual.oTasaGeneral.MonedaAbreviacion == abreviacion)
+                            {
+                                oUsuarioActual.oTasaGeneral.Valor = montoOperacion;
+                            }
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"Error al parsear el monto para {displayMoneda} en la tabla. Asegúrese de que sea numérico. No se guardó.", "Error de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Error de formato en el monto para {displayMoneda}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }
-                catch (ArgumentException ex)
-                {
-                    // Captura de errores de validación de CapaNegocio (Ej: Monto negativo)
-                    MessageBox.Show(ex.Message, "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error general al procesar la fila: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error al procesar la fila: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
             if (registrosGuardados > 0)
             {
-                MessageBox.Show($"¡Proceso completado! {registrosGuardados} nuevos/actualizados registros han sido guardados y vinculados al usuario con ID: {idUsuario}.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if (registrosTotales > 0)
-            {
-                MessageBox.Show($"Advertencia: Ninguno de los registros se consideró nuevo o modificado para guardar, o todos fallaron la validación/BD. El historial permanece visible.", "Fallo/Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"¡Proceso completado! {registrosGuardados} registros procesados.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            // **PASO CLAVE 2: Recargamos el historial para reflejar los posibles cambios/guardados**
-            // Esto asegura que la tabla esté sincronizada con la base de datos, eliminando las filas amarillas (nuevas) si fueron guardadas exitosamente.
             CargarHistorialUsuario();
         }
 
@@ -405,45 +375,35 @@ namespace CapaPresentacion
         /// </summary>
         private void dgvtasasdecambio_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // 1. Verificación del click en la columna correcta
-            if (e.RowIndex < 0 || e.ColumnIndex != dgvtasasdecambio.Columns["btnSeleccionarTasa"].Index)
-            {
-                return;
-            }
-
-
+            // 1. Verificación del click en la columna de botón "Usar"
+            if (e.RowIndex < 0 || e.ColumnIndex != dgvtasasdecambio.Columns["btnSeleccionarTasa"].Index) return;
             if (dgvtasasdecambio.Rows[e.RowIndex].IsNewRow) return;
 
-            // Obtener la fila donde se hizo clic
             DataGridViewRow row = dgvtasasdecambio.Rows[e.RowIndex];
-
-            // 2. Extracción de los datos de la fila
             string displayMoneda = row.Cells["Moneda"].Value?.ToString();
-            string montoText = row.Cells["Monto"].Value?.ToString();
 
-            if (string.IsNullOrEmpty(displayMoneda) || string.IsNullOrEmpty(montoText))
-            {
-                MessageBox.Show("Error: Datos incompletos en la fila seleccionada.", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            // CORRECCIÓN DE DECIMALES: Limpieza de cadena antes de parsear
+            string montoText = row.Cells["Monto"].Value?.ToString().Replace(",", ".");
 
-            // 3. Obtener la TasaCambio original (para usar su IdMoneda, etc.)
+            if (string.IsNullOrEmpty(displayMoneda) || string.IsNullOrEmpty(montoText)) return;
+
             string abreviacion = displayMoneda.Split('(').Last().TrimEnd(')');
+
             if (!_tasasActuales.TryGetValue(abreviacion, out TasaCambio tasaOriginal))
             {
-                MessageBox.Show($"Error interno: No se pudo obtener la tasa BCV original para '{abreviacion}'.", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No se pudo recuperar la información base de la moneda.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (!decimal.TryParse(montoText, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal montoOperacion))
             {
-                MessageBox.Show("El monto de la operación no es un número válido. Por favor, edite la celda y use un formato numérico.", "Error de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Monto no válido.", "Error de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // 4. Confirmar la acción con el usuario
+            // 4. Confirmación del usuario
             DialogResult result = MessageBox.Show(
-                $"¿Desea establecer la tasa de {displayMoneda} con el valor de {montoOperacion.ToString("N2", CultureInfo.InvariantCulture)} como su Tasa de Cambio General para el sistema?",
+                $"¿Desea establecer {displayMoneda} ({montoOperacion:N2}) como Tasa General del sistema?",
                 "Confirmar Tasa General",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
@@ -452,32 +412,33 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    // 5. Llamar a la Capa de Negocio para guardar la Tasa General
                     CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
 
-                    // **NOTA: DEBES IMPLEMENTAR EstablecerTasaGeneralUsuario EN CapaNegocio**
+                    // Llamada al método de negocio que guarda en la tabla PREFERENCIAS_USUARIO
                     bool guardadoExitoso = cnRegistro.EstablecerTasaGeneralUsuario(oUsuarioActual.IdUsuario, tasaOriginal, montoOperacion);
 
                     if (guardadoExitoso)
                     {
+                        // ACTUALIZACIÓN DE SESIÓN: Ahora el resto del sistema puede leer esta tasa desde oUsuarioActual
+                        oUsuarioActual.oTasaGeneral = new TasaGeneralUsuario()
+                        {
+                            MonedaAbreviacion = abreviacion,
+                            Valor = montoOperacion
+                        };
+
                         MessageBox.Show("Tasa General establecida exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Opcional: Resaltar la fila seleccionada como General
+                        // Feedback visual: Resetear fondos y pintar la activa de verde
                         foreach (DataGridViewRow r in dgvtasasdecambio.Rows)
                         {
-                            r.DefaultCellStyle.BackColor = Color.LightGray; // Restablece el color base del historial
+                            r.DefaultCellStyle.BackColor = Color.LightGray;
                         }
-                        // La fila seleccionada siempre es la Tasa General, la resaltamos en verde claro
                         row.DefaultCellStyle.BackColor = Color.LightGreen;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Fallo al guardar la Tasa General. Verifique la conexión a la Base de Datos o la implementación en la Capa de Negocio.", "Error de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al intentar establecer la Tasa General: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -13,14 +13,9 @@ namespace CapaDatos
 {
     public class CD_TasaCambio
     {
-        // Usa la cadena de conexión de la clase estática de CapaDatos
         private string CadenaConexion = Conexion.cadena;
 
-        /// <summary>
-        /// Obtiene la última tasa registrada en la base de datos para cada moneda.
-        /// (Usado por BcvScraper para verificar si necesita actualizar).
-        /// </summary>
-        /// <returns>Diccionario con la última TasaCambio por abreviación de moneda.</returns>
+     
         public Dictionary<string, TasaCambio> ObtenerUltimasTasas()
         {
             var listaTasas = new Dictionary<string, TasaCambio>();
@@ -35,7 +30,6 @@ namespace CapaDatos
                     GROUP BY MonedaAbreviacion
                 ) AS UltimaTasa ON T.MonedaAbreviacion = UltimaTasa.MonedaAbreviacion 
                                 AND T.FechaRegistro = UltimaTasa.MaxFecha";
-
             try
             {
                 using (SqlConnection conexion = new SqlConnection(CadenaConexion))
@@ -310,6 +304,8 @@ namespace CapaDatos
             }
             return tasaGeneral;
         }
+
+
 
     }
 }

@@ -15,7 +15,7 @@ namespace CapaEntidad
         public string FechaValor { get; set; }         // La fecha en que fue publicada la tasa (Ej: "03 de Noviembre de 2025")
         public DateTime FechaRegistro { get; set; }    // Fecha y hora en que se extrajo/registró el dato
 
-        // Propiedad de solo lectura para mostrar en el ComboBox de la interfaz
-        public string Display => $"{NombreCompleto} ({MonedaAbreviacion})";
+        
+       
     }
 }

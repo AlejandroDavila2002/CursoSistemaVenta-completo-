@@ -57,7 +57,7 @@ namespace CapaDatos
                 }
                 catch (Exception ex)
                 {
-                   
+                    System.Windows.Forms.MessageBox.Show("Error en SQL: " + ex.Message);
                     lista = new List<ReporteCompras>();
                 }
             }
@@ -145,6 +145,7 @@ namespace CapaDatos
                 }
                 catch (Exception ex)
                 {
+                    System.Windows.Forms.MessageBox.Show("Error en SQL: " + ex.Message);
                     lista = new List<ReporteInventario>();
                 }
             }

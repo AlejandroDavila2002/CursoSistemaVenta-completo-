@@ -10,17 +10,10 @@ namespace CapaNegocio
 {
     public class CN_RegistroUsuario
     {
-        // Se asume que CD_TasaCambio contiene los métodos para interactuar con la BD.
+        
         private CD_TasaCambio oCD_TasaCambio = new CD_TasaCambio();
 
-        // ==============================================================================
-        // MÉTODOS DE OBTENCIÓN DE TASAS
-        // ==============================================================================
-
-        /// <summary>
-        /// [NUEVO MÉTODO] Obtiene las tasas de cambio, invocando al BcvScraper para decidir
-        /// si debe actualizar desde la web o usar la caché de la BD.
-        /// </summary>
+        
         public async Task<Dictionary<string, TasaCambio>> ObtenerTasasActualizadasAsync()
         {
             // Esta es la llamada correcta que invoca al scraper
@@ -77,30 +70,39 @@ namespace CapaNegocio
             return oCD_TasaCambio.ObtenerHistorialUsuario(idUsuario);
         }
 
-        /// <summary>
-        /// Establece una tasa de cambio específica (Moneda y Monto) como 
-        /// la 'Tasa General' o predeterminada del sistema para este usuario.
-        /// </summary>
-        public bool EstablecerTasaGeneralUsuario(int idUsuario, TasaCambio tasaOriginal, decimal montoOperacion)
+        /// <summary>
+                /// Establece una tasa de cambio específica (Moneda y Monto) como 
+                /// la 'Tasa General' o predeterminada del sistema para este usuario.
+                /// </summary>
+
+        public bool EstablecerTasaGeneralUsuario(int idUsuario, TasaCambio tasa, decimal montoPersonalizado)
         {
-            if (idUsuario <= 0)
+            // 1. Validaciones de Negocio
+            if (idUsuario <= 0) return false;
+
+            if (tasa == null || string.IsNullOrEmpty(tasa.MonedaAbreviacion))
+                throw new ArgumentException("La moneda seleccionada no es válida.");
+
+            if (montoPersonalizado <= 0)
+                throw new ArgumentException("El monto de la tasa general debe ser mayor a cero.");
+
+            // 2. Llamada a la Capa de Datos
+            CD_TasaCambio objData = new CD_TasaCambio();
+            bool resultado = objData.GuardarTasaGeneralUsuario(idUsuario, tasa.MonedaAbreviacion, montoPersonalizado);
+
+            // 3. Lógica de Sincronización Global
+            if (resultado)
             {
-                throw new ArgumentException("El ID de usuario es inválido para establecer la Tasa General.");
+                // Actualizamos el objeto de sesión si es necesario (se profundizará en el Punto 4)
+                // Por ahora, devolvemos el éxito del registro en DB
+                return true;
             }
 
-            if (montoOperacion <= 0)
-            {
-                throw new ArgumentException("El monto de la Tasa General debe ser un valor positivo.");
-            }
-
-            return oCD_TasaCambio.GuardarTasaGeneralUsuario(idUsuario, tasaOriginal.MonedaAbreviacion, montoOperacion);
+            return false;
         }
 
-        /// <summary>
-        /// [AGREGADO] Carga la tasa de cambio preferida o "General" guardada por el usuario.
-        /// </summary>
-        /// <param name="idUsuario">ID del usuario.</param>
-        /// <returns>Objeto TasaGeneralUsuario o null si no se encontró ninguna preferencia.</returns>
+        
+        
         public TasaGeneralUsuario ObtenerTasaGeneral(int idUsuario)
         {
             if (idUsuario <= 0)

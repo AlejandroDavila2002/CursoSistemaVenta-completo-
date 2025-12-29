@@ -45,19 +45,39 @@ namespace CapaPresentacion
 
             }
 
-
-
                 lblUsuario.Text = UsuarioActual.NombreCompleto;
 
-            CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
-            UsuarioActual.oTasaGeneral = cnRegistro.ObtenerTasaGeneral(UsuarioActual.IdUsuario);
+            
 
-            // OPCIONAL: Mostrar la tasa en la barra de estado o un Label del formulario principal
+            try
+            {
+                CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
+                TasaGeneralUsuario tasaRecuperada = cnRegistro.ObtenerTasaGeneral(UsuarioActual.IdUsuario);
+
+                if (tasaRecuperada != null)
+                {
+                    UsuarioActual.oTasaGeneral = tasaRecuperada;
+                    ActualizarLabelTasa(); // Llamamos al método que pinta el texto
+                }
+                else
+                {
+                    lbltasa.Text = "Tasa: No definida";
+                }
+            }
+            catch
+            {
+                lbltasa.Text = "Tasa: Error al cargar";
+            }
+        }
+
+        // Método para refrescar el texto del label desde cualquier parte del sistema
+        public void ActualizarLabelTasa()
+        {
             if (UsuarioActual.oTasaGeneral != null)
             {
-                // Supongamos que tienes un toolStripStatusLabel llamado lbltasa
-                lbltasa.Text = $"Tasa Actual: 1 {UsuarioActual.oTasaGeneral.MonedaAbreviacion} = {UsuarioActual.oTasaGeneral.Valor:N2} VES";
-                lbltasa.ForeColor = Color.DarkGreen;
+                lbltasa.Text = $"Tasa: {UsuarioActual.oTasaGeneral.MonedaAbreviacion} = {UsuarioActual.oTasaGeneral.Valor:N2} VES";
+                //lbltasa.Text = $"Tasa: {UsuarioActual.oTasaGeneral.DisplayTasa}";
+                //lbltasa.ForeColor = Color.Green; // Opcional: para resaltar que está activa
             }
         }
 
@@ -271,11 +291,14 @@ namespace CapaPresentacion
 
         private void menusistemaCambiario_Click(object sender, EventArgs e)
         {
-         
-            frmSistemaCambiario frmSistemaCambiario = new frmSistemaCambiario(UsuarioActual);
 
-            frmSistemaCambiario.ShowDialog();
-            frmSistemaCambiario.Dispose();
+            using (frmSistemaCambiario frm = new frmSistemaCambiario(UsuarioActual))
+            {
+                frm.ShowDialog();
+            }
+
+            // Una vez cerrada la ventana, refrescamos el label con el nuevo valor en memoria
+            ActualizarLabelTasa();
         }
 
         private void detalleNegocioToolStripMenuItem_Click(object sender, EventArgs e)

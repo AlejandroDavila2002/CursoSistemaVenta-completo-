@@ -17,7 +17,7 @@ namespace CapaPresentacion
     public partial class frmSistemaCambiario : Form
     {
 
-        private Usuario oUsuarioActual;
+        private Usuario UsuarioActual;
 
         // Diccionario para mantener el registro completo de las tasas BCV actuales (Abreviación -> TasaCambio)
         private Dictionary<string, TasaCambio> _tasasActuales = new Dictionary<string, TasaCambio>();
@@ -27,7 +27,7 @@ namespace CapaPresentacion
         public frmSistemaCambiario(Usuario usuarioLogueado)
         {
             InitializeComponent();
-            this.oUsuarioActual = usuarioLogueado;
+            this.UsuarioActual = usuarioLogueado;
             InicializarDataGridView();
             // Vinculamos el evento para la selección del botón de Tasa General
             dgvtasasdecambio.CellContentClick += dgvtasasdecambio_CellContentClick;
@@ -52,7 +52,7 @@ namespace CapaPresentacion
         /// </summary>
         private void CargarHistorialUsuario()
         {
-            if (oUsuarioActual == null || oUsuarioActual.IdUsuario <= 0) return;
+            if (UsuarioActual == null || UsuarioActual.IdUsuario <= 0) return;
 
             try
             {
@@ -61,7 +61,7 @@ namespace CapaPresentacion
                 // Llama a la capa de negocio para obtener el historial.
                 // Se espera que 'historial' sea una lista que se pueda mapear a las columnas Moneda, FechaBCV y Monto.
                 // Ejemplo de lo que debe retornar la CapaNegocio: List<object[]> donde object[] = { "Euro (EUR)", "2024-11-05", 45000.50m }
-                var historial = cnRegistro.ObtenerHistorialOperacionesPorUsuario(oUsuarioActual.IdUsuario);
+                var historial = cnRegistro.ObtenerHistorialOperacionesPorUsuario(UsuarioActual.IdUsuario);
 
                 // **PASO CLAVE 1: Limpiar la tabla antes de cargar el historial**
                 // Esto asegura que solo se muestre el estado actual de la BD o las nuevas entradas después de un 'Agregar'.
@@ -310,7 +310,7 @@ namespace CapaPresentacion
                 return;
             }
 
-            if (oUsuarioActual == null || oUsuarioActual.IdUsuario <= 0)
+            if (UsuarioActual == null || UsuarioActual.IdUsuario <= 0)
             {
                 MessageBox.Show("Error de Sesión: No se pudo obtener el usuario logueado. Cierre e inicie sesión de nuevo.", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -318,7 +318,7 @@ namespace CapaPresentacion
 
             CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
             int registrosGuardados = 0;
-            int idUsuario = oUsuarioActual.IdUsuario;
+            int idUsuario = UsuarioActual.IdUsuario;
 
             foreach (DataGridViewRow row in dgvtasasdecambio.Rows)
             {
@@ -337,7 +337,7 @@ namespace CapaPresentacion
 
                     if (decimal.TryParse(valorTexto, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal montoOperacion))
                     {
-                        bool resultado = cnRegistro.GuardarRegistroIndividual(oUsuarioActual, tasaOriginal, montoOperacion);
+                        bool resultado = cnRegistro.GuardarRegistroIndividual(UsuarioActual, tasaOriginal, montoOperacion);
 
                         if (resultado)
                         {
@@ -345,9 +345,9 @@ namespace CapaPresentacion
                             row.DefaultCellStyle.BackColor = Color.LightGray;
 
                             // SINCRONIZACIÓN: Si esta moneda es la Tasa General actual, actualizamos el valor en memoria
-                            if (oUsuarioActual.oTasaGeneral != null && oUsuarioActual.oTasaGeneral.MonedaAbreviacion == abreviacion)
+                            if (UsuarioActual.oTasaGeneral != null && UsuarioActual.oTasaGeneral.MonedaAbreviacion == abreviacion)
                             {
-                                oUsuarioActual.oTasaGeneral.Valor = montoOperacion;
+                                UsuarioActual.oTasaGeneral.Valor = montoOperacion;
                             }
                         }
                     }
@@ -373,6 +373,7 @@ namespace CapaPresentacion
         /// <summary>
         /// Maneja el evento de click en el botón "Usar" para establecer una Tasa General para el usuario.
         /// </summary>
+
         private void dgvtasasdecambio_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // 1. Verificación del click en la columna de botón "Usar"
@@ -382,7 +383,7 @@ namespace CapaPresentacion
             DataGridViewRow row = dgvtasasdecambio.Rows[e.RowIndex];
             string displayMoneda = row.Cells["Moneda"].Value?.ToString();
 
-            // CORRECCIÓN DE DECIMALES: Limpieza de cadena antes de parsear
+            // Limpieza de cadena para evitar errores de formato decimal
             string montoText = row.Cells["Monto"].Value?.ToString().Replace(",", ".");
 
             if (string.IsNullOrEmpty(displayMoneda) || string.IsNullOrEmpty(montoText)) return;
@@ -391,7 +392,7 @@ namespace CapaPresentacion
 
             if (!_tasasActuales.TryGetValue(abreviacion, out TasaCambio tasaOriginal))
             {
-                MessageBox.Show("No se pudo recuperar la información base de la moneda.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No se pudo recuperar la información base.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -403,8 +404,8 @@ namespace CapaPresentacion
 
             // 4. Confirmación del usuario
             DialogResult result = MessageBox.Show(
-                $"¿Desea establecer {displayMoneda} ({montoOperacion:N2}) como Tasa General del sistema?",
-                "Confirmar Tasa General",
+                $"¿Desea establecer {displayMoneda} ({montoOperacion:N2}) como Tasa General?",
+                "Confirmar",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -414,13 +415,13 @@ namespace CapaPresentacion
                 {
                     CN_RegistroUsuario cnRegistro = new CN_RegistroUsuario();
 
-                    // Llamada al método de negocio que guarda en la tabla PREFERENCIAS_USUARIO
-                    bool guardadoExitoso = cnRegistro.EstablecerTasaGeneralUsuario(oUsuarioActual.IdUsuario, tasaOriginal, montoOperacion);
+                    // USO DE UsuarioActual: Coincide con la variable definida en Inicio.cs
+                    bool guardadoExitoso = cnRegistro.EstablecerTasaGeneralUsuario(UsuarioActual.IdUsuario, tasaOriginal, montoOperacion);
 
                     if (guardadoExitoso)
                     {
-                        // ACTUALIZACIÓN DE SESIÓN: Ahora el resto del sistema puede leer esta tasa desde oUsuarioActual
-                        oUsuarioActual.oTasaGeneral = new TasaGeneralUsuario()
+                        // ACTUALIZACIÓN DE SESIÓN EN MEMORIA
+                        UsuarioActual.oTasaGeneral = new TasaGeneralUsuario()
                         {
                             MonedaAbreviacion = abreviacion,
                             Valor = montoOperacion
@@ -428,12 +429,20 @@ namespace CapaPresentacion
 
                         MessageBox.Show("Tasa General establecida exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Feedback visual: Resetear fondos y pintar la activa de verde
+                        // Feedback visual en la tabla
                         foreach (DataGridViewRow r in dgvtasasdecambio.Rows)
                         {
                             r.DefaultCellStyle.BackColor = Color.LightGray;
                         }
                         row.DefaultCellStyle.BackColor = Color.LightGreen;
+
+                        // REFRESCAR EL LABEL EN LA VENTANA PRINCIPAL
+                        // Buscamos el formulario de Inicio entre los abiertos
+                        Inicio principal = Application.OpenForms.OfType<Inicio>().FirstOrDefault();
+                        if (principal != null)
+                        {
+                            principal.ActualizarLabelTasa();
+                        }
                     }
                 }
                 catch (Exception ex)

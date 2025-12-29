@@ -276,13 +276,13 @@ namespace CapaPresentacion
 
             try
             {
-                // 1. Obtener datos del negocio y Logo desde Capa Negocio
+                // 1. Obtener datos del negocio y Logo
                 bool obtenido = false;
                 CN_DetallesNegocio negocio = new CN_DetallesNegocio();
                 byte[] byteImage = negocio.obtenerLogo(out obtenido);
                 Detalles_Negocio datosNegocio = negocio.ObtenerDatos();
 
-                // 2. Cargar la plantilla HTML desde los Recursos del proyecto
+                // 2. Cargar la plantilla HTML desde Recursos
                 string texto_html = string.Empty;
                 var recurso = Properties.Resources.PlantillaInventario;
 
@@ -291,26 +291,42 @@ namespace CapaPresentacion
                 else
                     texto_html = recurso.ToString();
 
-                // 3. Preparar el logo (IMPORTANTE: Limpieza de cadena Base64)
+                // 3. Preparar el logo en Base64
                 string logoFullSource = "";
                 if (obtenido && byteImage != null && byteImage.Length > 0)
                 {
-                    // Convertimos a Base64 y eliminamos saltos de línea (\n, \r) que iTextSharp no procesa bien
                     string base64String = Convert.ToBase64String(byteImage).Replace("\n", "").Replace("\r", "");
                     logoFullSource = "data:image/png;base64," + base64String;
                 }
 
-                // 4. Generar dinámicamente las filas de la tabla principal
+                // 4. Generar dinámicamente las filas con colores de fondo
                 StringBuilder filas = new StringBuilder();
                 foreach (DataGridViewRow row in dgvDataProducto.Rows)
                 {
                     if (row.Visible)
                     {
                         int i = row.Index;
-                        filas.Append("<tr>");
+
+                        // Lógica de validación de Stock para asignar la clase CSS a la fila
+                        int stock = Convert.ToInt32(row.Cells["STOCK"].Value);
+                        // Definimos un umbral para stock bajo (puedes ajustarlo o traerlo de la DB)
+                        int stockMinimo = 10;
+
+                        string claseFila = "";
+                        if (stock <= 0)
+                        {
+                            claseFila = "class='stock-agotado'"; // Fondo Rojo
+                        }
+                        else if (stock <= stockMinimo)
+                        {
+                            claseFila = "class='stock-bajo'";    // Fondo Amarillo
+                        }
+
+                        // Construcción de la fila HTML
+                        filas.Append($"<tr {claseFila}>");
                         filas.Append($"<td class='text-center'>{row.Cells["CODIGO"].Value}</td>");
                         filas.Append($"<td>{row.Cells["PRODUCTO"].Value}</td>");
-                        filas.Append($"<td class='text-center'>{row.Cells["STOCK"].Value}</td>");
+                        filas.Append($"<td class='text-center'>{stock}</td>");
                         filas.Append($"<td class='text-right'>{dgvDataCosto.Rows[i].Cells["COSTOUNT"].Value}</td>");
                         filas.Append($"<td class='text-right'>{dgvDataCosto.Rows[i].Cells["TOTALCOSTO"].Value}</td>");
                         filas.Append($"<td class='text-right'>{dvgDataVenta.Rows[i].Cells["PRECIOVENTA"].Value}</td>");
@@ -319,7 +335,7 @@ namespace CapaPresentacion
                     }
                 }
 
-                // 5. Reemplazos masivos en la plantilla HTML
+                // 5. Reemplazos en la plantilla
                 texto_html = texto_html.Replace("{{logo}}", logoFullSource)
                                        .Replace("{{nombrenegocio}}", datosNegocio.Nombre.ToUpper())
                                        .Replace("{{rifnegocio}}", datosNegocio.RUC)
@@ -332,7 +348,7 @@ namespace CapaPresentacion
                                        .Replace("{{sbajo}}", ProductosBajo.Text)
                                        .Replace("{{sagotado}}", ProductosAgotados.Text);
 
-                // 6. Configuración del Guardado y Generación del PDF
+                // 6. Configuración de Guardado y Generación del PDF
                 SaveFileDialog savefile = new SaveFileDialog();
                 savefile.FileName = $"ReporteInventario_{DateTime.Now:ddMMyyyy_HHmm}.pdf";
                 savefile.Filter = "Pdf Files|*.pdf";
@@ -341,14 +357,13 @@ namespace CapaPresentacion
                 {
                     using (FileStream stream = new FileStream(savefile.FileName, FileMode.Create))
                     {
-                        // Configuramos el documento en A4 Horizontal (Rotate)
+                        // A4 Horizontal para que quepa bien la tabla valorizada
                         Document pdfDoc = new Document(PageSize.A4.Rotate(), 25, 25, 25, 25);
                         PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
                         pdfDoc.Open();
 
                         using (StringReader sr = new StringReader(texto_html))
                         {
-                            // XMLWorkerHelper parsea el HTML y el CSS a iTextSharp
                             XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
                         }
 

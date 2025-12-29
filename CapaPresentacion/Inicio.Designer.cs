@@ -371,12 +371,13 @@
             // lbltasa
             // 
             this.lbltasa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbltasa.AutoSize = true;
             this.lbltasa.BackColor = System.Drawing.Color.SteelBlue;
             this.lbltasa.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbltasa.ForeColor = System.Drawing.Color.White;
-            this.lbltasa.Location = new System.Drawing.Point(959, 31);
+            this.lbltasa.Location = new System.Drawing.Point(961, 34);
             this.lbltasa.Name = "lbltasa";
-            this.lbltasa.Size = new System.Drawing.Size(65, 16);
+            this.lbltasa.Size = new System.Drawing.Size(147, 16);
             this.lbltasa.TabIndex = 6;
             this.lbltasa.Text = "toolStripStatusLabel";
             this.lbltasa.TextAlign = System.Drawing.ContentAlignment.TopRight;

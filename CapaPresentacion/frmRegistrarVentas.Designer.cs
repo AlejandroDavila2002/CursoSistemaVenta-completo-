@@ -39,8 +39,10 @@
             this.IdProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Preciobs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SubTotalBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnRegistrar = new FontAwesome.Sharp.IconButton();
             this.txtCambio = new System.Windows.Forms.TextBox();
@@ -72,6 +74,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.txtTotalapagar = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.CambioMoneda = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.txtCantidad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -144,8 +147,10 @@
             this.IdProducto,
             this.Producto,
             this.Precio,
+            this.Preciobs,
             this.Cantidad,
             this.Subtotal,
+            this.SubTotalBs,
             this.btnEliminar});
             this.dgvData.Location = new System.Drawing.Point(28, 212);
             this.dgvData.Margin = new System.Windows.Forms.Padding(2);
@@ -180,8 +185,13 @@
             // Precio
             // 
             this.Precio.FillWeight = 122.4865F;
-            this.Precio.HeaderText = "Precio ";
+            this.Precio.HeaderText = "Precio $";
             this.Precio.Name = "Precio";
+            // 
+            // Preciobs
+            // 
+            this.Preciobs.HeaderText = "Precio bs";
+            this.Preciobs.Name = "Preciobs";
             // 
             // Cantidad
             // 
@@ -192,8 +202,13 @@
             // Subtotal
             // 
             this.Subtotal.FillWeight = 86.1582F;
-            this.Subtotal.HeaderText = "Sub Total";
+            this.Subtotal.HeaderText = "SubTotal $";
             this.Subtotal.Name = "Subtotal";
+            // 
+            // SubTotalBs
+            // 
+            this.SubTotalBs.HeaderText = "SubTotal Bs";
+            this.SubTotalBs.Name = "SubTotalBs";
             // 
             // btnEliminar
             // 
@@ -224,7 +239,7 @@
             // txtCambio
             // 
             this.txtCambio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCambio.Location = new System.Drawing.Point(1019, 556);
+            this.txtCambio.Location = new System.Drawing.Point(1019, 547);
             this.txtCambio.Margin = new System.Windows.Forms.Padding(2);
             this.txtCambio.Name = "txtCambio";
             this.txtCambio.Size = new System.Drawing.Size(99, 20);
@@ -236,7 +251,7 @@
             this.label12.AutoSize = true;
             this.label12.BackColor = System.Drawing.Color.White;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(1016, 538);
+            this.label12.Location = new System.Drawing.Point(1016, 529);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(48, 13);
             this.label12.TabIndex = 39;
@@ -270,7 +285,7 @@
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label1.Location = new System.Drawing.Point(5, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1131, 627);
+            this.label1.Size = new System.Drawing.Size(1131, 657);
             this.label1.TabIndex = 35;
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
@@ -508,7 +523,7 @@
             // txtPagocon
             // 
             this.txtPagocon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPagocon.Location = new System.Drawing.Point(1019, 501);
+            this.txtPagocon.Location = new System.Drawing.Point(1019, 492);
             this.txtPagocon.Margin = new System.Windows.Forms.Padding(2);
             this.txtPagocon.Name = "txtPagocon";
             this.txtPagocon.Size = new System.Drawing.Size(99, 20);
@@ -521,7 +536,7 @@
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.White;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(1016, 483);
+            this.label13.Location = new System.Drawing.Point(1016, 474);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(61, 13);
             this.label13.TabIndex = 45;
@@ -530,7 +545,7 @@
             // txtTotalapagar
             // 
             this.txtTotalapagar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTotalapagar.Location = new System.Drawing.Point(1017, 449);
+            this.txtTotalapagar.Location = new System.Drawing.Point(1017, 443);
             this.txtTotalapagar.Margin = new System.Windows.Forms.Padding(2);
             this.txtTotalapagar.Name = "txtTotalapagar";
             this.txtTotalapagar.Size = new System.Drawing.Size(99, 20);
@@ -547,17 +562,31 @@
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.White;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(1014, 431);
+            this.label14.Location = new System.Drawing.Point(1014, 425);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(83, 13);
+            this.label14.Size = new System.Drawing.Size(87, 13);
             this.label14.TabIndex = 47;
-            this.label14.Text = "Total a pagar";
+            this.label14.Text = "Total a pagar ";
+            // 
+            // CambioMoneda
+            // 
+            this.CambioMoneda.AutoSize = true;
+            this.CambioMoneda.BackColor = System.Drawing.Color.White;
+            this.CambioMoneda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CambioMoneda.Location = new System.Drawing.Point(205, 27);
+            this.CambioMoneda.Name = "CambioMoneda";
+            this.CambioMoneda.Size = new System.Drawing.Size(148, 20);
+            this.CambioMoneda.TabIndex = 49;
+            this.CambioMoneda.Text = "Pagar con Bolivares";
+            this.CambioMoneda.UseVisualStyleBackColor = false;
+            this.CambioMoneda.CheckedChanged += new System.EventHandler(this.CambioMoneda_CheckedChanged);
             // 
             // frmRegistrarVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1140, 645);
+            this.Controls.Add(this.CambioMoneda);
             this.Controls.Add(this.txtTotalapagar);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.txtPagocon);
@@ -622,15 +651,18 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtStock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn IdProducto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Producto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Precio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Subtotal;
-        private System.Windows.Forms.DataGridViewButtonColumn btnEliminar;
         private System.Windows.Forms.TextBox txtPagocon;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtTotalapagar;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IdProducto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Producto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Precio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Preciobs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Subtotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SubTotalBs;
+        private System.Windows.Forms.DataGridViewButtonColumn btnEliminar;
+        private System.Windows.Forms.CheckBox CambioMoneda;
     }
 }

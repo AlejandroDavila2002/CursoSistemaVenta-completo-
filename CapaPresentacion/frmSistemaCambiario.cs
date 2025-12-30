@@ -429,6 +429,12 @@ namespace CapaPresentacion
 
                         MessageBox.Show("Tasa General establecida exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                        frmRegistrarVentas frmVenta = Application.OpenForms.OfType<frmRegistrarVentas>().FirstOrDefault();
+                        if (frmVenta != null)
+                        {
+                            frmVenta.RecalcularTodoPorCambioTasa();
+                        }
+
                         // Feedback visual en la tabla
                         foreach (DataGridViewRow r in dgvtasasdecambio.Rows)
                         {

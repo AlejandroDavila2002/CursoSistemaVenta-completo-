@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,36 @@ namespace CapaPresentacion
     public partial class frmRegistrarVentas : Form
     {
         private Usuario _UsuarioActual;
+        private decimal _totalUSD = 0; // Totales acumulados en memoria para rapidez
+        private decimal _totalVES = 0;
         public frmRegistrarVentas(Usuario usuarioActual)
         {
             InitializeComponent();
             _UsuarioActual = usuarioActual;
+        }
+
+        public void RecalcularTodoPorCambioTasa()
+        {
+            // 1. Obtenemos la nueva tasa que ya fue actualizada en el objeto global
+            decimal nuevaTasa = _UsuarioActual.oTasaGeneral != null ? _UsuarioActual.oTasaGeneral.Valor : 0;
+
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                // 2. Extraemos los valores base en Dólares (que son nuestra fuente de verdad)
+                decimal precioUSD = Convert.ToDecimal(row.Cells["Precio"].Value, CultureInfo.InvariantCulture);
+                int cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
+
+                // 3. Calculamos los nuevos valores con la tasa actualizada
+                decimal nuevoPrecioBs = precioUSD * nuevaTasa;
+                decimal nuevoSubTotalBs = (precioUSD * cantidad) * nuevaTasa;
+
+                // 4. Actualizamos las celdas del Grid dinámicamente
+                row.Cells["PrecioBs"].Value = nuevoPrecioBs.ToString("0.00", CultureInfo.InvariantCulture);
+                row.Cells["SubTotalBs"].Value = nuevoSubTotalBs.ToString("0.00", CultureInfo.InvariantCulture);
+            }
+
+            // 5. Finalmente, recalculamos los totales generales para actualizar el txtTotalapagar
+            CalcularTotal();
         }
 
         private void frmRegistrarVentas_Load(object sender, EventArgs e)
@@ -118,7 +145,7 @@ namespace CapaPresentacion
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            decimal precio = 0;
+            decimal precioUSD = 0;
             bool productoExiste = false;
 
             if (int.Parse(txtIdProducto.Text) == 0)
@@ -127,13 +154,13 @@ namespace CapaPresentacion
                 return;
             }
 
-            if (!decimal.TryParse(txtPrecio.Text, out precio))
+            if (!decimal.TryParse(txtPrecio.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out precioUSD))
             {
-                MessageBox.Show("Precio o formato de venta incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Precio o formato incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (Convert.ToInt32(txtStock.Text) < Convert.ToInt32(txtCantidad.Text))
+            if (Convert.ToInt32(txtStock.Text) < Convert.ToInt32(txtCantidad.Value))
             {
                 MessageBox.Show("La cantidad no puede ser mayor al Stock", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -148,49 +175,100 @@ namespace CapaPresentacion
                 }
             }
 
-
             if (!productoExiste)
             {
                 bool resultado = new CN_Venta().RestarStock(int.Parse(txtIdProducto.Text), Convert.ToInt32(txtCantidad.Value));
 
                 if (resultado)
                 {
-                    dgvData.Rows.Add(new object[]
-                    {
-                    txtIdProducto.Text,
-                    txtNombreProducto.Text,
-                    precio.ToString("0.00"),
-                    txtCantidad.Value.ToString(),
-                    (txtCantidad.Value * precio).ToString("0.00")
+                    // LÓGICA BIMONEDA POR FILA
+                    decimal tasa = _UsuarioActual.oTasaGeneral != null ? _UsuarioActual.oTasaGeneral.Valor : 0;
+                    decimal precioVES = precioUSD * tasa;
+                    decimal subtotalUSD = txtCantidad.Value * precioUSD;
+                    decimal subtotalVES = txtCantidad.Value * precioVES;
+
+                    // El orden debe coincidir con tu DGV (según tu descripción de 6 columnas):
+                    // 0: IdProducto, 1: Producto, 2: Precio (USD), 3: PrecioBs, 4: Cantidad, 5: Subtotal (USD), 6: SubTotalBs
+                    dgvData.Rows.Add(new object[] {
+                        txtIdProducto.Text,
+                        txtNombreProducto.Text,
+                        precioUSD.ToString("0.00", CultureInfo.InvariantCulture),
+                        precioVES.ToString("0.00", CultureInfo.InvariantCulture), // Nueva Columna PrecioBs
+                        txtCantidad.Value.ToString(),
+                        subtotalUSD.ToString("0.00", CultureInfo.InvariantCulture),
+                        subtotalVES.ToString("0.00", CultureInfo.InvariantCulture)
                     });
 
                     CalcularTotal();
                     LImpiarProducto();
                 }
-
-
             }
-            else 
+            else
             {
-                MessageBox.Show("El producto ya se encuentra agregado. Si necesita más cantidad, elimínelo y vuelva a agregarlo con la cantidad total.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El producto ya se encuentra agregado.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
-
         }
 
         private void CalcularTotal()
         {
-            decimal total = 0;
+            _totalUSD = 0;
+            _totalVES = 0;
 
-            if (dgvData.Rows.Count > 0)
+            try
             {
                 foreach (DataGridViewRow row in dgvData.Rows)
                 {
-                    total += Convert.ToDecimal(row.Cells["Subtotal"].Value.ToString());
-
+                    // Validamos que la celda no sea nula y tenga valor antes de convertir
+                    if (row.Cells["Subtotal"].Value != null && row.Cells["SubTotalBs"].Value != null)
+                    {
+                        _totalUSD += Convert.ToDecimal(row.Cells["Subtotal"].Value, CultureInfo.InvariantCulture);
+                        _totalVES += Convert.ToDecimal(row.Cells["SubTotalBs"].Value, CultureInfo.InvariantCulture);
+                    }
                 }
             }
-            txtTotalapagar.Text = total.ToString("0.00");
+            catch (Exception ex)
+            {
+                // Esto te dirá exactamente qué columna está fallando si persiste el error
+                Console.WriteLine("Error en CalcularTotal: " + ex.Message);
+            }
+
+            RefrescarMontoPantalla();
+        }
+
+        // --- MÉTODO REFRESCAR PANTALLA (CONTROLA EL CHECKBOX) ---
+        private void RefrescarMontoPantalla()
+        {
+            // Verificamos que el control exista y no estemos en proceso de carga
+            if (txtTotalapagar == null) return;
+
+            decimal tasa = (_UsuarioActual.oTasaGeneral != null) ? _UsuarioActual.oTasaGeneral.Valor : 1;
+
+            if (CambioMoneda.Checked)
+            {
+                // Muestra Bolívares
+                txtTotalapagar.Text = _totalVES.ToString("N2", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                // Muestra Dólares
+                txtTotalapagar.Text = _totalUSD.ToString("0.00", CultureInfo.InvariantCulture);
+            }
+
+            // Solo calcular cambio si hay un monto en 'Paga con'
+            if (!string.IsNullOrWhiteSpace(txtPagocon.Text))
+            {
+                CalcularCambio();
+            }
+        }
+
+        private void CambioMoneda_CheckedChanged(object sender, EventArgs e)
+        {
+            // Evitamos errores si el total aún no se ha calculado al iniciar el form
+            RefrescarMontoPantalla();
+
+            // Limpieza de seguridad
+            txtPagocon.Text = "";
+            txtCambio.Text = "0.00";
         }
 
         private void LImpiarProducto()
@@ -210,7 +288,7 @@ namespace CapaPresentacion
             if (e.RowIndex < 0)
                 return;
 
-            if (e.ColumnIndex == 5)
+            if (e.ColumnIndex == 7)
             {
 
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All);
@@ -229,22 +307,18 @@ namespace CapaPresentacion
             if (dgvData.Columns[e.ColumnIndex].Name == "btnEliminar")
             {
                 int indice = e.RowIndex;
-
                 if (indice >= 0)
                 {
                     bool resultado = new CN_Venta().sumarStock(
-                        Convert.ToInt32(dgvData.Rows[indice].Cells["IdProducto"].Value.ToString()),
-                        Convert.ToInt32(dgvData.Rows[indice].Cells["Cantidad"].Value.ToString()));
+                        Convert.ToInt32(dgvData.Rows[indice].Cells["IdProducto"].Value),
+                        Convert.ToInt32(dgvData.Rows[indice].Cells["Cantidad"].Value));
 
                     if (resultado)
                     {
                         dgvData.Rows.RemoveAt(indice);
                         CalcularTotal();
                     }
-
-
                 }
-
             }
         }
 
@@ -462,81 +536,55 @@ namespace CapaPresentacion
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            if (txtDocumento.Text.Trim() == "")
+            // Validaciones iniciales
+            if (string.IsNullOrWhiteSpace(txtDocumento.Text)) { MessageBox.Show("Seleccione cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (dgvData.Rows.Count < 1) { MessageBox.Show("Agregue productos", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            if (string.IsNullOrWhiteSpace(txtPagocon.Text)) { MessageBox.Show("Ingrese el monto de pago", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+
+            decimal pagoCon = Convert.ToDecimal(txtPagocon.Text, CultureInfo.InvariantCulture);
+            decimal totalActual = Convert.ToDecimal(txtTotalapagar.Text, CultureInfo.InvariantCulture);
+
+            if (pagoCon < totalActual)
             {
-                MessageBox.Show("Debe ingresar el documento del cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("El pago no cubre el total", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
-            if (txtNombreCliente.Text.Trim() == "")
-            {
-                MessageBox.Show("Debe ingresar el nombre del cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            if (dgvData.Rows.Count < 1)
-            {
-                MessageBox.Show("Debe ingresar productos a la venta", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-
-            // se conservarán estos 3 bloques de validacion para mayor seguridad, por ahora. 20/11/2025
-            if (string.IsNullOrWhiteSpace(txtPagocon.Text))
-            {
-                MessageBox.Show("Debe ingresar con cuánto paga el cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return; // ESTO DETIENE EL GUARDADO
-            }
-
-            // 2. Validar que el pago cubra el total
-            decimal pagoCon;
-            decimal total = Convert.ToDecimal(txtTotalapagar.Text);
-
-            if (!decimal.TryParse(txtPagocon.Text, out pagoCon))
-            {
-                MessageBox.Show("Formato de moneda incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            // 3. Validar que el pago no sea menor al total
-            if (pagoCon < total)
-            {
-                MessageBox.Show("El monto de pago no puede ser menor al total a pagar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return; // ESTO DETIENE EL GUARDADO
-            }
-
-
-
+            // PREPARAR DATATABLE PARA SQL (Debe tener 5 columnas según tu TYPE SQL)
             DataTable detalleVenta = new DataTable();
             detalleVenta.Columns.Add("IdProducto", typeof(int));
-            detalleVenta.Columns.Add("Precio", typeof(decimal));
+            detalleVenta.Columns.Add("PrecioVenta", typeof(decimal));
             detalleVenta.Columns.Add("Cantidad", typeof(int));
-            detalleVenta.Columns.Add("Subtotal", typeof(decimal));
+            detalleVenta.Columns.Add("SubTotal", typeof(decimal));
+            detalleVenta.Columns.Add("SubTotalBs", typeof(decimal));
 
             foreach (DataGridViewRow row in dgvData.Rows)
             {
                 detalleVenta.Rows.Add(
-                    Convert.ToInt32(row.Cells["IdProducto"].Value.ToString()),
-                    Convert.ToDecimal(row.Cells["Precio"].Value.ToString()),
-                    Convert.ToInt32(row.Cells["Cantidad"].Value.ToString()),
-                    Convert.ToDecimal(row.Cells["Subtotal"].Value.ToString())
+                    Convert.ToInt32(row.Cells["IdProducto"].Value),
+                    Convert.ToDecimal(row.Cells["Precio"].Value, CultureInfo.InvariantCulture), // Siempre enviamos USD como base
+                    Convert.ToInt32(row.Cells["Cantidad"].Value),
+                    Convert.ToDecimal(row.Cells["Subtotal"].Value, CultureInfo.InvariantCulture),
+                    Convert.ToDecimal(row.Cells["SubTotalBs"].Value, CultureInfo.InvariantCulture)
                 );
             }
 
-
+            decimal tasaActual = _UsuarioActual.oTasaGeneral != null ? _UsuarioActual.oTasaGeneral.Valor : 0;
             int idCorrelativo = new CN_Venta().ObtenerCorrelativo();
             string NumeroDocumento = string.Format("{0:00000}", idCorrelativo);
-            CalcularCambio();
 
             Venta oVenta = new Venta()
             {
                 oUsuario = new Usuario() { IdUsuario = _UsuarioActual.IdUsuario },
-                TipoDocumento = ((OpcionCombo)cboTipoDocumento.SelectedItem).Valor.ToString(),
+                TipoDocumento = ((OpcionCombo)cboTipoDocumento.SelectedItem).Texto,
                 NumeroDocumento = NumeroDocumento,
                 DocumentoCliente = txtDocumento.Text.Trim(),
                 NombreCliente = txtNombreCliente.Text.Trim(),
-                MontoPago = Convert.ToDecimal(txtPagocon.Text),
-                MontoCambio = Convert.ToDecimal(txtCambio.Text),
-                MontoTotal = Convert.ToDecimal(txtTotalapagar.Text)
+                MontoPago = pagoCon,
+                MontoCambio = Convert.ToDecimal(txtCambio.Text, CultureInfo.InvariantCulture),
+                MontoTotal = _totalUSD,      // Guardamos la base en Dólares
+                MontoBs = _totalVES,         // Guardamos el total en Bolívares
+                TasaCambio = tasaActual
             };
 
             string mensaje = string.Empty;
@@ -544,44 +592,32 @@ namespace CapaPresentacion
 
             if (resultado)
             {
-                // 1. Mostrar el mensaje y capturar la respuesta (Si/No)
-                var result = MessageBox.Show(
-                    "Venta registrada exitosamente: \n" + NumeroDocumento + "\n\n¿Desea copiar al portapapeles?",
-                    "Mensaje",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information); // Usé 'Information' para éxito, queda mejor que 'Exclamation'
-
-                // 2. Lógica para copiar al portapapeles si el usuario dice "Sí"
-                if (result == DialogResult.Yes)
-                {
-                    Clipboard.SetText(NumeroDocumento);
-                }
-
-                // 3. Reiniciar el formulario para una nueva venta
-                txtDocumento.Text = "";
-                txtNombreCliente.Text = "";
-                dgvData.Rows.Clear();
-                CalcularTotal();
-                txtPagocon.Text = "";
-                txtCambio.Text = "";
-
-                txtCodigoProducto.Text = "";
-                txtNombreProducto.Text = "";
-                txtPrecio.Text = "0.00";
-                txtStock.Text = "0";
-                txtCantidad.Value = 1;
-
-
-
+                MessageBox.Show("Venta registrada: " + NumeroDocumento, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarFormularioCompleto();
             }
             else
             {
-                // Lógica si algo falló
-                MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
+
+        private void LimpiarFormularioCompleto()
+        {
+            txtDocumento.Text = "";
+            txtNombreCliente.Text = "";
+            dgvData.Rows.Clear();
+            _totalUSD = 0;
+            _totalVES = 0;
+            txtPagocon.Text = "";
+            txtCambio.Text = "0.00";
+            RefrescarMontoPantalla();
+            LImpiarProducto();
+        }
+
+
+
+
+
 
     }
 }

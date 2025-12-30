@@ -121,6 +121,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("MontoCambio", obj.MontoCambio);
                     cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
                     cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
+                    cmd.Parameters.AddWithValue("@MontoBs", obj.MontoBs);
+                    cmd.Parameters.AddWithValue("@TasaCambio", obj.TasaCambio);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -132,6 +134,7 @@ namespace CapaDatos
             }
             catch(Exception ex)
             {
+                MessageBox.Show("Error en SQL: " + ex.Message);
                 Resultado = false;
             }
 

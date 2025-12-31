@@ -51,6 +51,29 @@ namespace CapaPresentacion
             CalcularTotal();
         }
 
+        private void DevolverStockCompleto()
+        {
+            if (dgvData.Rows.Count > 0)
+            {
+                CN_Venta objVenta = new CN_Venta();
+                foreach (DataGridViewRow row in dgvData.Rows)
+                {
+                    int idProd = Convert.ToInt32(row.Cells["IdProducto"].Value);
+                    int cant = Convert.ToInt32(row.Cells["Cantidad"].Value);
+
+                    // Sumamos de nuevo lo que habíamos restado preventivamente
+                    objVenta.sumarStock(idProd, cant);
+                }
+                dgvData.Rows.Clear();
+                CalcularTotal();
+            }
+        }
+
+        private void frmRegistrarVentas_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Si cierras y hay productos, devolvemos el stock a la DB
+            DevolverStockCompleto();
+        }
         private void frmRegistrarVentas_Load(object sender, EventArgs e)
         {
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Boleta", Texto = "Boleta" });
@@ -247,11 +270,13 @@ namespace CapaPresentacion
             {
                 // Muestra Bolívares
                 txtTotalapagar.Text = _totalVES.ToString("N2", CultureInfo.InvariantCulture);
+                label13.Text = "Paga con (Bs):"; // Actualizamos la etiqueta
             }
             else
             {
                 // Muestra Dólares
                 txtTotalapagar.Text = _totalUSD.ToString("0.00", CultureInfo.InvariantCulture);
+                label13.Text = "Paga con ($):"; // Actualizamos la etiqueta
             }
 
             // Solo calcular cambio si hay un monto en 'Paga con'
@@ -400,7 +425,7 @@ namespace CapaPresentacion
 
         private void txtPrecio_MouseClick(object sender, MouseEventArgs e)
         {
-            // A veces el clic anula la selección del Enter, esto lo fuerza de nuevo
+            // A veces el clic anula la selección del Enter, esto lo forza de nuevo
             txtPrecio.SelectAll();
         }
 
@@ -482,7 +507,7 @@ namespace CapaPresentacion
 
         private void txtTotalapagar_MouseClick(object sender, MouseEventArgs e)
         {
-            // A veces el clic anula la selección del Enter, esto lo fuerza de nuevo
+            // A veces el clic anula la selección del Enter, esto lo forza de nuevo
             txtTotalapagar.SelectAll();
         }
 

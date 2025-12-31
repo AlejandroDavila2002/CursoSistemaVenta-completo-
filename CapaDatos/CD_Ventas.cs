@@ -112,30 +112,44 @@ namespace CapaDatos
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
                 {
                     SqlCommand cmd = new SqlCommand("SP_RegistrarVenta", oconexion);
+
+                    // --- PARÁMETROS BÁSICOS ---
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
                     cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
                     cmd.Parameters.AddWithValue("NombreCliente", obj.NombreCliente);
+
+                    // --- MONTOS DE PAGO (Pueden venir en BS o USD según el CheckBox del Form) ---
                     cmd.Parameters.AddWithValue("MontoPago", obj.MontoPago);
                     cmd.Parameters.AddWithValue("MontoCambio", obj.MontoCambio);
-                    cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
-                    cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
-                    cmd.Parameters.AddWithValue("@MontoBs", obj.MontoBs);
-                    cmd.Parameters.AddWithValue("@TasaCambio", obj.TasaCambio);
-                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                    // --- TOTALES Y TASA (BIMONEDA) ---
+                    cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal); // Total en USD
+                    cmd.Parameters.AddWithValue("MontoBs", obj.MontoBs);       // Total en VES
+                    cmd.Parameters.AddWithValue("TasaCambio", obj.TasaCambio); // Tasa aplicada
+
+                    // --- DETALLE DE VENTA (DataTable con 5 columnas: IdProd, Precio, Cant, SubUSD, SubVES) ---
+                    SqlParameter t_detalle = cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
+                    t_detalle.SqlDbType = SqlDbType.Structured;
+                    t_detalle.TypeName = "dbo.EDetalle_Venta";
+
+                    // --- PARÁMETROS DE SALIDA ---
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+
                     cmd.CommandType = CommandType.StoredProcedure;
                     oconexion.Open();
                     cmd.ExecuteNonQuery();
+
                     Resultado = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
                     Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error en SQL: " + ex.Message);
                 Resultado = false;
+                Mensaje = ex.Message;
             }
 
             return Resultado;
@@ -149,14 +163,16 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select v.IdVenta, u.NombreCompleto,"); 
+                    query.AppendLine("select v.IdVenta, u.NombreCompleto,");
                     query.AppendLine("v.DocumentoCliente, v.NombreCliente,");
                     query.AppendLine("v.TipoDocumento, v.NumeroDocumento,");
-                    query.AppendLine("v.MontoPago, v.MontoCambio, v.MontoTotal,");
+                    // Asegúrate de tener esta coma aquí despues de TasaCambio
+                    query.AppendLine("v.MontoPago, v.MontoCambio, v.MontoTotal, v.MontoBs, v.TasaCambio,");
                     query.AppendLine("convert(char(10),v.FechaRegistro,103)[FechaRegistro]");
                     query.AppendLine("from VENTA v");
                     query.AppendLine("inner join USUARIO u on u.IdUsuario = v.IdUsuario");
                     query.AppendLine("where v.NumeroDocumento = @NumeroDocumento");
+
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.Parameters.AddWithValue("@NumeroDocumento", NumeroDocumento);
                     cmd.CommandType = CommandType.Text;
@@ -164,25 +180,35 @@ namespace CapaDatos
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                       while (reader.Read())
+                        if (reader.Read())
                         {
-                            obj.IdVenta = Convert.ToInt32(reader["IdVenta"]);
-                            obj.oUsuario = new Usuario() {NombreCompleto = reader["NombreCompleto"].ToString() };
-                            obj.DocumentoCliente = reader["DocumentoCliente"].ToString();
-                            obj.NombreCliente = reader["NombreCliente"].ToString();
-                            obj.TipoDocumento = reader["TipoDocumento"].ToString();
-                            obj.NumeroDocumento = reader["NumeroDocumento"].ToString();
-                            obj.MontoPago = Convert.ToDecimal(reader["MontoPago"]);
-                            obj.MontoCambio = Convert.ToDecimal(reader["MontoCambio"]);
-                            obj.MontoTotal = Convert.ToDecimal(reader["MontoTotal"]);
-                            obj.FechaRegistro = reader["FechaRegistro"].ToString();
+                            obj = new Venta()
+                            {
+                                IdVenta = Convert.ToInt32(reader["IdVenta"]),
+                                oUsuario = new Usuario() { NombreCompleto = reader["NombreCompleto"].ToString() },
+                                DocumentoCliente = reader["DocumentoCliente"].ToString(),
+                                NombreCliente = reader["NombreCliente"].ToString(),
+                                TipoDocumento = reader["TipoDocumento"].ToString(),
+                                NumeroDocumento = reader["NumeroDocumento"].ToString(),
+                                MontoPago = Convert.ToDecimal(reader["MontoPago"]),
+                                MontoCambio = Convert.ToDecimal(reader["MontoCambio"]),
+                                MontoTotal = Convert.ToDecimal(reader["MontoTotal"]),
+                                MontoBs = Convert.ToDecimal(reader["MontoBs"]),
+                                TasaCambio = Convert.ToDecimal(reader["TasaCambio"]),
+                                FechaRegistro = reader["FechaRegistro"].ToString()
+                            };
                         }
                     }
+
+                    // --- ESTO ES LO QUE FALTA SI EL GRID SALE VACÍO O EN 0 ---
+                    if (obj.IdVenta != 0)
+                    {
+                        obj.oDetalleVenta = ObtenerDetalleVenta(obj.IdVenta);
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    obj = new Venta(); // si llega aqui es porque hubo un error y retornamos un objeto vacio.
-                    MessageBox.Show(ex.Message);
+                    obj = new Venta();
                 }
             }
             return obj;
@@ -196,7 +222,7 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select p.IdProducto, p.Nombre, p.PrecioCompra, dv.PrecioVenta, dv.Cantidad, dv.SubTotal");
+                    query.AppendLine("select p.IdProducto, p.Nombre, p.PrecioCompra, dv.PrecioVenta, dv.Cantidad, dv.SubTotal, dv.SubTotalBs");
                     query.AppendLine("from DETALLE_VENTA dv inner join PRODUCTO p on p.IdProducto");
                     query.AppendLine("= dv.IdProducto where dv.IdVenta = @IdVenta");
 
@@ -217,7 +243,8 @@ namespace CapaDatos
                                 PrecioCompra = Convert.ToDecimal(reader["PrecioCompra"])},
                                 PrecioVenta = Convert.ToDecimal(reader["PrecioVenta"]),
                                 Cantidad = Convert.ToInt32(reader["Cantidad"]),
-                                SubTotal = Convert.ToDecimal(reader["SubTotal"])
+                                SubTotal = Convert.ToDecimal(reader["SubTotal"]),
+                                SubTotalBs = Convert.ToDecimal(reader["SubTotalBs"])
                             });
                         }
                     }
@@ -229,6 +256,45 @@ namespace CapaDatos
                 }
             }
             return oLista;
+        }
+
+        public List<Venta> ListarVentasResumen()
+        {
+            List<Venta> lista = new List<Venta>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    // Solo traemos lo necesario para que el usuario identifique la factura
+                    query.AppendLine("select NumeroDocumento, TipoDocumento, NombreCliente, MontoTotal, MontoBs, FechaRegistro from VENTA order by IdVenta desc");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Venta()
+                            {
+                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                TipoDocumento = dr["TipoDocumento"].ToString(),
+                                NombreCliente = dr["NombreCliente"].ToString(),
+                                MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                                MontoBs = Convert.ToDecimal(dr["MontoBs"]),
+                                FechaRegistro = dr["FechaRegistro"].ToString()
+                            });
+                        }
+                    }
+                }
+                catch
+                {
+                    lista = new List<Venta>();
+                }
+            }
+            return lista;
         }
     }
 

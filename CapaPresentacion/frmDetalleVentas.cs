@@ -1,5 +1,6 @@
 ﻿using CapaEntidad;
 using CapaNegocio;
+using CapaPresentacion.modales;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using System;
@@ -28,6 +29,26 @@ namespace CapaPresentacion
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if (txtNumeroDocumento.Text.Trim() == "")
+            {
+                using (var modal = new mdCodigoVentas())
+                {
+                    var result = modal.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        txtNumeroDocumento.Text = modal.NumeroFacturaSeleccionada;
+                        EjecutarBusquedaDirecta();
+                    }
+                }
+            }
+            else
+            {
+                EjecutarBusquedaDirecta();
+            }
+        }
+
+        private void EjecutarBusquedaDirecta()
         {
             Venta oVenta = new CN_Venta().ObtenerVenta(txtNumeroDocumento.Text.Trim());
 
@@ -72,7 +93,7 @@ namespace CapaPresentacion
                 // Asignamos el texto con el símbolo incluido
                 txtMontoCambio.Text = string.Format("{0} {1}", simbolo, oVenta.MontoCambio.ToString("0.00", CultureInfo.InvariantCulture));
                 txtMontoPago.Text = string.Format("{0} {1}", simbolo, oVenta.MontoPago.ToString("0.00", CultureInfo.InvariantCulture));
-                
+
                 // Mostrar la tasa histórica de la venta
                 txtTasaVenta.Text = oVenta.TasaCambio.ToString("0.00", CultureInfo.InvariantCulture);
             }
@@ -82,7 +103,6 @@ namespace CapaPresentacion
                 txtNumeroDocumento.BackColor = Color.MistyRose;
             }
         }
-
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             // Limpiar todos los campos del formulario

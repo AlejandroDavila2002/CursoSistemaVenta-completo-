@@ -266,8 +266,8 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    // Solo traemos lo necesario para que el usuario identifique la factura
-                    query.AppendLine("select NumeroDocumento, TipoDocumento, NombreCliente, MontoTotal, MontoBs, FechaRegistro from VENTA order by IdVenta desc");
+                    // Seleccionamos ambos montos para decidir cuál mostrar en el modal
+                    query.AppendLine("select NumeroDocumento, NombreCliente, MontoTotal, MontoBs, TasaCambio, FechaRegistro from VENTA order by IdVenta desc");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = CommandType.Text;
@@ -280,18 +280,22 @@ namespace CapaDatos
                             lista.Add(new Venta()
                             {
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
+                                //TipoDocumento = dr["TipoDocumento"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
                                 MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
-                                MontoBs = Convert.ToDecimal(dr["MontoBs"]),
-                                FechaRegistro = dr["FechaRegistro"].ToString()
+                                // CORRECCIÓN: Validar DBNull para evitar InvalidCastException
+                                MontoBs = dr["MontoBs"] != DBNull.Value ? Convert.ToDecimal(dr["MontoBs"]) : 0,
+                                TasaCambio = dr["TasaCambio"] != DBNull.Value ? Convert.ToDecimal(dr["TasaCambio"]) : 0,
+                                FechaRegistro = dr["FechaRegistro"] != DBNull.Value ?
+                                Convert.ToDateTime(dr["FechaRegistro"]).ToString("dd/MM/yyyy") : ""
                             });
                         }
                     }
                 }
-                catch
-                {
-                    lista = new List<Venta>();
+                catch (Exception ex) // Es buena práctica capturar la excepción para depurar
+                { 
+                    lista = new List<Venta>(); 
+                    Console.WriteLine(ex.Message); 
                 }
             }
             return lista;

@@ -38,11 +38,12 @@
             this.label11 = new System.Windows.Forms.Label();
             this.chkMostrarInactivos = new System.Windows.Forms.CheckBox();
             this.dgvData = new System.Windows.Forms.DataGridView();
+            this.cbVerEnBs = new System.Windows.Forms.CheckBox();
             this.btnSeleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NombreProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CodigoVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PrecioVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FechaRegistro = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -160,10 +161,10 @@
             this.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.btnSeleccionar,
-            this.Codigo,
-            this.NombreProducto,
+            this.CodigoVenta,
+            this.NombreCliente,
             this.PrecioVenta,
-            this.Estado});
+            this.FechaRegistro});
             this.dgvData.Location = new System.Drawing.Point(2, 74);
             this.dgvData.Margin = new System.Windows.Forms.Padding(2);
             this.dgvData.MinimumSize = new System.Drawing.Size(820, 382);
@@ -181,6 +182,18 @@
             this.dgvData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvData.Size = new System.Drawing.Size(843, 388);
             this.dgvData.TabIndex = 158;
+            this.dgvData.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellDoubleClick);
+            // 
+            // cbVerEnBs
+            // 
+            this.cbVerEnBs.AutoSize = true;
+            this.cbVerEnBs.Location = new System.Drawing.Point(737, 15);
+            this.cbVerEnBs.Name = "cbVerEnBs";
+            this.cbVerEnBs.Size = new System.Drawing.Size(89, 17);
+            this.cbVerEnBs.TabIndex = 166;
+            this.cbVerEnBs.Text = "Ventas en Bs";
+            this.cbVerEnBs.UseVisualStyleBackColor = true;
+            this.cbVerEnBs.CheckedChanged += new System.EventHandler(this.cbVerEnBs_CheckedChanged);
             // 
             // btnSeleccionar
             // 
@@ -188,31 +201,32 @@
             this.btnSeleccionar.Name = "btnSeleccionar";
             this.btnSeleccionar.Visible = false;
             // 
-            // Codigo
+            // CodigoVenta
             // 
-            this.Codigo.HeaderText = "Codigo Venta";
-            this.Codigo.Name = "Codigo";
+            this.CodigoVenta.HeaderText = "Codigo Venta";
+            this.CodigoVenta.Name = "CodigoVenta";
             // 
-            // NombreProducto
+            // NombreCliente
             // 
-            this.NombreProducto.HeaderText = "Nombre Cliente";
-            this.NombreProducto.Name = "NombreProducto";
+            this.NombreCliente.HeaderText = "Nombre Cliente";
+            this.NombreCliente.Name = "NombreCliente";
             // 
             // PrecioVenta
             // 
             this.PrecioVenta.HeaderText = "Monto Total";
             this.PrecioVenta.Name = "PrecioVenta";
             // 
-            // Estado
+            // FechaRegistro
             // 
-            this.Estado.HeaderText = "Fecha Venta";
-            this.Estado.Name = "Estado";
+            this.FechaRegistro.HeaderText = "Fecha Venta";
+            this.FechaRegistro.Name = "FechaRegistro";
             // 
             // mdCodigoVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(848, 465);
+            this.Controls.Add(this.cbVerEnBs);
             this.Controls.Add(this.btnLimpiarCombo);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.txtBusqueda);
@@ -242,10 +256,11 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox chkMostrarInactivos;
         private System.Windows.Forms.DataGridView dgvData;
+        private System.Windows.Forms.CheckBox cbVerEnBs;
         private System.Windows.Forms.DataGridViewButtonColumn btnSeleccionar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Codigo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NombreProducto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CodigoVenta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NombreCliente;
         private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVenta;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FechaRegistro;
     }
 }

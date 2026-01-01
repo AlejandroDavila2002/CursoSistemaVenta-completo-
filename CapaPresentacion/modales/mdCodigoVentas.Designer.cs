@@ -38,12 +38,12 @@
             this.label11 = new System.Windows.Forms.Label();
             this.chkMostrarInactivos = new System.Windows.Forms.CheckBox();
             this.dgvData = new System.Windows.Forms.DataGridView();
-            this.cbVerEnBs = new System.Windows.Forms.CheckBox();
             this.btnSeleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.CodigoVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PrecioVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FechaRegistro = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbVerEnBs = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -184,17 +184,6 @@
             this.dgvData.TabIndex = 158;
             this.dgvData.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellDoubleClick);
             // 
-            // cbVerEnBs
-            // 
-            this.cbVerEnBs.AutoSize = true;
-            this.cbVerEnBs.Location = new System.Drawing.Point(737, 15);
-            this.cbVerEnBs.Name = "cbVerEnBs";
-            this.cbVerEnBs.Size = new System.Drawing.Size(89, 17);
-            this.cbVerEnBs.TabIndex = 166;
-            this.cbVerEnBs.Text = "Ventas en Bs";
-            this.cbVerEnBs.UseVisualStyleBackColor = true;
-            this.cbVerEnBs.CheckedChanged += new System.EventHandler(this.cbVerEnBs_CheckedChanged);
-            // 
             // btnSeleccionar
             // 
             this.btnSeleccionar.HeaderText = "";
@@ -220,6 +209,17 @@
             // 
             this.FechaRegistro.HeaderText = "Fecha Venta";
             this.FechaRegistro.Name = "FechaRegistro";
+            // 
+            // cbVerEnBs
+            // 
+            this.cbVerEnBs.AutoSize = true;
+            this.cbVerEnBs.Location = new System.Drawing.Point(697, 15);
+            this.cbVerEnBs.Name = "cbVerEnBs";
+            this.cbVerEnBs.Size = new System.Drawing.Size(129, 17);
+            this.cbVerEnBs.TabIndex = 166;
+            this.cbVerEnBs.Text = "Ver solo ventas en Bs";
+            this.cbVerEnBs.UseVisualStyleBackColor = true;
+            this.cbVerEnBs.CheckedChanged += new System.EventHandler(this.cbVerEnBs_CheckedChanged);
             // 
             // mdCodigoVentas
             // 

@@ -129,6 +129,9 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("MontoBs", obj.MontoBs);       // Total en VES
                     cmd.Parameters.AddWithValue("TasaCambio", obj.TasaCambio); // Tasa aplicada
 
+                    // --- BANDERA DE PAGO (BIMONEDA) ---
+                    cmd.Parameters.AddWithValue("TipoMoneda", obj.TipoMoneda); // Moneda con la que se pago. (Bs vs USD)
+
                     // --- DETALLE DE VENTA (DataTable con 5 columnas: IdProd, Precio, Cant, SubUSD, SubVES) ---
                     SqlParameter t_detalle = cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
                     t_detalle.SqlDbType = SqlDbType.Structured;
@@ -167,7 +170,7 @@ namespace CapaDatos
                     query.AppendLine("v.DocumentoCliente, v.NombreCliente,");
                     query.AppendLine("v.TipoDocumento, v.NumeroDocumento,");
                     // Asegúrate de tener esta coma aquí despues de TasaCambio
-                    query.AppendLine("v.MontoPago, v.MontoCambio, v.MontoTotal, v.MontoBs, v.TasaCambio,");
+                    query.AppendLine("v.MontoPago, v.MontoCambio, v.MontoTotal, v.MontoBs, v.TasaCambio, v.TipoMoneda,");
                     query.AppendLine("convert(char(10),v.FechaRegistro,103)[FechaRegistro]");
                     query.AppendLine("from VENTA v");
                     query.AppendLine("inner join USUARIO u on u.IdUsuario = v.IdUsuario");
@@ -195,6 +198,7 @@ namespace CapaDatos
                                 MontoTotal = Convert.ToDecimal(reader["MontoTotal"]),
                                 MontoBs = Convert.ToDecimal(reader["MontoBs"]),
                                 TasaCambio = Convert.ToDecimal(reader["TasaCambio"]),
+                                TipoMoneda = reader["TipoMoneda"].ToString(),
                                 FechaRegistro = reader["FechaRegistro"].ToString()
                             };
                         }
@@ -266,8 +270,8 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    // Seleccionamos ambos montos para decidir cuál mostrar en el modal
-                    query.AppendLine("select NumeroDocumento, NombreCliente, MontoTotal, MontoBs, TasaCambio, FechaRegistro from VENTA order by IdVenta desc");
+                    // 1. Agregamos TipoMoneda al Select
+                    query.AppendLine("select NumeroDocumento, NombreCliente, MontoTotal, MontoBs, TasaCambio, TipoMoneda, FechaRegistro from VENTA order by IdVenta desc");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = CommandType.Text;
@@ -280,23 +284,18 @@ namespace CapaDatos
                             lista.Add(new Venta()
                             {
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
-                                //TipoDocumento = dr["TipoDocumento"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
                                 MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
-                                // CORRECCIÓN: Validar DBNull para evitar InvalidCastException
                                 MontoBs = dr["MontoBs"] != DBNull.Value ? Convert.ToDecimal(dr["MontoBs"]) : 0,
-                                TasaCambio = dr["TasaCambio"] != DBNull.Value ? Convert.ToDecimal(dr["TasaCambio"]) : 0,
+                                // 2. Mapeamos la nueva bandera
+                                TipoMoneda = dr["TipoMoneda"].ToString(),
                                 FechaRegistro = dr["FechaRegistro"] != DBNull.Value ?
-                                Convert.ToDateTime(dr["FechaRegistro"]).ToString("dd/MM/yyyy") : ""
+                                    Convert.ToDateTime(dr["FechaRegistro"]).ToString("dd/MM/yyyy") : ""
                             });
                         }
                     }
                 }
-                catch (Exception ex) // Es buena práctica capturar la excepción para depurar
-                { 
-                    lista = new List<Venta>(); 
-                    Console.WriteLine(ex.Message); 
-                }
+                catch { lista = new List<Venta>(); }
             }
             return lista;
         }

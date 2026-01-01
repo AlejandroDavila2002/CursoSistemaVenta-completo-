@@ -614,7 +614,8 @@ namespace CapaPresentacion
                 MontoCambio = montoCambioCalculado,
                 MontoTotal = _totalUSD,
                 MontoBs = _totalVES,
-                TasaCambio = tasaActual
+                TasaCambio = tasaActual,
+                TipoMoneda = CambioMoneda.Checked ? "VES" : "USD"
             };
 
             string mensaje = string.Empty;

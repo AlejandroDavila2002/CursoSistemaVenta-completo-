@@ -36,6 +36,14 @@
             this.txtIdProducto = new System.Windows.Forms.TextBox();
             this.txtNombreProducto = new System.Windows.Forms.TextBox();
             this.dgvData = new System.Windows.Forms.DataGridView();
+            this.IdProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Preciobs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SubTotalBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnRegistrar = new FontAwesome.Sharp.IconButton();
             this.txtCambio = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -67,14 +75,6 @@
             this.txtTotalapagar = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.CambioMoneda = new System.Windows.Forms.CheckBox();
-            this.IdProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Preciobs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SubTotalBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.txtCantidad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -169,6 +169,52 @@
             this.dgvData.TabIndex = 41;
             this.dgvData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellContentClick);
             this.dgvData.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvData_CellPainting);
+            // 
+            // IdProducto
+            // 
+            this.IdProducto.HeaderText = "IdProducto";
+            this.IdProducto.Name = "IdProducto";
+            this.IdProducto.Visible = false;
+            // 
+            // Producto
+            // 
+            this.Producto.FillWeight = 96.79497F;
+            this.Producto.HeaderText = "Producto";
+            this.Producto.Name = "Producto";
+            // 
+            // Precio
+            // 
+            this.Precio.FillWeight = 122.4865F;
+            this.Precio.HeaderText = "Precio $";
+            this.Precio.Name = "Precio";
+            // 
+            // Preciobs
+            // 
+            this.Preciobs.HeaderText = "Precio Bs";
+            this.Preciobs.Name = "Preciobs";
+            // 
+            // Cantidad
+            // 
+            this.Cantidad.FillWeight = 83.10423F;
+            this.Cantidad.HeaderText = "Cantidad";
+            this.Cantidad.Name = "Cantidad";
+            // 
+            // Subtotal
+            // 
+            this.Subtotal.FillWeight = 86.1582F;
+            this.Subtotal.HeaderText = "SubTotal $";
+            this.Subtotal.Name = "Subtotal";
+            // 
+            // SubTotalBs
+            // 
+            this.SubTotalBs.HeaderText = "SubTotal Bs";
+            this.SubTotalBs.Name = "SubTotalBs";
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.FillWeight = 30F;
+            this.btnEliminar.HeaderText = "";
+            this.btnEliminar.Name = "btnEliminar";
             // 
             // btnRegistrar
             // 
@@ -534,52 +580,6 @@
             this.CambioMoneda.Text = "Pagar con Bolivares";
             this.CambioMoneda.UseVisualStyleBackColor = false;
             this.CambioMoneda.CheckedChanged += new System.EventHandler(this.CambioMoneda_CheckedChanged);
-            // 
-            // IdProducto
-            // 
-            this.IdProducto.HeaderText = "IdProducto";
-            this.IdProducto.Name = "IdProducto";
-            this.IdProducto.Visible = false;
-            // 
-            // Producto
-            // 
-            this.Producto.FillWeight = 96.79497F;
-            this.Producto.HeaderText = "Producto";
-            this.Producto.Name = "Producto";
-            // 
-            // Precio
-            // 
-            this.Precio.FillWeight = 122.4865F;
-            this.Precio.HeaderText = "Precio $";
-            this.Precio.Name = "Precio";
-            // 
-            // Preciobs
-            // 
-            this.Preciobs.HeaderText = "Precio Bs";
-            this.Preciobs.Name = "Preciobs";
-            // 
-            // Cantidad
-            // 
-            this.Cantidad.FillWeight = 83.10423F;
-            this.Cantidad.HeaderText = "Cantidad";
-            this.Cantidad.Name = "Cantidad";
-            // 
-            // Subtotal
-            // 
-            this.Subtotal.FillWeight = 86.1582F;
-            this.Subtotal.HeaderText = "SubTotal $";
-            this.Subtotal.Name = "Subtotal";
-            // 
-            // SubTotalBs
-            // 
-            this.SubTotalBs.HeaderText = "SubTotal Bs";
-            this.SubTotalBs.Name = "SubTotalBs";
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.FillWeight = 30F;
-            this.btnEliminar.HeaderText = "";
-            this.btnEliminar.Name = "btnEliminar";
             // 
             // frmRegistrarVentas
             // 

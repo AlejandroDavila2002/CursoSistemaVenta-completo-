@@ -43,23 +43,26 @@ namespace CapaPresentacion
 
             dgvData.Rows.Clear();
 
-            foreach (ReporteVenta rc in lista)
+            foreach (ReporteVenta row in lista)
             {
                 dgvData.Rows.Add(new object[] {
-                    rc.FechaRegistro,
-                    rc.TipoDocumento,
-                    rc.NumeroDocumento,
-                    rc.MontoTotal,
-                    rc.UsuarioRegistro,
-                    rc.DocumentoCliente,
-                    rc.NombreCliente,
-                    rc.CodigoProducto,
-                    rc.NombreProducto,
-                    rc.Categoria,
-                    rc.PrecioVenta,
-                    rc.Cantidad,
-                    rc.SubTotal
-                });
+                row.FechaRegistro,
+                row.TipoDocumento,
+                row.NumeroDocumento,
+                row.MontoTotal,     // Total USD
+                row.MontoBs,        // Total BS (NUEVO)
+                row.TasaCambio,     // Tasa aplicada (NUEVO)
+                row.TipoMoneda,     // Moneda de pago
+                row.UsuarioRegistro,
+                row.DocumentoCliente,
+                row.NombreCliente,
+                row.CodigoProducto,
+                row.NombreProducto,
+                row.Categoria,
+                row.PrecioVenta,
+                row.Cantidad,
+                row.SubTotal
+            });
             }
 
 
@@ -75,42 +78,51 @@ namespace CapaPresentacion
             {
                 DataTable dt = new DataTable();
 
-                // 1. Agregar las columnas al DataTable
-                foreach (DataGridViewColumn columna in dgvData.Columns)
-                {
-                    if (columna.HeaderText != "" && columna.Visible)
-                        dt.Columns.Add(columna.HeaderText, typeof(string));
-                }
+                // 1. DEFINIR LAS COLUMNAS EXACTAS (Total: 16 columnas)
+                dt.Columns.Add("Fecha Registro", typeof(string));
+                dt.Columns.Add("Tipo Documento", typeof(string));
+                dt.Columns.Add("Numero Documento", typeof(string));
+                dt.Columns.Add("Monto Total USD", typeof(string));
+                dt.Columns.Add("Monto Bs", typeof(string));
+                dt.Columns.Add("Tasa", typeof(string));
+                dt.Columns.Add("Tipo Moneda", typeof(string));
+                dt.Columns.Add("Usuario Registro", typeof(string));
+                dt.Columns.Add("Documento Cliente", typeof(string));
+                dt.Columns.Add("Nombre Cliente", typeof(string));
+                dt.Columns.Add("Codigo Producto", typeof(string));
+                dt.Columns.Add("Nombre Producto", typeof(string));
+                dt.Columns.Add("Categoria", typeof(string));
+                dt.Columns.Add("Precio Venta", typeof(string));
+                dt.Columns.Add("Cantidad", typeof(string));
+                dt.Columns.Add("SubTotal", typeof(string));
 
-                // 2. Agregar las filas al DataTable
+                // 2. AGREGAR LAS FILAS (Asegúrate de pasar exactamente 16 valores)
                 foreach (DataGridViewRow row in dgvData.Rows)
                 {
                     if (row.Visible)
                     {
                         dt.Rows.Add(new object[] {
-
-
-
-                            row.Cells["FechaRegistro"].Value?.ToString() ?? "",
-                            row.Cells["TipoDocumento"].Value?.ToString() ?? "",
-                            row.Cells["NumeroDocumento"].Value?.ToString() ?? "",
-                            row.Cells["MontoTotal"].Value?.ToString() ?? "",
-                            row.Cells["UsuarioRegistro"].Value?.ToString() ?? "",
-                            row.Cells["DocumentoCliente"].Value?.ToString() ?? "",
-                            row.Cells["NombreCliente"].Value?.ToString() ?? "",
-                            row.Cells["CodigoProducto"].Value?.ToString() ?? "",
-                            row.Cells["NombreProducto"].Value?.ToString() ?? "",
-                            row.Cells["Categoria"].Value?.ToString() ?? "",
-                           
-                            row.Cells["PrecioVenta"].Value?.ToString() ?? "",
-                            row.Cells["Cantidad"].Value?.ToString() ?? "",
-                            row.Cells["SubTotal"].Value?.ToString() ?? ""
-
-                        });
+                    row.Cells["FechaRegistro"].Value?.ToString() ?? "",
+                    row.Cells["TipoDocumento"].Value?.ToString() ?? "",
+                    row.Cells["NumeroDocumento"].Value?.ToString() ?? "",
+                    row.Cells["MontoTotal"].Value?.ToString() ?? "", // Este es "Monto Total USD"
+                    row.Cells["MontoBs"].Value?.ToString() ?? "",
+                    row.Cells["TasaCambio"].Value?.ToString() ?? "",
+                    row.Cells["TipoMoneda"].Value?.ToString() ?? "",
+                    row.Cells["UsuarioRegistro"].Value?.ToString() ?? "",
+                    row.Cells["DocumentoCliente"].Value?.ToString() ?? "",
+                    row.Cells["NombreCliente"].Value?.ToString() ?? "",
+                    row.Cells["CodigoProducto"].Value?.ToString() ?? "",
+                    row.Cells["NombreProducto"].Value?.ToString() ?? "",
+                    row.Cells["Categoria"].Value?.ToString() ?? "",
+                    row.Cells["PrecioVenta"].Value?.ToString() ?? "",
+                    row.Cells["Cantidad"].Value?.ToString() ?? "",
+                    row.Cells["SubTotal"].Value?.ToString() ?? ""
+                });
                     }
                 }
 
-                // 3. Guardar el archivo
+                // 3. GUARDAR EL ARCHIVO
                 SaveFileDialog savefile = new SaveFileDialog();
                 savefile.FileName = string.Format("ReporteVentas_{0}.xlsx", DateTime.Now.ToString("ddMMyyyyHHmmss"));
                 savefile.Filter = "Excel Files | *.xlsx";
@@ -125,9 +137,9 @@ namespace CapaPresentacion
                         wb.SaveAs(savefile.FileName);
                         MessageBox.Show("Reporte Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Error al generar reporte", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Error al generar reporte: " + ex.Message, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

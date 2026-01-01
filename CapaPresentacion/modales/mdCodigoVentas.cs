@@ -31,24 +31,49 @@ namespace CapaPresentacion.modales
         private void MostrarVentas()
         {
             dgvData.Rows.Clear();
-            bool verEnBs = cbVerEnBs.Checked;
 
-            if (_listaVentas != null) // Validación de seguridad
+            // Determinamos qué bandera buscar según el estado del CheckBox
+            // Si está marcado, filtramos por Bolívares (VES), si no, por Dólares (USD)
+            string monedaABuscar = cbVerEnBs.Checked ? "VES" : "USD";
+
+            if (_listaVentas != null)
             {
-                foreach (Venta v in _listaVentas)
-                {
-                    string montoAMostrar = verEnBs ?
-                        v.MontoBs.ToString("N2") :
-                        v.MontoTotal.ToString("N2");
+                // Filtramos la lista original para obtener solo las ventas de la moneda seleccionada
+                var listaFiltrada = _listaVentas.Where(v => v.TipoMoneda == monedaABuscar).ToList();
 
-                    // Añadimos una fila y capturamos el índice
+                foreach (Venta v in listaFiltrada)
+                {
+                    string montoFormateado;
+
+                    if (monedaABuscar == "VES")
+                    {
+                        // Formateamos con el símbolo de Bolívares
+                        montoFormateado = $"Bs. {v.MontoBs.ToString("N2")}";
+                    }
+                    else
+                    {
+                        // Formateamos con el símbolo de Dólares
+                        montoFormateado = $"$ {v.MontoTotal.ToString("N2")}";
+                    }
+
+                    // Añadimos la fila al DataGridView
                     int indice = dgvData.Rows.Add();
 
-                    // Asignamos explícitamente a cada celda por el NOMBRE de la columna del Designer
                     dgvData.Rows[indice].Cells["CodigoVenta"].Value = v.NumeroDocumento;
-                    dgvData.Rows[indice].Cells["NombreCliente"].Value = v.NombreCliente; // Usando el nombre que pusiste en el Designer
-                    dgvData.Rows[indice].Cells["PrecioVenta"].Value = montoAMostrar;
+                    dgvData.Rows[indice].Cells["NombreCliente"].Value = v.NombreCliente;
+                    dgvData.Rows[indice].Cells["PrecioVenta"].Value = montoFormateado;
                     dgvData.Rows[indice].Cells["FechaRegistro"].Value = v.FechaRegistro;
+
+                    // Opcional: Aplicar un color distintivo a la celda si es Bolívares
+                    if (monedaABuscar == "VES")
+                    {
+                        dgvData.Rows[indice].Cells["PrecioVenta"].Style.ForeColor = Color.DarkGreen;
+                        dgvData.Rows[indice].Cells["PrecioVenta"].Style.SelectionForeColor = Color.LimeGreen;
+                    }
+                    else
+                    {
+                        dgvData.Rows[indice].Cells["PrecioVenta"].Style.ForeColor = Color.Blue;
+                    }
                 }
             }
         }

@@ -48,6 +48,9 @@
             this.TipoDocumento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumeroDocumento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MontoTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MontoBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TasaCambio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TipoMoneda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UsuarioRegistro = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DocumentoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -188,6 +191,9 @@
             this.TipoDocumento,
             this.NumeroDocumento,
             this.MontoTotal,
+            this.MontoBs,
+            this.TasaCambio,
+            this.TipoMoneda,
             this.UsuarioRegistro,
             this.DocumentoCliente,
             this.NombreCliente,
@@ -326,6 +332,24 @@
             this.MontoTotal.Name = "MontoTotal";
             this.MontoTotal.ReadOnly = true;
             // 
+            // MontoBs
+            // 
+            this.MontoBs.HeaderText = "MontoBs";
+            this.MontoBs.Name = "MontoBs";
+            this.MontoBs.ReadOnly = true;
+            // 
+            // TasaCambio
+            // 
+            this.TasaCambio.HeaderText = "TasaCambio";
+            this.TasaCambio.Name = "TasaCambio";
+            this.TasaCambio.ReadOnly = true;
+            // 
+            // TipoMoneda
+            // 
+            this.TipoMoneda.HeaderText = "TipoMoneda";
+            this.TipoMoneda.Name = "TipoMoneda";
+            this.TipoMoneda.ReadOnly = true;
+            // 
             // UsuarioRegistro
             // 
             this.UsuarioRegistro.HeaderText = "Usuario Registro";
@@ -432,6 +456,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TipoDocumento;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumeroDocumento;
         private System.Windows.Forms.DataGridViewTextBoxColumn MontoTotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MontoBs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TasaCambio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TipoMoneda;
         private System.Windows.Forms.DataGridViewTextBoxColumn UsuarioRegistro;
         private System.Windows.Forms.DataGridViewTextBoxColumn DocumentoCliente;
         private System.Windows.Forms.DataGridViewTextBoxColumn NombreCliente;

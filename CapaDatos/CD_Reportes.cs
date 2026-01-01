@@ -89,7 +89,13 @@ namespace CapaDatos
                                 FechaRegistro = dr["FechaRegistro"].ToString(),
                                 TipoDocumento = dr["TipoDocumento"].ToString(),
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
-                                MontoTotal = dr["MontoTotal"].ToString(),
+                                MontoTotal = dr["MontoTotal"].ToString(), // Este suele ser el valor en USD
+
+                                // --- NUEVOS PARÁMETROS DE BIOMONEDA ---
+                                MontoBs = dr["MontoBs"].ToString(),
+                                TasaCambio = dr["TasaCambio"].ToString(),
+                                TipoMoneda = dr["TipoMoneda"].ToString(),
+
                                 UsuarioRegistro = dr["UsuarioRegistro"].ToString(),
                                 DocumentoCliente = dr["DocumentoCliente"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),

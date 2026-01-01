@@ -575,7 +575,11 @@ namespace CapaPresentacion
                 return;
             }
 
-            // PREPARAR DATATABLE PARA SQL (Debe tener 5 columnas según tu TYPE SQL)
+            // --- CORRECCIÓN: Calcular el cambio aquí mismo ---
+            // Esto evita el error si txtCambio.Text está vacío
+            decimal montoCambioCalculado = pagoCon - totalActual;
+
+            // PREPARAR DATATABLE PARA SQL
             DataTable detalleVenta = new DataTable();
             detalleVenta.Columns.Add("IdProducto", typeof(int));
             detalleVenta.Columns.Add("PrecioVenta", typeof(decimal));
@@ -587,7 +591,7 @@ namespace CapaPresentacion
             {
                 detalleVenta.Rows.Add(
                     Convert.ToInt32(row.Cells["IdProducto"].Value),
-                    Convert.ToDecimal(row.Cells["Precio"].Value, CultureInfo.InvariantCulture), // Siempre enviamos USD como base
+                    Convert.ToDecimal(row.Cells["Precio"].Value, CultureInfo.InvariantCulture),
                     Convert.ToInt32(row.Cells["Cantidad"].Value),
                     Convert.ToDecimal(row.Cells["Subtotal"].Value, CultureInfo.InvariantCulture),
                     Convert.ToDecimal(row.Cells["SubTotalBs"].Value, CultureInfo.InvariantCulture)
@@ -606,9 +610,10 @@ namespace CapaPresentacion
                 DocumentoCliente = txtDocumento.Text.Trim(),
                 NombreCliente = txtNombreCliente.Text.Trim(),
                 MontoPago = pagoCon,
-                MontoCambio = Convert.ToDecimal(txtCambio.Text, CultureInfo.InvariantCulture),
-                MontoTotal = _totalUSD,      // Guardamos la base en Dólares
-                MontoBs = _totalVES,         // Guardamos el total en Bolívares
+                // USAMOS LA VARIABLE CALCULADA, NO EL TEXTBOX
+                MontoCambio = montoCambioCalculado,
+                MontoTotal = _totalUSD,
+                MontoBs = _totalVES,
                 TasaCambio = tasaActual
             };
 

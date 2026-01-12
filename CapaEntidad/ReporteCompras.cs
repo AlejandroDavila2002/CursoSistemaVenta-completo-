@@ -22,5 +22,13 @@ namespace CapaEntidad
         public string PrecioVenta { get; set; }
         public string Cantidad { get; set; }
         public string SubTotal { get; set; }
+
+        // --- NUEVAS PROPIEDADES ---
+        public string TasaCambio { get; set; }
+        public string EsCompraEnBs { get; set; } // Lo manejamos como string para reporte
+        public string PrecioCompraBs { get; set; }
+        public string PrecioVentaBs { get; set; }
+        public string SubTotalBs { get; set; }
+        public string MontoTotalBs { get; set; }
     }
 }

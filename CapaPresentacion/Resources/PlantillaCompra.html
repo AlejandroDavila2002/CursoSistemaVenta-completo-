@@ -54,32 +54,32 @@
     <table border="0" style="width:100%">
         <tr>
             <td style="width:20%"><label style="font-size:12px;font-weight:bold">Documento Proveedor:</label></td>
-			<td style="width:20%"><label style="font-size:12px;">@docproveedor</label></td>
+            <td style="width:20%"><label style="font-size:12px;">@docproveedor</label></td>
         </tr>
-		<tr>
-			<td style="width:20%"><label style="font-size:12px;font-weight:bold">Nombre Proveedor:</label></td>
-			<td style="width:20%"><label style="font-size:12px;">@nombreproveedor</label></td>
-		</tr>
-		<tr>
-			<td style="width:20%"><label style="font-size:12px;font-weight:bold">Fecha Registro:</label></td>
+        <tr>
+            <td style="width:20%"><label style="font-size:12px;font-weight:bold">Nombre Proveedor:</label></td>
+            <td style="width:20%"><label style="font-size:12px;">@nombreproveedor</label></td>
+        </tr>
+        <tr>
+            <td style="width:20%"><label style="font-size:12px;font-weight:bold">Fecha Registro:</label></td>
             <td style="width:20%"><label style="font-size:12px;">@fecharegistro</label></td>
         </tr>
         <tr>
             <td style="width:20%"><label style="font-size:12px;font-weight:bold">Usuario Registro:</label></td>
             <td style="width:20%"><label style="font-size:12px;">@usuarioregistro</label></td>
         </tr>
+        <tr>
+            <td style="width:20%"><label style="font-size:12px;font-weight:bold">Tasa de Cambio:</label></td>
+            <td style="width:20%"><label style="font-size:12px;">@tasacambio</label></td>
+        </tr>
 
 
     </table>
     <div style="height:15px !important"></div>
+
     <table style="width:100%;font-size:12px;" class="border">
         <thead>
-            <tr style="background-color:#CACACA">
-                <th>Producto</th>
-                <th>Precio Compra</th>
-                <th>Precio Venta</th> <th>Cantidad</th>
-                <th>Sub Total</th>
-            </tr>
+            @titulos
         </thead>
         <tbody>
             @filas

@@ -51,6 +51,13 @@ namespace CapaDatos
                                 PrecioVenta = dr["PrecioVenta"].ToString(),
                                 Cantidad = dr["Cantidad"].ToString(),
                                 SubTotal = dr["SubTotal"].ToString(),
+
+                                TasaCambio = dr["TasaCambio"].ToString(),
+                                EsCompraEnBs = Convert.ToBoolean(dr["EsCompraEnBs"]) ? "Sí" : "No", // Formateamos visualmente
+                                PrecioCompraBs = dr["PrecioCompraBs"].ToString(),
+                                PrecioVentaBs = dr["PrecioVentaBs"].ToString(),
+                                SubTotalBs = dr["SubTotalBs"].ToString(),
+                                MontoTotalBs = dr["MontoTotalBs"].ToString()
                             });
                         }
                     }

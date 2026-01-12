@@ -17,5 +17,9 @@ namespace CapaEntidad
         public List<Detalle_Compra> oDetalleCommpra { get; set; }
         public string FechaRegistro { get; set; }
 
+        // --- NUEVAS PROPIEDADES ---
+        public bool EsCompraEnBs { get; set; }
+        public decimal TasaCambio { get; set; }
+
     }
 }

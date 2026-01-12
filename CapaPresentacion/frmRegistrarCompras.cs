@@ -28,6 +28,19 @@ namespace CapaPresentacion
 
         private void frmRegistrarCompras_Load(object sender, EventArgs e)
         {
+            decimal tasaActual = _usuarioActual.oTasaGeneral != null ? _usuarioActual.oTasaGeneral.Valor : 0;
+
+            if (tasaActual <= 0)
+            {
+                chkCompraEnBs.Checked = false;
+                chkCompraEnBs.Enabled = false;
+                chkCompraEnBs.Text = "Compra en Bs (No hay tasa definida)";
+            }
+            else
+            {
+                chkCompraEnBs.Enabled = true;
+                chkCompraEnBs.Text = $"Compra en Bolívares (Convertir) ";
+            }
 
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Boleta", Texto = "Boleta" });
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Factura", Texto = "Factura" });
@@ -126,6 +139,14 @@ namespace CapaPresentacion
             decimal precioVenta;
             bool Producto_existe = false;
 
+            // Variables finales que irán a la Grilla (Siempre en USD)
+            decimal costoUnitarioUSD = 0;
+            decimal precioVentaUSD = 0;
+
+            // --- BANDERA DE MONEDA ---
+            bool esCompraEnBolivares = chkCompraEnBs.Checked;
+
+
             if (txtIdProducto.Text == "0")
             {
                 MessageBox.Show("Debe seleccionar un Producto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -146,6 +167,60 @@ namespace CapaPresentacion
                 return;
             }
 
+            // 1. MEJORA: Validación estricta de valores positivos
+            if (!decimal.TryParse(txtCompraProducto.Text, out precioCompra) || precioCompra <= 0)
+            {
+                MessageBox.Show("El Precio de Compra debe ser mayor a 0 y en formato USD.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                txtCompraProducto.Select();
+                return;
+            }
+
+            if (!decimal.TryParse(txtVentaProducto.Text, out precioVenta) || precioVenta <= 0)
+            {
+                MessageBox.Show("El Precio de Venta debe ser mayor a 0 y en formato USD.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                txtVentaProducto.Select();
+                return;
+            }
+
+            if (precioVenta < precioCompra)
+            {
+                DialogResult pregunta = MessageBox.Show(
+                    $"El precio de venta ({precioVenta}) es menor al costo ({precioCompra}).\n¿Está seguro que desea registrar pérdida?",
+                    "Advertencia de Rentabilidad",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (pregunta == DialogResult.No) return;
+            }
+
+            if (esCompraEnBolivares)
+            {
+                // Validación de seguridad (Defense in Depth)
+                if (_usuarioActual.oTasaGeneral == null || _usuarioActual.oTasaGeneral.Valor <= 0)
+                {
+                    MessageBox.Show("No se puede convertir. La tasa es 0 o no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                decimal tasa = _usuarioActual.oTasaGeneral.Valor;
+
+                // MATEMÁTICA: Input (Bs) / Tasa = Base de Datos ($)
+                costoUnitarioUSD = precioCompra / tasa;
+                precioVentaUSD = precioVenta / tasa;
+            }
+            else
+            {
+                // Si la bandera es falsa, el input ya son Dólares
+                costoUnitarioUSD = precioCompra;
+                precioVentaUSD = precioVenta;
+            }
+
+            if (costoUnitarioUSD <= 0 || precioVentaUSD <= 0)
+            {
+                MessageBox.Show("Los montos calculados en USD no pueden ser 0.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             foreach (DataGridViewRow fila in dgvData.Rows)
             {
 
@@ -156,7 +231,7 @@ namespace CapaPresentacion
                 }
             }
 
-
+            
             if (Producto_existe)
             {
                 MessageBox.Show("Ya agregaste este Producto a la lista", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -167,10 +242,10 @@ namespace CapaPresentacion
 
                     txtIdProducto.Text,
                     txtNombreProducto.Text,
-                    precioCompra.ToString("0.00"),
-                    precioVenta.ToString("0.00"),
+                    costoUnitarioUSD.ToString("0.00"),
+                    precioVentaUSD.ToString("0.00"),
                     txtCantidad.Value.ToString(),
-                    (txtCantidad.Value * precioCompra).ToString("0.00") // Agregué formato al total también
+                    (txtCantidad.Value * costoUnitarioUSD).ToString("0.00") // Agregué formato al total también
                 });
 
 
@@ -459,6 +534,8 @@ namespace CapaPresentacion
                 TipoDocumento = ((OpcionCombo)cboTipoDocumento.SelectedItem).Texto,
                 NumeroDocumento = numeroDocumento,
                 MontoTotal = Convert.ToDecimal(txtTotalaPagar.Text),
+                EsCompraEnBs = chkCompraEnBs.Checked,
+                TasaCambio = _usuarioActual.oTasaGeneral.Valor
 
             };
 
@@ -487,6 +564,28 @@ namespace CapaPresentacion
             }
         }
 
+        private void chkCompraEnBs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCompraEnBs.Checked)
+            {
+                // MODO BOLÍVARES
+                lblCompra.Text = "Precio Compra (Bs):"; // Asumiendo que tienes labels encima de los txt
+                lblVenta.Text = "Precio Venta (Bs):";
+
+                // Cambio de color a un amarillo suave para indicar "Atención: Conversión Activa"
+                txtCompraProducto.BackColor = Color.LightYellow;
+                txtVentaProducto.BackColor = Color.LightYellow;
+            }
+            else
+            {
+                // MODO DÓLARES (Default)
+                lblCompra.Text = "Precio Compra ($):";
+                lblVenta.Text = "Precio Venta ($):";
+
+                txtCompraProducto.BackColor = Color.White;
+                txtVentaProducto.BackColor = Color.White;
+            }
+        }
     }
 }
 

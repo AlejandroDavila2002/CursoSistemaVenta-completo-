@@ -52,33 +52,67 @@ namespace CapaPresentacion
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            int idProveedores =  Convert.ToInt32(((OpcionCombo)cboProveedor.SelectedItem).Valor.ToString());
+            // 1. Obtener ID del proveedor seleccionado
+            int idProveedores = Convert.ToInt32(((OpcionCombo)cboProveedor.SelectedItem).Valor.ToString());
 
+            // 2. Obtener la lista de datos
             List<ReporteCompras> lista = new List<ReporteCompras>();
-
             lista = new CN_Reporte().compras(txtInicio.Value.ToString(), txtFin.Value.ToString(), idProveedores);
 
+            // 3. Limpiar la tabla
             dgvData.Rows.Clear();
 
-            foreach(ReporteCompras rc in lista)
+            // 4. Llenar la tabla USANDO NOMBRES DE COLUMNAS (Para evitar inconsistencias)
+            foreach (ReporteCompras rc in lista)
             {
-                dgvData.Rows.Add(new object[] {
-                    rc.FechaRegistro,
-                    rc.TipoDocumento,
-                    rc.NumeroDocumento,
-                    rc.MontoTotal,
-                    rc.UsuarioRegistro,
-                    rc.DocumentoProveedor,
-                    rc.RazonSocial,
-                    rc.CodigoProducto,
-                    rc.NombreProducto,
-                    rc.Categoria,
-                    rc.PrecioCompra,
-                    rc.PrecioVenta,
-                    rc.Cantidad,
-                    rc.SubTotal
-                });
+                // Agregamos una fila vacía y obtenemos su índice
+                int rowId = dgvData.Rows.Add();
+                DataGridViewRow row = dgvData.Rows[rowId];
+
+                // --- COLUMNAS DE TEXTO (Se quedan igual) ---
+                row.Cells["FechaRegistro"].Value = rc.FechaRegistro;
+                row.Cells["TipoDocumento"].Value = rc.TipoDocumento;
+                row.Cells["NumeroDocumento"].Value = rc.NumeroDocumento;
+                row.Cells["UsuarioRegistro"].Value = rc.UsuarioRegistro;
+                row.Cells["DocumentoProveedor"].Value = rc.DocumentoProveedor;
+                row.Cells["RazonSocial"].Value = rc.RazonSocial;
+                row.Cells["CodigoProducto"].Value = rc.CodigoProducto;
+                row.Cells["NombreProducto"].Value = rc.NombreProducto;
+                row.Cells["Categoria"].Value = rc.Categoria;
+                row.Cells["Cantidad"].Value = rc.Cantidad; // La cantidad suele dejarse sin decimales o como viene
+
+                // --- COLUMNAS MONETARIAS (Aplicamos formato 0.00) ---
+                // Usamos Convert.ToDecimal() para asegurar que sea número y luego formateamos
+
+                // Totales del Documento
+                row.Cells["MontoTotal"].Value = Convert.ToDecimal(rc.MontoTotal).ToString("N2");
+                row.Cells["MontoTotalBs"].Value = Convert.ToDecimal(rc.MontoTotalBs).ToString("N2");
+
+                // Precios de Compra
+                row.Cells["PrecioCompra"].Value = Convert.ToDecimal(rc.PrecioCompra).ToString("N2");
+                row.Cells["PrecioCompraBs"].Value = Convert.ToDecimal(rc.PrecioCompraBs).ToString("N2");
+
+                // Precios de Venta
+                row.Cells["PrecioVenta"].Value = Convert.ToDecimal(rc.PrecioVenta).ToString("N2");
+                row.Cells["PrecioVentaBs"].Value = Convert.ToDecimal(rc.PrecioVentaBs).ToString("N2");
+
+                // Subtotales
+                row.Cells["SubTotal"].Value = Convert.ToDecimal(rc.SubTotal).ToString("N2");
+                row.Cells["SubTotalBs"].Value = Convert.ToDecimal(rc.SubTotalBs).ToString("N2");
+
+                // Tasa de Cambio
+                row.Cells["TasaCambio"].Value = Convert.ToDecimal(rc.TasaCambio).ToString("N2");
+
+                // --- COLUMNA OPCIONAL (Si/No) ---
+                if (dgvData.Columns.Contains("EsCompraEnBs"))
+                {
+                    row.Cells["EsCompraEnBs"].Value = rc.EsCompraEnBs;
+                }
             }
+
+            dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+        
         }
 
         private void btnExportarExcel_Click(object sender, EventArgs e)
@@ -86,66 +120,60 @@ namespace CapaPresentacion
             if (dgvData.Rows.Count < 1)
             {
                 MessageBox.Show("No hay datos para exportar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
-            else
+
+            try
             {
                 DataTable dt = new DataTable();
 
-                // 1. Agregar las columnas al DataTable
+                // 1. GENERAR COLUMNAS AUTOMÁTICAMENTE
+                // Solo agrega al Excel las columnas que el usuario puede ver
                 foreach (DataGridViewColumn columna in dgvData.Columns)
                 {
-                    if (columna.HeaderText != "" && columna.Visible)
+                    if (columna.Visible && !string.IsNullOrEmpty(columna.HeaderText))
+                    {
                         dt.Columns.Add(columna.HeaderText, typeof(string));
+                    }
                 }
 
-                // 2. Agregar las filas al DataTable
+                // 2. LLENAR FILAS AUTOMÁTICAMENTE
                 foreach (DataGridViewRow row in dgvData.Rows)
                 {
                     if (row.Visible)
                     {
-                        dt.Rows.Add(new object[] {
-                    
-                  
-                   
-                            row.Cells["FechaRegistro"].Value?.ToString() ?? "",
-                            row.Cells["TipoDocumento"].Value?.ToString() ?? "",
-                            row.Cells["NumeroDocumento"].Value?.ToString() ?? "",
-                            row.Cells["MontoTotal"].Value?.ToString() ?? "",
-                            row.Cells["UsuarioRegistro"].Value?.ToString() ?? "",
-                            row.Cells["DocumentoProveedor"].Value?.ToString() ?? "",
-                            row.Cells["RazonSocial"].Value?.ToString() ?? "",
-                            row.Cells["CodigoProducto"].Value?.ToString() ?? "",
-                            row.Cells["NombreProducto"].Value?.ToString() ?? "",
-                            row.Cells["Categoria"].Value?.ToString() ?? "",
-                            row.Cells["PrecioCompra"].Value?.ToString() ?? "",
-                            row.Cells["PrecioVenta"].Value?.ToString() ?? "",
-                            row.Cells["Cantidad"].Value?.ToString() ?? "",
-                            row.Cells["SubTotal"].Value?.ToString() ?? ""
-       
-                        });
+                        dt.Rows.Add(new object[dt.Columns.Count]); // Crea fila vacía
+
+                        int i = 0;
+                        foreach (DataGridViewColumn columna in dgvData.Columns)
+                        {
+                            if (columna.Visible && !string.IsNullOrEmpty(columna.HeaderText))
+                            {
+                                // Llena celda por celda dinámicamente
+                                dt.Rows[dt.Rows.Count - 1][i] = row.Cells[columna.Name].Value?.ToString() ?? "";
+                                i++;
+                            }
+                        }
                     }
                 }
 
-                // 3. Guardar el archivo
+                // 3. GUARDAR
                 SaveFileDialog savefile = new SaveFileDialog();
                 savefile.FileName = string.Format("ReporteCompras_{0}.xlsx", DateTime.Now.ToString("ddMMyyyyHHmmss"));
                 savefile.Filter = "Excel Files | *.xlsx";
 
                 if (savefile.ShowDialog() == DialogResult.OK)
                 {
-                    try
-                    {
-                        XLWorkbook wb = new XLWorkbook();
-                        var hoja = wb.Worksheets.Add(dt, "Informe");
-                        hoja.ColumnsUsed().AdjustToContents();
-                        wb.SaveAs(savefile.FileName);
-                        MessageBox.Show("Reporte Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Error al generar reporte", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    XLWorkbook wb = new XLWorkbook();
+                    var hoja = wb.Worksheets.Add(dt, "Informe");
+                    hoja.ColumnsUsed().AdjustToContents();
+                    wb.SaveAs(savefile.FileName);
+                    MessageBox.Show("Reporte Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al generar reporte: " + ex.Message, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -154,59 +182,77 @@ namespace CapaPresentacion
             if (dgvData.Rows.Count < 1)
             {
                 MessageBox.Show("No hay datos para exportar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
-            else
+
+            // --- 1. CONSTRUCCIÓN DINÁMICA DEL HTML ---
+
+            // A. Encabezados de la tabla (@titulos)
+            string titulos = "<tr>";
+            foreach (DataGridViewColumn columna in dgvData.Columns)
             {
-                
-                string Texto_Html = "<html><head><style>table {border-collapse: collapse;} th {background-color: #D6EEEE;}</style></head><body><h2>Reporte de Compras</h2><table border='1' cellpadding='5'><thead><tr><th>Fecha</th><th>Documento</th><th>Proveedor</th><th>Producto</th><th>Cantidad</th><th>SubTotal</th></tr></thead><tbody>@filas</tbody></table></body></html>";
-
-                // Si usas plantilla de recursos, descomenta esta línea y comenta la de arriba:
-                // string Texto_Html = Properties.Resources.PlantillaReporte.ToString();
-
-                string filas = string.Empty;
-
-                // 2. Llenar las filas (CORREGIDO: PROTECCIÓN CONTRA NULOS)
-                foreach (DataGridViewRow row in dgvData.Rows)
+                if (columna.Visible && columna.HeaderText != "")
                 {
-                    if (row.Visible)
-                    {
-                        filas += "<tr>";
-                        // Usamos ?.ToString() ?? "" para que si es null ponga un texto vacío
-                        filas += "<td>" + (row.Cells["FechaRegistro"].Value?.ToString() ?? "") + "</td>";
-                        filas += "<td>" + (row.Cells["NumeroDocumento"].Value?.ToString() ?? "") + "</td>";
-                        filas += "<td>" + (row.Cells["RazonSocial"].Value?.ToString() ?? "") + "</td>";
-                        filas += "<td>" + (row.Cells["NombreProducto"].Value?.ToString() ?? "") + "</td>";
-                        filas += "<td>" + (row.Cells["Cantidad"].Value?.ToString() ?? "") + "</td>";
-                        filas += "<td>" + (row.Cells["SubTotal"].Value?.ToString() ?? "") + "</td>";
-                        filas += "</tr>";
-                    }
+                    titulos += "<th style='background-color:#D6EEEE;'>" + columna.HeaderText + "</th>";
                 }
+            }
+            titulos += "</tr>";
 
-                // Reemplazar la marca @filas en el HTML
-                Texto_Html = Texto_Html.Replace("@filas", filas);
-
-                // 3. Guardar el archivo PDF
-                SaveFileDialog savefile = new SaveFileDialog();
-                savefile.FileName = string.Format("ReporteCompras_{0}.pdf", DateTime.Now.ToString("ddMMyyyyHHmmss"));
-                savefile.Filter = "Pdf Files|*.pdf";
-
-                if (savefile.ShowDialog() == DialogResult.OK)
+            // B. Filas de datos (@filas)
+            string filas = string.Empty;
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                if (row.Visible)
                 {
-                    using (FileStream stream = new FileStream(savefile.FileName, FileMode.Create))
+                    filas += "<tr>";
+                    foreach (DataGridViewColumn columna in dgvData.Columns)
                     {
-                        Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
-                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-
-                        using (StringReader sr = new StringReader(Texto_Html))
+                        if (columna.Visible && columna.HeaderText != "")
                         {
-                            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                            string valor = row.Cells[columna.Name].Value?.ToString() ?? "";
+                            filas += "<td>" + valor + "</td>";
                         }
-
-                        pdfDoc.Close();
-                        stream.Close();
-                        MessageBox.Show("Documento Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+                    filas += "</tr>";
+                }
+            }
+
+            // C. Plantilla HTML Base
+            // IMPORTANTE: 'font-size: 7px' reduce la letra para que quepan todas las columnas nuevas
+            string Texto_Html = "<html><head><style>";
+            Texto_Html += "table {border-collapse: collapse; width: 100%; font-family: Arial; font-size: 7px;}";
+            Texto_Html += "th, td {border: 1px solid black; padding: 4px; text-align: center;}";
+            Texto_Html += "</style></head><body>";
+            Texto_Html += "<h2 style='text-align:center; font-family: Arial;'>Reporte de Compras</h2>";
+            Texto_Html += "<table>";
+            Texto_Html += "<thead>" + titulos + "</thead>";
+            Texto_Html += "<tbody>" + filas + "</tbody>";
+            Texto_Html += "</table></body></html>";
+
+
+            // --- 2. GENERAR Y GUARDAR PDF ---
+            SaveFileDialog savefile = new SaveFileDialog();
+            savefile.FileName = string.Format("ReporteCompras_{0}.pdf", DateTime.Now.ToString("ddMMyyyyHHmmss"));
+            savefile.Filter = "Pdf Files|*.pdf";
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                using (FileStream stream = new FileStream(savefile.FileName, FileMode.Create))
+                {
+                    // IMPORTANTE: .Rotate() para poner la hoja en Horizontal
+                    Document pdfDoc = new Document(PageSize.A4.Rotate(), 10, 10, 10, 10);
+
+                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
+
+                    using (StringReader sr = new StringReader(Texto_Html))
+                    {
+                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                    }
+
+                    pdfDoc.Close();
+                    stream.Close();
+                    MessageBox.Show("Documento Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

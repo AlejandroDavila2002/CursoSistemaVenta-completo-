@@ -58,6 +58,9 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
                     cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
+                    cmd.Parameters.AddWithValue("EsCompraEnBs", obj.EsCompraEnBs);
+                    cmd.Parameters.AddWithValue("TasaCambio", obj.TasaCambio);
+
                     cmd.Parameters.AddWithValue("DetalleCompra", DetalleCompra);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
@@ -89,8 +92,10 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select c.IdCompra,u.NombreCompleto,pr.Documento, pr.RazonSocial, c.TipoDocumento,");
-                    query.AppendLine("c.NumeroDocumento, c.MontoTotal, CONVERT(char(10),c.FechaRegistro,103)[FehcaRegistro]");
+
+                    
+                    query.AppendLine("select c.IdCompra, u.NombreCompleto, pr.Documento, pr.RazonSocial, c.TipoDocumento,");
+                    query.AppendLine("c.NumeroDocumento, c.MontoTotal, c.EsCompraEnBs, c.TasaCambio, CONVERT(char(10),c.FechaRegistro,103)[FehcaRegistro]");
                     query.AppendLine("from COMPRA c");
                     query.AppendLine("inner join USUARIO u on u.IdUsuario = c.IdUsuario");
                     query.AppendLine("inner join PROVEEDOR pr on pr.IdProveedor = c.IdProveedor");
@@ -112,19 +117,21 @@ namespace CapaDatos
                                 TipoDocumento = dr["TipoDocumento"].ToString(),
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
                                 MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
-                                FechaRegistro = dr["FehcaRegistro"].ToString()
-
+                                FechaRegistro = dr["FehcaRegistro"].ToString(),
+                 
+                                EsCompraEnBs = Convert.ToBoolean(dr["EsCompraEnBs"]),
+                                TasaCambio = Convert.ToDecimal(dr["TasaCambio"])
                             };
                         }
                     }
                 }
-                catch
+                catch (Exception ex) // Agregué 'ex' para que puedas ver errores si depuras
                 {
                     obj = null;
+                    
                 }
             }
             return obj;
-
         }
 
         public List<Detalle_Compra> ObtenerDetalleCompra(int IdCompra)

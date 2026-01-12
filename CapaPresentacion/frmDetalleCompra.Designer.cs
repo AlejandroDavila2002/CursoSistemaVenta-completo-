@@ -54,9 +54,12 @@
             this.IdProducto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PrecioCompra = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PrecioCompraBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PrecioVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PrecioVentaBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SubTotalBs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnExportarPDF = new FontAwesome.Sharp.IconButton();
             this.btnLimpiar = new FontAwesome.Sharp.IconButton();
@@ -246,12 +249,13 @@
             // 
             this.txtTotalaPagar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txtTotalaPagar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotalaPagar.Location = new System.Drawing.Point(138, 681);
+            this.txtTotalaPagar.Location = new System.Drawing.Point(153, 681);
             this.txtTotalaPagar.Margin = new System.Windows.Forms.Padding(2);
             this.txtTotalaPagar.Name = "txtTotalaPagar";
             this.txtTotalaPagar.Size = new System.Drawing.Size(99, 22);
             this.txtTotalaPagar.TabIndex = 41;
             this.txtTotalaPagar.Text = "0";
+           
             // 
             // label12
             // 
@@ -286,9 +290,12 @@
             this.IdProducto,
             this.Producto,
             this.PrecioCompra,
+            this.PrecioCompraBs,
             this.PrecioVenta,
+            this.PrecioVentaBs,
             this.Cantidad,
             this.Subtotal,
+            this.SubTotalBs,
             this.btnEliminar});
             this.dgvData.Location = new System.Drawing.Point(32, 238);
             this.dgvData.Margin = new System.Windows.Forms.Padding(2);
@@ -321,14 +328,26 @@
             // PrecioCompra
             // 
             this.PrecioCompra.FillWeight = 122.4865F;
-            this.PrecioCompra.HeaderText = "Precio Compra";
+            this.PrecioCompra.HeaderText = "Precio Compra $";
             this.PrecioCompra.Name = "PrecioCompra";
+            // 
+            // PrecioCompraBs
+            // 
+            this.PrecioCompraBs.HeaderText = "Precio Compra Bs";
+            this.PrecioCompraBs.Name = "PrecioCompraBs";
+            this.PrecioCompraBs.Visible = false;
             // 
             // PrecioVenta
             // 
             this.PrecioVenta.FillWeight = 107.7376F;
-            this.PrecioVenta.HeaderText = "Precio Venta";
+            this.PrecioVenta.HeaderText = "Precio Venta $";
             this.PrecioVenta.Name = "PrecioVenta";
+            // 
+            // PrecioVentaBs
+            // 
+            this.PrecioVentaBs.HeaderText = "Precio Venta Bs";
+            this.PrecioVentaBs.Name = "PrecioVentaBs";
+            this.PrecioVentaBs.Visible = false;
             // 
             // Cantidad
             // 
@@ -341,6 +360,12 @@
             this.Subtotal.FillWeight = 86.1582F;
             this.Subtotal.HeaderText = "Sub Total";
             this.Subtotal.Name = "Subtotal";
+            // 
+            // SubTotalBs
+            // 
+            this.SubTotalBs.HeaderText = "Sub Total Bs";
+            this.SubTotalBs.Name = "SubTotalBs";
+            this.SubTotalBs.Visible = false;
             // 
             // btnEliminar
             // 
@@ -428,6 +453,7 @@
             this.Controls.Add(this.label1);
             this.Name = "frmDetalleCompra";
             this.Text = "frmfrmDetalleCompra";
+            this.Load += new System.EventHandler(this.frmDetalleCompra_Load);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -467,9 +493,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn IdProducto;
         private System.Windows.Forms.DataGridViewTextBoxColumn Producto;
         private System.Windows.Forms.DataGridViewTextBoxColumn PrecioCompra;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioCompraBs;
         private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVenta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVentaBs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn Subtotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SubTotalBs;
         private System.Windows.Forms.DataGridViewButtonColumn btnEliminar;
     }
 }

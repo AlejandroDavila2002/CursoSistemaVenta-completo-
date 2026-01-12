@@ -177,6 +177,13 @@ namespace CapaPresentacion
                 return;
             }
 
+            if (_UsuarioActual.oTasaGeneral == null || _UsuarioActual.oTasaGeneral.Valor <= 0)
+            {
+                MessageBox.Show("No hay una Tasa de Cambio configurada o su valor es 0.\n\nPor favor, vaya al módulo 'Sistema Cambiario' y establezca una Tasa General antes de vender.",
+                                "Tasa No Definida", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return; // Detenemos la ejecución aquí
+            }
+
             if (!decimal.TryParse(txtPrecio.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out precioUSD))
             {
                 MessageBox.Show("Precio o formato incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

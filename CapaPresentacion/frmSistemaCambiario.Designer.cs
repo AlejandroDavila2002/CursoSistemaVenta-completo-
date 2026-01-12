@@ -40,6 +40,7 @@
             this.Moneda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvtasasdecambio)).BeginInit();
             this.SuspendLayout();
             // 
@@ -128,7 +129,7 @@
             // 
             // btnBuscar
             // 
-            this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBuscar.BackColor = System.Drawing.Color.White;
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscar.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -176,6 +177,14 @@
             this.Monto.Name = "Monto";
             this.Monto.Width = 155;
             // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(7, -1);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(621, 50);
+            this.label3.TabIndex = 30;
+            // 
             // frmSistemaCambiario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,6 +199,7 @@
             this.Controls.Add(this.cboTasaDeCambio);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.btnaceptar);
+            this.Controls.Add(this.label3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximumSize = new System.Drawing.Size(649, 326);
             this.MinimizeBox = false;
@@ -217,5 +227,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Moneda;
         private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
         private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
+        private System.Windows.Forms.Label label3;
     }
 }

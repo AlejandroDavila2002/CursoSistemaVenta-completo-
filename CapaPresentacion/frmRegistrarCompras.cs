@@ -1,5 +1,6 @@
 ﻿using CapaEntidad;
 using CapaNegocio;
+using CapaPresentacion.modales;
 using CapaPresentacion.utilidades;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
@@ -81,37 +82,45 @@ namespace CapaPresentacion
 
         private void btnBuscarProducto_Click(object sender, EventArgs e)
         {
-            using (modales.mdProductos mdProductos = new modales.mdProductos())
+            using (var modal = new mdProductos())
             {
-                mdProductos.ShowDialog();
-                if (mdProductos._Producto != null)
+                var result = modal.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    txtIdProducto.Text = mdProductos._Producto.IdProducto.ToString();
-                    txtCodigoProducto.BackColor = Color.White;
-                    txtCodigoProducto.Text = mdProductos._Producto.Codigo;
-                    txtNombreProducto.Text = mdProductos._Producto.NombreProducto;
-                    txtCompraProducto.Text = mdProductos._Producto.PrecioCompra.ToString("0.00");
-                    txtVentaProducto.Text = mdProductos._Producto.PrecioVenta.ToString("0.00");
+                    // ... (asignación de ID, Nombre, etc.) ...
+                    txtIdProducto.Text = modal._Producto.IdProducto.ToString();
+                    txtCodigoProducto.Text = modal._Producto.Codigo;
+                    txtNombreProducto.Text = modal._Producto.NombreProducto;
 
+                    // --- CORRECCIÓN AQUÍ ---
+                    decimal precioCompraBase = modal._Producto.PrecioCompra; // Viene en USD
+                    decimal precioVentaBase = modal._Producto.PrecioVenta;   // Viene en USD
+                    decimal tasa = _usuarioActual.oTasaGeneral.Valor;
 
+                    // Preguntamos: ¿Está el modo Bolívares activado AHORA MISMO?
+                    if (chkCompraEnBs.Checked)
+                    {
+                        // Si está activado, mostramos YA convertido en Bs
+                        txtCompraProducto.Text = (precioCompraBase * tasa).ToString("0.00");
+                        txtVentaProducto.Text = (precioVentaBase * tasa).ToString("0.00");
+                    }
+                    else
+                    {
+                        // Si no, mostramos en USD normal
+                        txtCompraProducto.Text = precioCompraBase.ToString("0.00");
+                        txtVentaProducto.Text = precioVentaBase.ToString("0.00");
+                    }
+                    // -----------------------
 
-                }
-                else
-                {
-                    txtIdProducto.Text = "0";
-                    txtCodigoProducto.Text = "";
-                    txtCodigoProducto.BackColor = Color.White;
-                    txtNombreProducto.Text = "";
-                    txtCompraProducto.Text = "";
-                    txtVentaProducto.Text = "";
-                    MessageBox.Show("No se seleccionó ningún producto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtCantidad.Select();
                 }
             }
         }
 
         private void txtCodigoProducto_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyData == Keys.Enter)
             {
                 Producto oProducto = new CN_Producto().listar().Where(p => p.Codigo == txtCodigoProducto.Text && p.Estado == true).FirstOrDefault();
 
@@ -119,69 +128,69 @@ namespace CapaPresentacion
                 {
                     txtCodigoProducto.BackColor = Color.Honeydew;
                     txtIdProducto.Text = oProducto.IdProducto.ToString();
-                    txtNombreProducto.Text = oProducto.NombreProducto.ToString();
-                    txtCompraProducto.Select();
+                    txtNombreProducto.Text = oProducto.NombreProducto;
+
+                    // --- CORRECCIÓN AQUÍ ---
+                    decimal precioCompraBase = oProducto.PrecioCompra;
+                    decimal precioVentaBase = oProducto.PrecioVenta;
+                    decimal tasa = _usuarioActual.oTasaGeneral.Valor;
+
+                    if (chkCompraEnBs.Checked)
+                    {
+                        // Convertimos a Bs INMEDIATAMENTE al cargar
+                        txtCompraProducto.Text = (precioCompraBase * tasa).ToString("0.00");
+                        txtVentaProducto.Text = (precioVentaBase * tasa).ToString("0.00");
+                    }
+                    else
+                    {
+                        txtCompraProducto.Text = precioCompraBase.ToString("0.00");
+                        txtVentaProducto.Text = precioVentaBase.ToString("0.00");
+                    }
+                    // -----------------------
+
+                    txtCantidad.Select();
                 }
                 else
                 {
                     txtCodigoProducto.BackColor = Color.MistyRose;
                     txtIdProducto.Text = "0";
                     txtNombreProducto.Text = "";
-
-
+                    // Si no encuentra, limpiamos todo
+                    txtCompraProducto.Text = "";
+                    txtVentaProducto.Text = "";
                 }
             }
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            decimal precioCompra;
-            decimal precioVenta;
+            decimal precioCompra = 0;
+            decimal precioVenta = 0;
             bool Producto_existe = false;
 
-            // Variables finales que irán a la Grilla (Siempre en USD)
-            decimal costoUnitarioUSD = 0;
-            decimal precioVentaUSD = 0;
-
-            // --- BANDERA DE MONEDA ---
-            bool esCompraEnBolivares = chkCompraEnBs.Checked;
-
-
+            // Validaciones iniciales
             if (txtIdProducto.Text == "0")
             {
                 MessageBox.Show("Debe seleccionar un Producto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (!decimal.TryParse(txtCompraProducto.Text, out precioCompra))
+            // 1. Validamos que sean números válidos
+            if (!decimal.TryParse(txtCompraProducto.Text, out precioCompra) || !decimal.TryParse(txtVentaProducto.Text, out precioVenta))
             {
                 MessageBox.Show("Formato de moneda incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 txtCompraProducto.Select();
                 return;
             }
 
-            if (!decimal.TryParse(txtVentaProducto.Text, out precioVenta))
+            // 2. Validamos que sean positivos
+            if (precioCompra <= 0 || precioVenta <= 0)
             {
-                MessageBox.Show("Formato de moneda incorrecto", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtVentaProducto.Select();
+                MessageBox.Show("Los precios de Compra y Venta deben ser mayores a 0.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            // 1. MEJORA: Validación estricta de valores positivos
-            if (!decimal.TryParse(txtCompraProducto.Text, out precioCompra) || precioCompra <= 0)
-            {
-                MessageBox.Show("El Precio de Compra debe ser mayor a 0 y en formato USD.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtCompraProducto.Select();
-                return;
-            }
-
-            if (!decimal.TryParse(txtVentaProducto.Text, out precioVenta) || precioVenta <= 0)
-            {
-                MessageBox.Show("El Precio de Venta debe ser mayor a 0 y en formato USD.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtVentaProducto.Select();
-                return;
-            }
-
+            // 3. Advertencia de Rentabilidad (Opcional pero útil)
             if (precioVenta < precioCompra)
             {
                 DialogResult pregunta = MessageBox.Show(
@@ -193,37 +202,14 @@ namespace CapaPresentacion
                 if (pregunta == DialogResult.No) return;
             }
 
-            if (esCompraEnBolivares)
-            {
-                // Validación de seguridad (Defense in Depth)
-                if (_usuarioActual.oTasaGeneral == null || _usuarioActual.oTasaGeneral.Valor <= 0)
-                {
-                    MessageBox.Show("No se puede convertir. La tasa es 0 o no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                decimal tasa = _usuarioActual.oTasaGeneral.Valor;
-
-                // MATEMÁTICA: Input (Bs) / Tasa = Base de Datos ($)
-                costoUnitarioUSD = precioCompra / tasa;
-                precioVentaUSD = precioVenta / tasa;
-            }
-            else
-            {
-                // Si la bandera es falsa, el input ya son Dólares
-                costoUnitarioUSD = precioCompra;
-                precioVentaUSD = precioVenta;
-            }
-
-            if (costoUnitarioUSD <= 0 || precioVentaUSD <= 0)
-            {
-                MessageBox.Show("Los montos calculados en USD no pueden ser 0.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            // --- LÓGICA CORE CORREGIDA ---
+            // NO CONVERTIMOS NADA AQUÍ. 
+            // Si el checkbox está en Bs, el txtCompraProducto ya tiene Bs.
+            // Si el checkbox está en USD, el txtCompraProducto ya tiene USD.
+            // Agregamos a la grilla EXACTAMENTE lo que ve el usuario para mantener la sincronización.
 
             foreach (DataGridViewRow fila in dgvData.Rows)
             {
-
                 if (fila.Cells["IdProducto"].Value?.ToString() == txtIdProducto.Text)
                 {
                     Producto_existe = true;
@@ -231,33 +217,30 @@ namespace CapaPresentacion
                 }
             }
 
-            
             if (Producto_existe)
             {
                 MessageBox.Show("Ya agregaste este Producto a la lista", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
-                dgvData.Rows.Add(new object[] {
+                // Calculamos el subtotal con el valor visual actual
+                decimal subtotal = precioCompra * txtCantidad.Value;
 
+                    dgvData.Rows.Add(new object[] {
                     txtIdProducto.Text,
                     txtNombreProducto.Text,
-                    costoUnitarioUSD.ToString("0.00"),
-                    precioVentaUSD.ToString("0.00"),
+                    precioCompra.ToString("N2"), // Precio tal cual se ve en pantalla
+                    precioVenta.ToString("N2"),  // Venta tal cual se ve en pantalla
                     txtCantidad.Value.ToString(),
-                    (txtCantidad.Value * costoUnitarioUSD).ToString("0.00") // Agregué formato al total también
-                });
-
+                    subtotal.ToString("N2"),     // Subtotal tal cual se ve en pantalla
+                    "" // Botón eliminar
+                    });
 
                 CalcularTotal();
-                limpiarProducto();
+                limpiarProducto(); // Asegúrate que tu método se llame LimpiarProducto o limpiarProducto (mayúscula/minúscula)
                 txtCodigoProducto.Select();
-
             }
-
-
         }
-
         private void limpiarProducto()
         {
             txtIdProducto.Text = "0";
@@ -281,7 +264,7 @@ namespace CapaPresentacion
 
                 }
             }
-            txtTotalaPagar.Text = total.ToString("0.00");
+            txtTotalaPagar.Text = total.ToString("N2");
         }
 
         private void dgvData_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -380,7 +363,7 @@ namespace CapaPresentacion
                 if (decimal.TryParse(txtCompraProducto.Text, out valor))
                 {
                     // Si funciona, le damos formato de 2 decimales
-                    txtCompraProducto.Text = valor.ToString("0.00");
+                    txtCompraProducto.Text = valor.ToString("N2");
                 }
                 else
                 {
@@ -464,7 +447,7 @@ namespace CapaPresentacion
                 if (decimal.TryParse(txtVentaProducto.Text, out valor))
                 {
                     // Si funciona, le damos formato de 2 decimales
-                    txtVentaProducto.Text = valor.ToString("0.00");
+                    txtVentaProducto.Text = valor.ToString("N2");
                 }
                 else
                 {
@@ -507,21 +490,37 @@ namespace CapaPresentacion
             DetalleCompra.Columns.Add("Cantidad", typeof(int));
             DetalleCompra.Columns.Add("MontoTotal", typeof(decimal));
 
+            decimal tasa = _usuarioActual.oTasaGeneral.Valor;
+            bool esBolivares = chkCompraEnBs.Checked;
+
             foreach (DataGridViewRow row in dgvData.Rows)
             {
-                DetalleCompra.Rows.Add(
-                new object[]
+                // 1. Obtenemos los valores visuales (lo que ve el usuario)
+                decimal dPrecioCompra = Convert.ToDecimal(row.Cells["PrecioCompra"].Value);
+                decimal dPrecioVenta = Convert.ToDecimal(row.Cells["PrecioVenta"].Value);
+                int dCantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
+                decimal dSubTotal = Convert.ToDecimal(row.Cells["SubTotal"].Value);
+
+                // 2. LOGICA DE CONVERSIÓN PARA BASE DE DATOS
+                if (esBolivares)
                 {
-                    Convert.ToUInt32( row.Cells["IdProducto"].Value.ToString()),
-                    row.Cells["PrecioCompra"].Value.ToString(),
-                    row.Cells["PrecioVenta"].Value.ToString(),
-                    row.Cells["Cantidad"].Value.ToString(),
-                    row.Cells["Subtotal"].Value.ToString(),
+                    // Si el usuario ingresó Bolívares (ej. 4560), dividimos entre la tasa (380)
+                    // para guardar Dólares en la BD (ej. 12$)
+                    dPrecioCompra = dPrecioCompra / tasa;
+                    dPrecioVenta = dPrecioVenta / tasa;
+                    dSubTotal = dSubTotal / tasa;
+                }
 
-
-
-                });
-
+                // 3. Agregamos a la tabla los valores YA CONVERTIDOS A USD
+                DetalleCompra.Rows.Add(
+                    new object[] {
+                        Convert.ToInt32(row.Cells["IdProducto"].Value),
+                        dPrecioCompra,
+                        dPrecioVenta,
+                        dCantidad,
+                        dSubTotal
+                    }
+                );
             }
 
             int idCorrelativo = new CN_Compra().ObtenerCorrelativo();
@@ -566,27 +565,133 @@ namespace CapaPresentacion
 
         private void chkCompraEnBs_CheckedChanged(object sender, EventArgs e)
         {
+            // 1. Obtener tasa y validar
+            decimal tasa = _usuarioActual.oTasaGeneral.Valor;
+
+            if (tasa == 0)
+            {
+                MessageBox.Show("No hay una tasa de cambio configurada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                chkCompraEnBs.Checked = false;
+                return;
+            }
+
+            // 2. Capturar valores actuales de los Inputs (Para convertirlos también)
+            decimal precioCompraInput = 0;
+            decimal precioVentaInput = 0;
+
+            // Usamos TryParse para que no falle si el cuadro está vacío
+            decimal.TryParse(txtCompraProducto.Text, out precioCompraInput);
+            decimal.TryParse(txtVentaProducto.Text, out precioVentaInput);
+
+
+            // 3. Lógica de Conversión Visual
             if (chkCompraEnBs.Checked)
             {
-                // MODO BOLÍVARES
-                lblCompra.Text = "Precio Compra (Bs):"; // Asumiendo que tienes labels encima de los txt
-                lblVenta.Text = "Precio Venta (Bs):";
+                // --- MODO BOLÍVARES ---
 
-                // Cambio de color a un amarillo suave para indicar "Atención: Conversión Activa"
+                // A. Etiquetas y Estilos
+                lblCompra.Text = "Precio Compra (Bs):";
+                lblVenta.Text = "Precio Venta (Bs):";
                 txtCompraProducto.BackColor = Color.LightYellow;
                 txtVentaProducto.BackColor = Color.LightYellow;
+
+                // B. Cambiar el Label del Total (Requerimiento nuevo)
+                label12.Text = "Total a Pagar Bs:";
+
+                // C. Convertir los Inputs: De USD a Bs (Multiplicar)
+                // Solo convertimos si tienen valores mayores a 0 para no llenar de ceros innecesarios
+                if (precioCompraInput > 0)
+                    txtCompraProducto.Text = (precioCompraInput * tasa).ToString("0.00");
+
+                if (precioVentaInput > 0)
+                    txtVentaProducto.Text = (precioVentaInput * tasa).ToString("0.00");
+
+                // D. Convertir la Grilla
+                RecalcularGrilla(true, tasa);
             }
             else
             {
-                // MODO DÓLARES (Default)
+                // --- MODO DÓLARES ---
+
+                // A. Etiquetas y Estilos
                 lblCompra.Text = "Precio Compra ($):";
                 lblVenta.Text = "Precio Venta ($):";
-
                 txtCompraProducto.BackColor = Color.White;
                 txtVentaProducto.BackColor = Color.White;
+
+                // B. Cambiar el Label del Total (Requerimiento nuevo)
+                label12.Text = "Total a Pagar $:";
+
+                // C. Convertir los Inputs: De Bs a USD (Dividir)
+                if (precioCompraInput > 0)
+                    txtCompraProducto.Text = (precioCompraInput / tasa).ToString("0.00");
+
+                if (precioVentaInput > 0)
+                    txtVentaProducto.Text = (precioVentaInput / tasa).ToString("0.00");
+
+                // D. Convertir la Grilla
+                RecalcularGrilla(false, tasa);
+            }
+
+            // 4. Recalcular el total final numérico
+            CalcularTotal();
+        }
+
+        // MÉTODO AUXILIAR PARA RECALCULAR FILAS
+        private void RecalcularGrilla(bool convertirABolivares, decimal tasa)
+        {
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                // Obtenemos los valores actuales de la celda
+                decimal pCompra = Convert.ToDecimal(row.Cells["PrecioCompra"].Value);
+                decimal pVenta = Convert.ToDecimal(row.Cells["PrecioVenta"].Value);
+                decimal subTotal = Convert.ToDecimal(row.Cells["Subtotal"].Value);
+
+                if (convertirABolivares)
+                {
+                    // USD -> BS (Multiplicamos)
+                    row.Cells["PrecioCompra"].Value = (pCompra * tasa).ToString("N2");
+                    row.Cells["PrecioVenta"].Value = (pVenta * tasa).ToString("N2");
+                    row.Cells["SubTotal"].Value = (subTotal * tasa).ToString("N2");
+                }
+                else
+                {
+                    // BS -> USD (Dividimos)
+                    row.Cells["PrecioCompra"].Value = (pCompra / tasa).ToString("N2");
+                    row.Cells["PrecioVenta"].Value = (pVenta / tasa).ToString("N2");
+                    row.Cells["SubTotal"].Value = (subTotal / tasa).ToString("N2");
+                }
             }
         }
+
+
+        private void dgvData_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            // Verificamos que se haya editado la columna de PrecioCompra o Cantidad
+            if (dgvData.Columns[e.ColumnIndex].Name == "PrecioCompra" || dgvData.Columns[e.ColumnIndex].Name == "Cantidad")
+            {
+                DataGridViewRow row = dgvData.Rows[e.RowIndex];
+
+                decimal precioCompra = 0;
+                int cantidad = 0;
+
+                // Validamos y obtenemos valores
+                decimal.TryParse(row.Cells["PrecioCompra"].Value.ToString(), out precioCompra);
+                int.TryParse(row.Cells["Cantidad"].Value.ToString(), out cantidad);
+
+                // Calculamos nuevo SubTotal (funciona igual para Bs o USD)
+                decimal subTotal = precioCompra * cantidad;
+                row.Cells["SubTotal"].Value = subTotal.ToString("N2");
+
+                // Actualizamos el Total Final
+                CalcularTotal();
+            }
+        }
+
+
     }
+
+
 }
 
 

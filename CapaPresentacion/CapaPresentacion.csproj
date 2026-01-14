@@ -138,6 +138,12 @@
     <Compile Include="frmDetallesNegocio.Designer.cs">
       <DependentUpon>frmDetallesNegocio.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmFlujoCaja.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFlujoCaja.Designer.cs">
+      <DependentUpon>frmFlujoCaja.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmRegistrarCompras.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,6 +228,12 @@
     <Compile Include="modales\mdCodigoVentas.Designer.cs">
       <DependentUpon>mdCodigoVentas.cs</DependentUpon>
     </Compile>
+    <Compile Include="modales\mdIngresoGato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdIngresoGato.Designer.cs">
+      <DependentUpon>mdIngresoGato.cs</DependentUpon>
+    </Compile>
     <Compile Include="modales\mdProductos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -253,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmDetallesNegocio.resx">
       <DependentUpon>frmDetallesNegocio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFlujoCaja.resx">
+      <DependentUpon>frmFlujoCaja.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRegistrarCompras.resx">
       <DependentUpon>frmRegistrarCompras.cs</DependentUpon>
@@ -295,6 +310,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdCodigoVentas.resx">
       <DependentUpon>mdCodigoVentas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdIngresoGato.resx">
+      <DependentUpon>mdIngresoGato.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdProductos.resx">
       <DependentUpon>mdProductos.cs</DependentUpon>

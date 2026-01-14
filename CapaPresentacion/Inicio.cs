@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CapaEntidad;
 using CapaNegocio;
@@ -103,6 +98,7 @@ namespace CapaPresentacion
             formulario.BackColor = Color.SteelBlue;
             contenedor.Controls.Add(formulario);
             formulario.Show();
+
 
 
         }
@@ -312,6 +308,15 @@ namespace CapaPresentacion
             AbrirFormulario(menumantenedor, formulario);
         }
 
-       
+        private void menuflujo_caja_Click(object sender, EventArgs e)
+        {
+            frmFlujoCaja formulario = new frmFlujoCaja(UsuarioActual);
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario((IconMenuItem)sender, formulario);
+        }
     }
 }

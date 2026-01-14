@@ -54,6 +54,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.lbltasa = new System.Windows.Forms.Label();
+            this.menuflujo_caja = new FontAwesome.Sharp.IconMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,6 +73,7 @@
             this.menucliente,
             this.menuproveedores,
             this.menureportes,
+            this.menuflujo_caja,
             this.menusistema_cambiario,
             this.menuacerdade});
             this.menu.Location = new System.Drawing.Point(0, 66);
@@ -382,6 +384,20 @@
             this.lbltasa.Text = "toolStripStatusLabel";
             this.lbltasa.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // menuflujo_caja
+            // 
+            this.menuflujo_caja.AutoSize = false;
+            this.menuflujo_caja.IconChar = FontAwesome.Sharp.IconChar.MoneyBillWaveAlt;
+            this.menuflujo_caja.IconColor = System.Drawing.Color.Black;
+            this.menuflujo_caja.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.menuflujo_caja.IconSize = 50;
+            this.menuflujo_caja.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.menuflujo_caja.Name = "menuflujo_caja";
+            this.menuflujo_caja.Size = new System.Drawing.Size(86, 69);
+            this.menuflujo_caja.Text = "Flujo de Caja";
+            this.menuflujo_caja.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.menuflujo_caja.Click += new System.EventHandler(this.menuflujo_caja_Click);
+            // 
             // Inicio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,6 +451,7 @@
         private System.Windows.Forms.ToolStripMenuItem reportesDeComprasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportesDeInventarioToolStripMenuItem;
         private System.Windows.Forms.Label lbltasa;
+        private FontAwesome.Sharp.IconMenuItem menuflujo_caja;
     }
 }
 

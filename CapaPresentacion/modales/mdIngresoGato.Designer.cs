@@ -271,7 +271,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(740, 392);
+            this.ClientSize = new System.Drawing.Size(330, 392);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.cboCategoria);
             this.Controls.Add(this.dateTimePicker1);

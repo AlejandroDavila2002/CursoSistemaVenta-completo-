@@ -314,9 +314,11 @@ namespace CapaPresentacion
 
             int anchoNecesario = formulario.Width;
             int altoNecesario = formulario.Height + contenedor.Location.Y;
+
             this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
 
-            AbrirFormulario((IconMenuItem)sender, formulario);
+
+            AbrirFormulario(menuflujo_caja, formulario);
         }
     }
 }

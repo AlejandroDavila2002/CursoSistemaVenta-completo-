@@ -20,9 +20,10 @@ namespace CapaPresentacion
 
         public frmFlujoCaja(Usuario usuarioActual)
         {
+
         }
 
-        private void dgvData_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void label14_Click(object sender, EventArgs e)
         {
 
         }

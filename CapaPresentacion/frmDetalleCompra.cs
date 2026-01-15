@@ -41,6 +41,18 @@ namespace CapaPresentacion
 
                 bool esBolivares = oCompra.EsCompraEnBs;
 
+                if (esBolivares)
+                {
+                    txtTasa.Visible = true;
+                    LbTasa.Visible = true;
+                    txtTasa.Text = oCompra.TasaCambio.ToString("N2");
+                }
+                else
+                {
+                    txtTasa.Visible = false;
+                    LbTasa.Visible = false;
+                }
+
                 // Configuramos visibilidad de columnas Bs
                 dgvData.Columns["PrecioCompraBs"].Visible = esBolivares;
                 dgvData.Columns["PrecioVentaBs"].Visible = esBolivares;
@@ -61,13 +73,13 @@ namespace CapaPresentacion
                     dgvData.Rows.Add(new object[] {
                         dc.oProducto.IdProducto,
                         dc.oProducto.NombreProducto,
-                        dc.PrecioCompra.ToString("0.00"),     // Precio USD
-                        precioCompraBs.ToString("0.00"),      // Precio Bs (Nuevo)
-                        dc.PrecioVenta.ToString("0.00"),      // Venta USD
-                        precioVentaBs.ToString("0.00"),       // Venta Bs (Nuevo)
+                        dc.PrecioCompra.ToString("N2"),     // Precio USD
+                        precioCompraBs.ToString("N2"),      // Precio Bs (Nuevo)
+                        dc.PrecioVenta.ToString("N2"),      // Venta USD
+                        precioVentaBs.ToString("N2"),       // Venta Bs (Nuevo)
                         dc.Cantidad,
-                        dc.MontoTotal.ToString("0.00"),       // Subtotal USD
-                        subTotalBs.ToString("0.00")           // Subtotal Bs (Nuevo)
+                        dc.MontoTotal.ToString("N2"),       // Subtotal USD
+                        subTotalBs.ToString("N2")           // Subtotal Bs (Nuevo)
                     });
 
 
@@ -79,13 +91,13 @@ namespace CapaPresentacion
                     // Si fue en Bs: Multiplicamos el Total en USD por la Tasa Histórica
                     decimal totalEnBs = oCompra.MontoTotal * oCompra.TasaCambio;
 
-                    txtTotalaPagar.Text = totalEnBs.ToString("0.00");
+                    txtTotalaPagar.Text = totalEnBs.ToString("N2");
                     //label12.Text = "Total a Pagar Bs:";
                 }
                 else
                 {
                     // Si fue en USD: Mostramos el monto directo (ya está en USD)
-                    txtTotalaPagar.Text = oCompra.MontoTotal.ToString("0.00");
+                    txtTotalaPagar.Text = oCompra.MontoTotal.ToString("N2");
                     //label12.Text = "Total a Pagar $:";
                 }
             }
@@ -132,7 +144,7 @@ namespace CapaPresentacion
 
             // Definimos el símbolo y la tasa a mostrar
             string simboloMoneda = oCompra.EsCompraEnBs ? "Bs. " : "$ ";
-            string tasaTexto = oCompra.TasaCambio.ToString("0.00");
+            string tasaTexto = oCompra.TasaCambio.ToString("N2");
 
 
             // --- GENERAR ENCABEZADOS DE TABLA DINÁMICOS ---

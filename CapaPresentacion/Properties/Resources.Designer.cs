@@ -113,9 +113,39 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_comportamiento_de_las_ventas_80 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-comportamiento-de-las-ventas-80", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_comprobado_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_comprobado_20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_crecimiento_de_las_acciones_85 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-crecimiento-de-las-acciones-85", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_lleno_más_2_matemáticas_25 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-lleno-más-2-matemáticas-25", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -166,7 +196,7 @@ namespace CapaPresentacion.Properties {
         ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
         ///&lt;html&gt;
         ///&lt;head&gt;
-        ///    &lt;title&gt;Web Page Design&lt;/title&gt;
+        ///    &lt;title&gt;Comprobante de Venta&lt;/title&gt;
         ///    &lt;style&gt;
         ///        table.border {
         ///            border-collapse: collapse;
@@ -176,17 +206,14 @@ namespace CapaPresentacion.Properties {
         ///                text-align: center;
         ///                padding: 5px;
         ///                border: 1px solid black;
+        ///                background-color: #CACACA;
+        ///                font-size: 11px;
         ///            }
         ///
         ///            table.border td {
         ///                text-align: center;
         ///                padding: 5px;
-        ///                border: 1px solid black;
-        ///            }
-        ///    &lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///    &lt;tab [resto de la cadena truncado]&quot;;.
+        ///              [resto de la cadena truncado]&quot;;.
         /// </summary>
         public static string PlantillaVenta {
             get {

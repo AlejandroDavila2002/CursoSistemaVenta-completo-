@@ -117,6 +117,7 @@
             this.label1.Size = new System.Drawing.Size(336, 781);
             this.label1.TabIndex = 65;
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Estado
             // 
@@ -274,7 +275,7 @@
             this.btnGuardar.Location = new System.Drawing.Point(11, 371);
             this.btnGuardar.Margin = new System.Windows.Forms.Padding(2);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(318, 43);
+            this.btnGuardar.Size = new System.Drawing.Size(321, 43);
             this.btnGuardar.TabIndex = 86;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

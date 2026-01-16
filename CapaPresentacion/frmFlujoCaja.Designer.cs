@@ -90,6 +90,8 @@
             this.txtInicio = new System.Windows.Forms.DateTimePicker();
             this.VentasVSGastos = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label12 = new System.Windows.Forms.Label();
+            this.txtMonto = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -179,7 +181,7 @@
             // txtReferencia
             // 
             this.txtReferencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtReferencia.Location = new System.Drawing.Point(15, 339);
+            this.txtReferencia.Location = new System.Drawing.Point(15, 373);
             this.txtReferencia.Name = "txtReferencia";
             this.txtReferencia.PasswordChar = '*';
             this.txtReferencia.Size = new System.Drawing.Size(317, 21);
@@ -190,7 +192,7 @@
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(12, 321);
+            this.label7.Location = new System.Drawing.Point(12, 354);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 15);
             this.label7.TabIndex = 84;
@@ -199,7 +201,7 @@
             // txtDescripcion
             // 
             this.txtDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDescripcion.Location = new System.Drawing.Point(15, 287);
+            this.txtDescripcion.Location = new System.Drawing.Point(12, 281);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(317, 21);
             this.txtDescripcion.TabIndex = 83;
@@ -227,7 +229,7 @@
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 269);
+            this.label5.Location = new System.Drawing.Point(12, 258);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(72, 15);
             this.label5.TabIndex = 82;
@@ -281,7 +283,7 @@
             this.btnGuardar.IconColor = System.Drawing.Color.White;
             this.btnGuardar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnGuardar.IconSize = 24;
-            this.btnGuardar.Location = new System.Drawing.Point(11, 371);
+            this.btnGuardar.Location = new System.Drawing.Point(11, 405);
             this.btnGuardar.Margin = new System.Windows.Forms.Padding(2);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(321, 43);
@@ -762,11 +764,33 @@
             this.label12.TabIndex = 106;
             this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
+            // txtMonto
+            // 
+            this.txtMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMonto.Location = new System.Drawing.Point(15, 325);
+            this.txtMonto.Name = "txtMonto";
+            this.txtMonto.PasswordChar = '*';
+            this.txtMonto.Size = new System.Drawing.Size(317, 21);
+            this.txtMonto.TabIndex = 108;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(12, 307);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(67, 15);
+            this.label15.TabIndex = 107;
+            this.label15.Text = "Referencia";
+            // 
             // frmFlujoCaja
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1816, 843);
+            this.Controls.Add(this.txtMonto);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.VentasVSGastos);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.label13);
@@ -876,5 +900,7 @@
         private System.Windows.Forms.DateTimePicker txtInicio;
         private System.Windows.Forms.DataVisualization.Charting.Chart VentasVSGastos;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox txtMonto;
+        private System.Windows.Forms.Label label15;
     }
 }

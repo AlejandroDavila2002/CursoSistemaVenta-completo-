@@ -13,14 +13,13 @@ namespace CapaPresentacion
 {
     public partial class frmFlujoCaja : Form
     {
-        public frmFlujoCaja()
-        {
-            InitializeComponent();
-        }
-
+       
         public frmFlujoCaja(Usuario usuarioActual)
         {
+            InitializeComponent(); // <--- Agrega esto
 
+            // Opcional: Si necesitas guardar el usuario para usarlo luego
+            //_usuarioActual = usuarioActual;
         }
 
         private void label14_Click(object sender, EventArgs e)
@@ -29,6 +28,11 @@ namespace CapaPresentacion
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmFlujoCaja_Load(object sender, EventArgs e)
         {
 
         }

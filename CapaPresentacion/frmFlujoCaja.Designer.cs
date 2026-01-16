@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,6 +58,11 @@
             this.Documento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.iconButton1 = new FontAwesome.Sharp.IconButton();
+            this.iconButton2 = new FontAwesome.Sharp.IconButton();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.TotaldgvData = new System.Windows.Forms.Label();
             this.dgvData = new System.Windows.Forms.DataGridView();
             this.label21 = new System.Windows.Forms.Label();
@@ -75,16 +83,13 @@
             this.iconPictureBox3 = new FontAwesome.Sharp.IconPictureBox();
             this.btnAgregarCategoria = new System.Windows.Forms.Button();
             this.btnAgregarFormaPago = new System.Windows.Forms.Button();
-            this.iconButton1 = new FontAwesome.Sharp.IconButton();
-            this.iconButton2 = new FontAwesome.Sharp.IconButton();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.btnBuscar = new FontAwesome.Sharp.IconButton();
             this.label13 = new System.Windows.Forms.Label();
             this.txtFin = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
             this.txtInicio = new System.Windows.Forms.DateTimePicker();
+            this.VentasVSGastos = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.label12 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -93,6 +98,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox2)).BeginInit();
             this.gpbegresos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VentasVSGastos)).BeginInit();
             this.SuspendLayout();
             // 
             // label11
@@ -104,17 +110,20 @@
             this.label11.ForeColor = System.Drawing.Color.Gray;
             this.label11.Location = new System.Drawing.Point(2, 3);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(1448, 54);
+            this.label11.Size = new System.Drawing.Size(1814, 57);
             this.label11.TabIndex = 51;
             this.label11.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.SystemColors.Window;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(2, 58);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(336, 781);
+            this.label1.Size = new System.Drawing.Size(1811, 781);
             this.label1.TabIndex = 65;
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -336,6 +345,9 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox5.Controls.Add(this.iconButton1);
             this.groupBox5.Controls.Add(this.iconButton2);
@@ -348,29 +360,100 @@
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Location = new System.Drawing.Point(339, 170);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1109, 669);
+            this.groupBox5.Size = new System.Drawing.Size(1472, 669);
             this.groupBox5.TabIndex = 64;
             this.groupBox5.TabStop = false;
+            // 
+            // iconButton1
+            // 
+            this.iconButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.iconButton1.BackColor = System.Drawing.SystemColors.Control;
+            this.iconButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.iconButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton1.ForeColor = System.Drawing.Color.Gray;
+            this.iconButton1.IconChar = FontAwesome.Sharp.IconChar.Broom;
+            this.iconButton1.IconColor = System.Drawing.Color.Black;
+            this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton1.IconSize = 24;
+            this.iconButton1.Location = new System.Drawing.Point(1415, 55);
+            this.iconButton1.Margin = new System.Windows.Forms.Padding(2);
+            this.iconButton1.Name = "iconButton1";
+            this.iconButton1.Size = new System.Drawing.Size(48, 23);
+            this.iconButton1.TabIndex = 103;
+            this.iconButton1.UseVisualStyleBackColor = false;
+            // 
+            // iconButton2
+            // 
+            this.iconButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.iconButton2.BackColor = System.Drawing.SystemColors.Control;
+            this.iconButton2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.iconButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton2.ForeColor = System.Drawing.Color.Gray;
+            this.iconButton2.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.iconButton2.IconColor = System.Drawing.Color.Black;
+            this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton2.IconSize = 24;
+            this.iconButton2.Location = new System.Drawing.Point(1363, 55);
+            this.iconButton2.Margin = new System.Windows.Forms.Padding(2);
+            this.iconButton2.Name = "iconButton2";
+            this.iconButton2.Size = new System.Drawing.Size(48, 23);
+            this.iconButton2.TabIndex = 102;
+            this.iconButton2.UseVisualStyleBackColor = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(1179, 57);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(179, 20);
+            this.textBox1.TabIndex = 101;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox2.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(1012, 57);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(161, 21);
+            this.comboBox2.TabIndex = 100;
+            // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(934, 60);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(72, 13);
+            this.label9.TabIndex = 99;
+            this.label9.Text = "Buscar por:";
             // 
             // TotaldgvData
             // 
             this.TotaldgvData.AllowDrop = true;
+            this.TotaldgvData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.TotaldgvData.BackColor = System.Drawing.Color.WhiteSmoke;
             this.TotaldgvData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TotaldgvData.Location = new System.Drawing.Point(22, 631);
+            this.TotaldgvData.Location = new System.Drawing.Point(20, 631);
             this.TotaldgvData.Name = "TotaldgvData";
-            this.TotaldgvData.Size = new System.Drawing.Size(1078, 23);
+            this.TotaldgvData.Size = new System.Drawing.Size(1443, 23);
             this.TotaldgvData.TabIndex = 75;
             this.TotaldgvData.Text = "Totales -";
             this.TotaldgvData.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // dgvData
             // 
+            this.dgvData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvData.Location = new System.Drawing.Point(23, 84);
             this.dgvData.Name = "dgvData";
             this.dgvData.ReadOnly = true;
-            this.dgvData.Size = new System.Drawing.Size(1077, 541);
+            this.dgvData.Size = new System.Drawing.Size(1440, 541);
             this.dgvData.TabIndex = 74;
             // 
             // label21
@@ -584,75 +667,9 @@
             this.btnAgregarFormaPago.TabIndex = 98;
             this.btnAgregarFormaPago.UseVisualStyleBackColor = true;
             // 
-            // iconButton1
-            // 
-            this.iconButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton1.BackColor = System.Drawing.SystemColors.Control;
-            this.iconButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton1.ForeColor = System.Drawing.Color.Gray;
-            this.iconButton1.IconChar = FontAwesome.Sharp.IconChar.Broom;
-            this.iconButton1.IconColor = System.Drawing.Color.Black;
-            this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton1.IconSize = 24;
-            this.iconButton1.Location = new System.Drawing.Point(1052, 55);
-            this.iconButton1.Margin = new System.Windows.Forms.Padding(2);
-            this.iconButton1.Name = "iconButton1";
-            this.iconButton1.Size = new System.Drawing.Size(48, 23);
-            this.iconButton1.TabIndex = 103;
-            this.iconButton1.UseVisualStyleBackColor = false;
-            // 
-            // iconButton2
-            // 
-            this.iconButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton2.BackColor = System.Drawing.SystemColors.Control;
-            this.iconButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton2.ForeColor = System.Drawing.Color.Gray;
-            this.iconButton2.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.iconButton2.IconColor = System.Drawing.Color.Black;
-            this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton2.IconSize = 24;
-            this.iconButton2.Location = new System.Drawing.Point(1000, 55);
-            this.iconButton2.Margin = new System.Windows.Forms.Padding(2);
-            this.iconButton2.Name = "iconButton2";
-            this.iconButton2.Size = new System.Drawing.Size(48, 23);
-            this.iconButton2.TabIndex = 102;
-            this.iconButton2.UseVisualStyleBackColor = false;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(816, 57);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(179, 20);
-            this.textBox1.TabIndex = 101;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox2.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(649, 57);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(161, 21);
-            this.comboBox2.TabIndex = 100;
-            // 
-            // label9
-            // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(571, 60);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(72, 13);
-            this.label9.TabIndex = 99;
-            this.label9.Text = "Buscar por:";
-            // 
             // btnBuscar
             // 
+            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -661,7 +678,7 @@
             this.btnBuscar.IconColor = System.Drawing.Color.Black;
             this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnBuscar.IconSize = 24;
-            this.btnBuscar.Location = new System.Drawing.Point(1392, 20);
+            this.btnBuscar.Location = new System.Drawing.Point(1755, 20);
             this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
@@ -670,10 +687,11 @@
             // 
             // label13
             // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(1217, 24);
+            this.label13.Location = new System.Drawing.Point(1580, 24);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(67, 15);
             this.label13.TabIndex = 102;
@@ -681,19 +699,21 @@
             // 
             // txtFin
             // 
+            this.txtFin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFin.CustomFormat = "dd/MM/yyyy";
             this.txtFin.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.txtFin.Location = new System.Drawing.Point(1291, 21);
+            this.txtFin.Location = new System.Drawing.Point(1654, 21);
             this.txtFin.Name = "txtFin";
             this.txtFin.Size = new System.Drawing.Size(95, 20);
             this.txtFin.TabIndex = 101;
             // 
             // label14
             // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(1040, 25);
+            this.label14.Location = new System.Drawing.Point(1403, 25);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(72, 15);
             this.label14.TabIndex = 100;
@@ -702,18 +722,52 @@
             // 
             // txtInicio
             // 
+            this.txtInicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtInicio.CustomFormat = "dd/MM/yyyy";
             this.txtInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.txtInicio.Location = new System.Drawing.Point(1116, 22);
+            this.txtInicio.Location = new System.Drawing.Point(1479, 22);
             this.txtInicio.Name = "txtInicio";
             this.txtInicio.Size = new System.Drawing.Size(95, 20);
             this.txtInicio.TabIndex = 99;
+            // 
+            // VentasVSGastos
+            // 
+            this.VentasVSGastos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.VentasVSGastos.BorderlineColor = System.Drawing.Color.WhiteSmoke;
+            chartArea1.Name = "ChartArea1";
+            this.VentasVSGastos.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.VentasVSGastos.Legends.Add(legend1);
+            this.VentasVSGastos.Location = new System.Drawing.Point(1451, 64);
+            this.VentasVSGastos.Name = "VentasVSGastos";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.VentasVSGastos.Series.Add(series1);
+            this.VentasVSGastos.Size = new System.Drawing.Size(362, 99);
+            this.VentasVSGastos.TabIndex = 104;
+            this.VentasVSGastos.Text = "chart1";
+            // 
+            // label12
+            // 
+            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label12.BackColor = System.Drawing.Color.DimGray;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.Gray;
+            this.label12.Location = new System.Drawing.Point(1444, 58);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(372, 108);
+            this.label12.TabIndex = 106;
+            this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // frmFlujoCaja
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1453, 843);
+            this.ClientSize = new System.Drawing.Size(1816, 843);
+            this.Controls.Add(this.VentasVSGastos);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.txtFin);
@@ -737,11 +791,13 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label11);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label1);
             this.Name = "frmFlujoCaja";
             this.Text = "frmFlujoCaja";
+            this.Load += new System.EventHandler(this.frmFlujoCaja_Load);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).EndInit();
@@ -754,6 +810,7 @@
             this.gpbegresos.ResumeLayout(false);
             this.gpbegresos.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VentasVSGastos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -817,5 +874,7 @@
         private System.Windows.Forms.DateTimePicker txtFin;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.DateTimePicker txtInicio;
+        private System.Windows.Forms.DataVisualization.Charting.Chart VentasVSGastos;
+        private System.Windows.Forms.Label label12;
     }
 }

@@ -310,7 +310,10 @@ namespace CapaPresentacion
 
         private void menuflujo_caja_Click(object sender, EventArgs e)
         {
-            frmFlujoCaja formulario = new frmFlujoCaja(UsuarioActual);
+            frmFlujoCaja formulario = new frmFlujoCaja(UsuarioActual)
+            {
+
+            };
 
             int anchoNecesario = formulario.Width;
             int altoNecesario = formulario.Height + contenedor.Location.Y;

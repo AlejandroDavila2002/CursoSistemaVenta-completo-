@@ -73,16 +73,6 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap icons8_alerta_321 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-alerta-321", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap icons8_basura_32 {
             get {
                 object obj = ResourceManager.GetObject("icons8_basura_32", resourceCulture);
@@ -103,6 +93,16 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_borrar_para_siempre_25 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_borrar_para_siempre_25", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_checked_checkbox_40 {
             get {
                 object obj = ResourceManager.GetObject("icons8_checked_checkbox_40", resourceCulture);
@@ -113,29 +113,9 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap icons8_comportamiento_de_las_ventas_80 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-comportamiento-de-las-ventas-80", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap icons8_comprobado_20 {
             get {
                 object obj = ResourceManager.GetObject("icons8_comprobado_20", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap icons8_crecimiento_de_las_acciones_85 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-crecimiento-de-las-acciones-85", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

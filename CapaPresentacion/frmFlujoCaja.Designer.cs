@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,8 +63,16 @@
             this.txtGastosOperativos = new System.Windows.Forms.TextBox();
             this.cboGastosOperativos = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.TotaldgvData = new System.Windows.Forms.Label();
+            this.lblTotaldgvDataGastosOperativos = new System.Windows.Forms.Label();
             this.dgvDataGastosOperativos = new System.Windows.Forms.DataGridView();
+            this.IdGasto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label21 = new System.Windows.Forms.Label();
             this.gpbutilidad = new System.Windows.Forms.GroupBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -92,24 +100,18 @@
             this.label12 = new System.Windows.Forms.Label();
             this.txtMonto = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.dgvDataDeudores = new System.Windows.Forms.DataGridView();
+            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MontoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Empleado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FechaDeuda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.iconButton6 = new FontAwesome.Sharp.IconButton();
             this.lblTotalDeudoresPendientes = new System.Windows.Forms.Label();
             this.iconButton5 = new FontAwesome.Sharp.IconButton();
             this.gpbDeudores = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MontoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Empleado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FechaDeuda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gpbGastosOperativos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataGastosOperativos)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -148,7 +150,6 @@
             this.label1.Size = new System.Drawing.Size(1952, 781);
             this.label1.TabIndex = 65;
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Estado
             // 
@@ -203,7 +204,6 @@
             this.txtReferencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReferencia.Location = new System.Drawing.Point(15, 373);
             this.txtReferencia.Name = "txtReferencia";
-            this.txtReferencia.PasswordChar = '*';
             this.txtReferencia.Size = new System.Drawing.Size(317, 21);
             this.txtReferencia.TabIndex = 85;
             // 
@@ -312,6 +312,7 @@
             this.btnGuardarGastosOperativos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGuardarGastosOperativos.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnGuardarGastosOperativos.UseVisualStyleBackColor = false;
+            this.btnGuardarGastosOperativos.Click += new System.EventHandler(this.btnGuardarGastosOperativos_Click);
             // 
             // label8
             // 
@@ -376,7 +377,7 @@
             this.gpbGastosOperativos.Controls.Add(this.txtGastosOperativos);
             this.gpbGastosOperativos.Controls.Add(this.cboGastosOperativos);
             this.gpbGastosOperativos.Controls.Add(this.label9);
-            this.gpbGastosOperativos.Controls.Add(this.TotaldgvData);
+            this.gpbGastosOperativos.Controls.Add(this.lblTotaldgvDataGastosOperativos);
             this.gpbGastosOperativos.Controls.Add(this.dgvDataGastosOperativos);
             this.gpbGastosOperativos.Controls.Add(this.label21);
             this.gpbGastosOperativos.Controls.Add(this.label2);
@@ -403,6 +404,7 @@
             this.btnLimpiarGastosOperativos.Size = new System.Drawing.Size(48, 23);
             this.btnLimpiarGastosOperativos.TabIndex = 103;
             this.btnLimpiarGastosOperativos.UseVisualStyleBackColor = false;
+            this.btnLimpiarGastosOperativos.Click += new System.EventHandler(this.btnLimpiarGastosOperativos_Click);
             // 
             // btnBuscarGastosOperativos
             // 
@@ -421,6 +423,7 @@
             this.btnBuscarGastosOperativos.Size = new System.Drawing.Size(48, 23);
             this.btnBuscarGastosOperativos.TabIndex = 102;
             this.btnBuscarGastosOperativos.UseVisualStyleBackColor = false;
+            this.btnBuscarGastosOperativos.Click += new System.EventHandler(this.btnBuscarGastosOperativos_Click);
             // 
             // txtGastosOperativos
             // 
@@ -453,37 +456,98 @@
             this.label9.TabIndex = 99;
             this.label9.Text = "Buscar por:";
             // 
-            // TotaldgvData
+            // lblTotaldgvDataGastosOperativos
             // 
-            this.TotaldgvData.AllowDrop = true;
-            this.TotaldgvData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.TotaldgvData.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.TotaldgvData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TotaldgvData.Location = new System.Drawing.Point(11, 633);
-            this.TotaldgvData.Name = "TotaldgvData";
-            this.TotaldgvData.Size = new System.Drawing.Size(997, 23);
-            this.TotaldgvData.TabIndex = 75;
-            this.TotaldgvData.Text = "Totales -";
-            this.TotaldgvData.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblTotaldgvDataGastosOperativos.AllowDrop = true;
+            this.lblTotaldgvDataGastosOperativos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTotaldgvDataGastosOperativos.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblTotaldgvDataGastosOperativos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotaldgvDataGastosOperativos.Location = new System.Drawing.Point(11, 633);
+            this.lblTotaldgvDataGastosOperativos.Name = "lblTotaldgvDataGastosOperativos";
+            this.lblTotaldgvDataGastosOperativos.Size = new System.Drawing.Size(997, 23);
+            this.lblTotaldgvDataGastosOperativos.TabIndex = 75;
+            this.lblTotaldgvDataGastosOperativos.Text = "Totales -";
+            this.lblTotaldgvDataGastosOperativos.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // dgvDataGastosOperativos
             // 
+            this.dgvDataGastosOperativos.AllowUserToAddRows = false;
             this.dgvDataGastosOperativos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvDataGastosOperativos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDataGastosOperativos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.IdGasto,
             this.Categoria,
             this.FormaPago,
             this.Descripción,
             this.Fecha,
             this.Referencia,
-            this.Monto});
+            this.Monto,
+            this.btnEliminar});
             this.dgvDataGastosOperativos.Location = new System.Drawing.Point(22, 84);
             this.dgvDataGastosOperativos.Name = "dgvDataGastosOperativos";
             this.dgvDataGastosOperativos.ReadOnly = true;
             this.dgvDataGastosOperativos.Size = new System.Drawing.Size(1002, 541);
             this.dgvDataGastosOperativos.TabIndex = 74;
+            this.dgvDataGastosOperativos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDataGastosOperativos_CellContentClick);
+            this.dgvDataGastosOperativos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvDataGastosOperativos_CellPainting);
+            // 
+            // IdGasto
+            // 
+            this.IdGasto.HeaderText = "IdGasto";
+            this.IdGasto.Name = "IdGasto";
+            this.IdGasto.ReadOnly = true;
+            this.IdGasto.Visible = false;
+            // 
+            // Categoria
+            // 
+            this.Categoria.HeaderText = "Categoria";
+            this.Categoria.Name = "Categoria";
+            this.Categoria.ReadOnly = true;
+            this.Categoria.Width = 180;
+            // 
+            // FormaPago
+            // 
+            this.FormaPago.HeaderText = "Forma de Pago";
+            this.FormaPago.Name = "FormaPago";
+            this.FormaPago.ReadOnly = true;
+            this.FormaPago.Width = 180;
+            // 
+            // Descripción
+            // 
+            this.Descripción.HeaderText = "Descripción";
+            this.Descripción.Name = "Descripción";
+            this.Descripción.ReadOnly = true;
+            this.Descripción.Width = 220;
+            // 
+            // Fecha
+            // 
+            this.Fecha.HeaderText = "Fecha";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            // 
+            // Referencia
+            // 
+            this.Referencia.HeaderText = "Referencia";
+            this.Referencia.Name = "Referencia";
+            this.Referencia.ReadOnly = true;
+            this.Referencia.Width = 180;
+            // 
+            // Monto
+            // 
+            this.Monto.HeaderText = "Monto";
+            this.Monto.Name = "Monto";
+            this.Monto.ReadOnly = true;
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.HeaderText = "";
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.ReadOnly = true;
+            this.btnEliminar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.btnEliminar.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.btnEliminar.Width = 40;
             // 
             // label21
             // 
@@ -713,6 +777,7 @@
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
             this.btnBuscar.TabIndex = 105;
             this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // label13
             // 
@@ -747,7 +812,6 @@
             this.label14.Size = new System.Drawing.Size(72, 15);
             this.label14.TabIndex = 100;
             this.label14.Text = "Fechs Inicio";
-            this.label14.Click += new System.EventHandler(this.label14_Click);
             // 
             // txtInicio
             // 
@@ -764,16 +828,16 @@
             this.VentasVSGastos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VentasVSGastos.BorderlineColor = System.Drawing.Color.WhiteSmoke;
-            chartArea2.Name = "ChartArea1";
-            this.VentasVSGastos.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.VentasVSGastos.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.VentasVSGastos.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.VentasVSGastos.Legends.Add(legend1);
             this.VentasVSGastos.Location = new System.Drawing.Point(1451, 64);
             this.VentasVSGastos.Name = "VentasVSGastos";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.VentasVSGastos.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.VentasVSGastos.Series.Add(series1);
             this.VentasVSGastos.Size = new System.Drawing.Size(452, 99);
             this.VentasVSGastos.TabIndex = 104;
             this.VentasVSGastos.Text = "chart1";
@@ -796,7 +860,6 @@
             this.txtMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMonto.Location = new System.Drawing.Point(15, 325);
             this.txtMonto.Name = "txtMonto";
-            this.txtMonto.PasswordChar = '*';
             this.txtMonto.Size = new System.Drawing.Size(317, 21);
             this.txtMonto.TabIndex = 108;
             // 
@@ -811,53 +874,13 @@
             this.label15.TabIndex = 107;
             this.label15.Text = "Monto";
             // 
-            // Categoria
-            // 
-            this.Categoria.HeaderText = "Categoria";
-            this.Categoria.Name = "Categoria";
-            this.Categoria.ReadOnly = true;
-            this.Categoria.Width = 180;
-            // 
-            // FormaPago
-            // 
-            this.FormaPago.HeaderText = "Forma de Pago";
-            this.FormaPago.Name = "FormaPago";
-            this.FormaPago.ReadOnly = true;
-            this.FormaPago.Width = 180;
-            // 
-            // Descripción
-            // 
-            this.Descripción.HeaderText = "Descripción";
-            this.Descripción.Name = "Descripción";
-            this.Descripción.ReadOnly = true;
-            this.Descripción.Width = 220;
-            // 
-            // Fecha
-            // 
-            this.Fecha.HeaderText = "Fecha";
-            this.Fecha.Name = "Fecha";
-            this.Fecha.ReadOnly = true;
-            // 
-            // Referencia
-            // 
-            this.Referencia.HeaderText = "Referencia";
-            this.Referencia.Name = "Referencia";
-            this.Referencia.ReadOnly = true;
-            this.Referencia.Width = 180;
-            // 
-            // Monto
-            // 
-            this.Monto.HeaderText = "Monto";
-            this.Monto.Name = "Monto";
-            this.Monto.ReadOnly = true;
-            // 
             // comboBox3
             // 
             this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox3.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(10, 54);
+            this.comboBox3.Location = new System.Drawing.Point(9, 59);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(215, 21);
             this.comboBox3.TabIndex = 105;
@@ -865,13 +888,14 @@
             // textBox3
             // 
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(231, 54);
+            this.textBox3.Location = new System.Drawing.Point(230, 59);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(179, 20);
             this.textBox3.TabIndex = 106;
             // 
             // dgvDataDeudores
             // 
+            this.dgvDataDeudores.AllowUserToAddRows = false;
             this.dgvDataDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -881,84 +905,10 @@
             this.MontoCliente,
             this.Empleado,
             this.FechaDeuda});
-            this.dgvDataDeudores.Location = new System.Drawing.Point(10, 84);
+            this.dgvDataDeudores.Location = new System.Drawing.Point(10, 85);
             this.dgvDataDeudores.Name = "dgvDataDeudores";
-            this.dgvDataDeudores.Size = new System.Drawing.Size(505, 543);
+            this.dgvDataDeudores.Size = new System.Drawing.Size(505, 541);
             this.dgvDataDeudores.TabIndex = 0;
-            // 
-            // iconButton6
-            // 
-            this.iconButton6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton6.BackColor = System.Drawing.SystemColors.Control;
-            this.iconButton6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton6.ForeColor = System.Drawing.Color.Gray;
-            this.iconButton6.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.iconButton6.IconColor = System.Drawing.Color.Black;
-            this.iconButton6.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton6.IconSize = 24;
-            this.iconButton6.Location = new System.Drawing.Point(415, 52);
-            this.iconButton6.Margin = new System.Windows.Forms.Padding(2);
-            this.iconButton6.Name = "iconButton6";
-            this.iconButton6.Size = new System.Drawing.Size(48, 23);
-            this.iconButton6.TabIndex = 107;
-            this.iconButton6.UseVisualStyleBackColor = false;
-            // 
-            // lblTotalDeudoresPendientes
-            // 
-            this.lblTotalDeudoresPendientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalDeudoresPendientes.Location = new System.Drawing.Point(7, 630);
-            this.lblTotalDeudoresPendientes.Name = "lblTotalDeudoresPendientes";
-            this.lblTotalDeudoresPendientes.Size = new System.Drawing.Size(495, 23);
-            this.lblTotalDeudoresPendientes.TabIndex = 1;
-            this.lblTotalDeudoresPendientes.Text = "Totales ";
-            this.lblTotalDeudoresPendientes.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // iconButton5
-            // 
-            this.iconButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton5.BackColor = System.Drawing.SystemColors.Control;
-            this.iconButton5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton5.ForeColor = System.Drawing.Color.Gray;
-            this.iconButton5.IconChar = FontAwesome.Sharp.IconChar.Broom;
-            this.iconButton5.IconColor = System.Drawing.Color.Black;
-            this.iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton5.IconSize = 24;
-            this.iconButton5.Location = new System.Drawing.Point(467, 52);
-            this.iconButton5.Margin = new System.Windows.Forms.Padding(2);
-            this.iconButton5.Name = "iconButton5";
-            this.iconButton5.Size = new System.Drawing.Size(48, 23);
-            this.iconButton5.TabIndex = 108;
-            this.iconButton5.UseVisualStyleBackColor = false;
-            // 
-            // gpbDeudores
-            // 
-            this.gpbDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gpbDeudores.Controls.Add(this.label16);
-            this.gpbDeudores.Controls.Add(this.iconButton5);
-            this.gpbDeudores.Controls.Add(this.lblTotalDeudoresPendientes);
-            this.gpbDeudores.Controls.Add(this.iconButton6);
-            this.gpbDeudores.Controls.Add(this.dgvDataDeudores);
-            this.gpbDeudores.Controls.Add(this.textBox3);
-            this.gpbDeudores.Controls.Add(this.comboBox3);
-            this.gpbDeudores.Location = new System.Drawing.Point(1376, 173);
-            this.gpbDeudores.Name = "gpbDeudores";
-            this.gpbDeudores.Size = new System.Drawing.Size(527, 666);
-            this.gpbDeudores.TabIndex = 109;
-            this.gpbDeudores.TabStop = false;
-            // 
-            // label16
-            // 
-            this.label16.AllowDrop = true;
-            this.label16.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(7, 21);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(248, 23);
-            this.label16.TabIndex = 104;
-            this.label16.Text = "Lista de Deudores";
             // 
             // Cliente
             // 
@@ -985,6 +935,82 @@
             this.FechaDeuda.Name = "FechaDeuda";
             this.FechaDeuda.ReadOnly = true;
             this.FechaDeuda.Width = 150;
+            // 
+            // iconButton6
+            // 
+            this.iconButton6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.iconButton6.BackColor = System.Drawing.SystemColors.Control;
+            this.iconButton6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.iconButton6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton6.ForeColor = System.Drawing.Color.Gray;
+            this.iconButton6.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.iconButton6.IconColor = System.Drawing.Color.Black;
+            this.iconButton6.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton6.IconSize = 24;
+            this.iconButton6.Location = new System.Drawing.Point(414, 57);
+            this.iconButton6.Margin = new System.Windows.Forms.Padding(2);
+            this.iconButton6.Name = "iconButton6";
+            this.iconButton6.Size = new System.Drawing.Size(48, 23);
+            this.iconButton6.TabIndex = 107;
+            this.iconButton6.UseVisualStyleBackColor = false;
+            // 
+            // lblTotalDeudoresPendientes
+            // 
+            this.lblTotalDeudoresPendientes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTotalDeudoresPendientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalDeudoresPendientes.Location = new System.Drawing.Point(20, 634);
+            this.lblTotalDeudoresPendientes.Name = "lblTotalDeudoresPendientes";
+            this.lblTotalDeudoresPendientes.Size = new System.Drawing.Size(495, 19);
+            this.lblTotalDeudoresPendientes.TabIndex = 1;
+            this.lblTotalDeudoresPendientes.Text = "Totales ";
+            this.lblTotalDeudoresPendientes.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // iconButton5
+            // 
+            this.iconButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.iconButton5.BackColor = System.Drawing.SystemColors.Control;
+            this.iconButton5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.iconButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton5.ForeColor = System.Drawing.Color.Gray;
+            this.iconButton5.IconChar = FontAwesome.Sharp.IconChar.Broom;
+            this.iconButton5.IconColor = System.Drawing.Color.Black;
+            this.iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton5.IconSize = 24;
+            this.iconButton5.Location = new System.Drawing.Point(466, 57);
+            this.iconButton5.Margin = new System.Windows.Forms.Padding(2);
+            this.iconButton5.Name = "iconButton5";
+            this.iconButton5.Size = new System.Drawing.Size(48, 23);
+            this.iconButton5.TabIndex = 108;
+            this.iconButton5.UseVisualStyleBackColor = false;
+            // 
+            // gpbDeudores
+            // 
+            this.gpbDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpbDeudores.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.gpbDeudores.Controls.Add(this.label16);
+            this.gpbDeudores.Controls.Add(this.iconButton5);
+            this.gpbDeudores.Controls.Add(this.lblTotalDeudoresPendientes);
+            this.gpbDeudores.Controls.Add(this.iconButton6);
+            this.gpbDeudores.Controls.Add(this.dgvDataDeudores);
+            this.gpbDeudores.Controls.Add(this.textBox3);
+            this.gpbDeudores.Controls.Add(this.comboBox3);
+            this.gpbDeudores.Location = new System.Drawing.Point(1372, 169);
+            this.gpbDeudores.Name = "gpbDeudores";
+            this.gpbDeudores.Size = new System.Drawing.Size(527, 670);
+            this.gpbDeudores.TabIndex = 109;
+            this.gpbDeudores.TabStop = false;
+            // 
+            // label16
+            // 
+            this.label16.AllowDrop = true;
+            this.label16.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(7, 21);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(248, 23);
+            this.label16.TabIndex = 104;
+            this.label16.Text = "Lista de Deudores";
             // 
             // frmFlujoCaja
             // 
@@ -1091,7 +1117,7 @@
         private System.Windows.Forms.Label lblMargenEgresos;
         private System.Windows.Forms.Label lblCantidadEgresos;
         private FontAwesome.Sharp.IconPictureBox iconPictureBox3;
-        private System.Windows.Forms.Label TotaldgvData;
+        private System.Windows.Forms.Label lblTotaldgvDataGastosOperativos;
         private System.Windows.Forms.Button btnAgregarCategoria;
         private System.Windows.Forms.Button btnAgregarFormaPago;
         private FontAwesome.Sharp.IconButton btnLimpiarGastosOperativos;
@@ -1108,12 +1134,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox txtMonto;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Categoria;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FormaPago;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Descripción;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Referencia;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.DataGridView dgvDataDeudores;
@@ -1126,5 +1146,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn MontoCliente;
         private System.Windows.Forms.DataGridViewTextBoxColumn Empleado;
         private System.Windows.Forms.DataGridViewTextBoxColumn FechaDeuda;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IdGasto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Categoria;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FormaPago;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Descripción;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Referencia;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
+        private System.Windows.Forms.DataGridViewButtonColumn btnEliminar;
     }
 }

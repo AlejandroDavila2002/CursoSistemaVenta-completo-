@@ -154,9 +154,7 @@ namespace CapaPresentacion
             {
                 foreach (DataGridViewRow row in dgvData.Rows)
                 {
-                    // --- AQUÍ ESTABA EL ERROR ---
-                    // Usamos ?. para evitar el crash si la celda es nula
-                    // Usamos ?? "" para que si es nula, la trate como texto vacío
+                    
                     string valorCelda = row.Cells[columnaFiltro].Value?.ToString().Trim().ToUpper() ?? "";
 
                     string busqueda = txtBusqueda.Text.Trim().ToUpper();

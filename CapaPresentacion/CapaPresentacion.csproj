@@ -369,6 +369,7 @@
     <None Include="Resources\icons8-lleno-más-2-matemáticas-25.png" />
     <None Include="Resources\icons8-crecimiento-de-las-acciones-85.png" />
     <None Include="Resources\icons8-comportamiento-de-las-ventas-80.png" />
+    <None Include="Resources\icons8_borrar_para_siempre_25.png" />
     <Content Include="Resources\PlantillaInventario.html" />
     <None Include="Resources\PlantillaVenta.html" />
     <None Include="Resources\PlantillaCompra.html" />

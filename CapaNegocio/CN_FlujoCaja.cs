@@ -53,5 +53,57 @@ namespace CapaNegocio
         {
             return objcd.ObtenerResumenFinanciero(fechaInicio, fechaFin);
         }
+
+
+
+
+
+        // --- MÉTODOS PARA CATEGORIAS ---
+        public List<CategoriaGasto> ListarCategorias()
+        {
+            return objcd.ListarCategorias();
+        }
+
+        public bool RegistrarCategoria(CategoriaGasto obj, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+            if (string.IsNullOrEmpty(obj.Descripcion) || string.IsNullOrWhiteSpace(obj.Descripcion))
+            {
+                Mensaje = "La descripción de la categoría no puede ser vacía.";
+                return false;
+            }
+            return objcd.RegistrarCategoria(obj, out Mensaje);
+        }
+
+        public bool EliminarCategoria(int id, out string Mensaje)
+        {
+            return objcd.EliminarCategoria(id, out Mensaje);
+        }
+
+
+
+        // --- MÉTODOS PARA FORMAS DE PAGO ---
+        public List<FormaPago> ListarFormasPago()
+        {
+            return objcd.ListarFormasPago();
+        }
+
+        public bool RegistrarFormaPago(FormaPago obj, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+            if (string.IsNullOrEmpty(obj.Descripcion) || string.IsNullOrWhiteSpace(obj.Descripcion))
+            {
+                Mensaje = "La descripción no puede ser vacía.";
+                return false;
+            }
+            return objcd.RegistrarFormaPago(obj, out Mensaje);
+        }
+
+        public bool EliminarFormaPago(int id, out string Mensaje)
+        {
+            return objcd.EliminarFormaPago(id, out Mensaje);
+        }
+
+
     }
 }

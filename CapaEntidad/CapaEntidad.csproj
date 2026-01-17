@@ -48,6 +48,7 @@
     <Compile Include="Detalles_Negocio.cs" />
     <Compile Include="Detalle_Compra.cs" />
     <Compile Include="Detalle_Venta.cs" />
+    <Compile Include="FormaPago.cs" />
     <Compile Include="Gasto.cs" />
     <Compile Include="Permiso.cs" />
     <Compile Include="Producto.cs" />

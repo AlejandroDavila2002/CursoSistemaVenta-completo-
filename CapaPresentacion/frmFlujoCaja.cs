@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using CapaPresentacion.modales;
 
 namespace CapaPresentacion
 {
@@ -40,42 +41,48 @@ namespace CapaPresentacion
 
         private void CargarCombos()
         {
-            // 1. Cargar Formas de Pago
+            // 1. CARGAR FORMAS DE PAGO (Desde Base de Datos)
             cboFormaPago.Items.Clear();
-            cboFormaPago.Items.Add(new OpcionCombo() { Valor = "Efectivo", Texto = "Efectivo" });
-            cboFormaPago.Items.Add(new OpcionCombo() { Valor = "Pago Movil", Texto = "Pago Movil" });
-            cboFormaPago.Items.Add(new OpcionCombo() { Valor = "Zelle", Texto = "Zelle" });
-            cboFormaPago.Items.Add(new OpcionCombo() { Valor = "Transferencia", Texto = "Transferencia" });
+            List<FormaPago> listaPagos = new CN_FlujoCaja().ListarFormasPago();
+
+            foreach (FormaPago item in listaPagos)
+            {
+                cboFormaPago.Items.Add(new OpcionCombo() { Valor = item.Descripcion, Texto = item.Descripcion });
+            }
             cboFormaPago.DisplayMember = "Texto";
             cboFormaPago.ValueMember = "Valor";
-            cboFormaPago.SelectedIndex = 0;
 
-            // 2. Cargar Categorías (AQUÍ DEBES CONECTAR CON TU CN_CategoriaGasto cuando la tengas lista)
-            // Por ahora, simulamos para que el código funcione o usamos una carga manual
+            if (cboFormaPago.Items.Count > 0) cboFormaPago.SelectedIndex = 0;
+
+
+            // 2. CARGAR CATEGORÍAS (Desde Base de Datos)
             cboCategoria.Items.Clear();
-            cboCategoria.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Servicios" });
-            cboCategoria.Items.Add(new OpcionCombo() { Valor = 2, Texto = "Nomina" });
-            cboCategoria.Items.Add(new OpcionCombo() { Valor = 3, Texto = "Mantenimiento" });
+            List<CategoriaGasto> listaCategoria = new CN_FlujoCaja().ListarCategorias();
+
+            foreach (CategoriaGasto item in listaCategoria)
+            {
+                // OJO: Aquí el Valor es el ID (int), no el texto
+                cboCategoria.Items.Add(new OpcionCombo() { Valor = item.IdCategoriaGasto, Texto = item.Descripcion });
+            }
             cboCategoria.DisplayMember = "Texto";
             cboCategoria.ValueMember = "Valor";
-            cboCategoria.SelectedIndex = 0;
 
-            // 3. Cargar Filtros de Búsqueda
+            if (cboCategoria.Items.Count > 0) cboCategoria.SelectedIndex = 0;
+
+
+            // 3. FILTROS DE BÚSQUEDA (Grilla)
             cboGastosOperativos.Items.Clear();
             foreach (DataGridViewColumn col in dgvDataGastosOperativos.Columns)
             {
-                // Filtramos columnas visibles y evitamos el botón
                 if (col.Visible && col.Name != "btnEliminar")
                 {
                     cboGastosOperativos.Items.Add(new OpcionCombo() { Valor = col.Name, Texto = col.HeaderText });
                 }
             }
-            if (cboGastosOperativos.Items.Count > 0)
-                cboGastosOperativos.SelectedIndex = 0;
-
             cboGastosOperativos.DisplayMember = "Texto";
             cboGastosOperativos.ValueMember = "Valor";
-            cboGastosOperativos.SelectedIndex = 0;
+
+            if (cboGastosOperativos.Items.Count > 0) cboGastosOperativos.SelectedIndex = 0;
         }
 
         private void CargarGastosOperativos()
@@ -315,6 +322,42 @@ namespace CapaPresentacion
             // Forzamos actualización visual
             VentasVSGastos.Update();
         }
+
+
+
+        // --- BOTÓN AGREGAR CATEGORÍA (+) ---
+        private void btnAgregarCategoria_Click(object sender, EventArgs e)
+        {
+            // Abrimos el modal como una pequeña ventana emergente
+            using (var modal = new mdCategoriaGasto())
+            {
+                var result = modal.ShowDialog();
+
+                // Si el usuario guardó o eliminó algo (nos devolvió OK), recargamos la lista
+                if (result == DialogResult.OK)
+                {
+                    CargarCombos();
+                }
+            }
+        }
+
+        // --- BOTÓN AGREGAR FORMA DE PAGO (+) ---
+        private void btnAgregarFormaPago_Click(object sender, EventArgs e)
+        {
+            using (var modal = new mdFormaPago())
+            {
+                var result = modal.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    CargarCombos();
+                }
+            }
+        }
+
+
+
+
 
     }
 }

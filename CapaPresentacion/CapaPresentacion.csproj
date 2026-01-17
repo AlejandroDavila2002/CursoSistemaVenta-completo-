@@ -220,6 +220,12 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="modales\mdCategoriaGasto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdCategoriaGasto.Designer.cs">
+      <DependentUpon>mdCategoriaGasto.cs</DependentUpon>
+    </Compile>
     <Compile Include="modales\mdCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +237,12 @@
     </Compile>
     <Compile Include="modales\mdCodigoVentas.Designer.cs">
       <DependentUpon>mdCodigoVentas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="modales\mdFormaPago.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdFormaPago.Designer.cs">
+      <DependentUpon>mdFormaPago.cs</DependentUpon>
     </Compile>
     <Compile Include="modales\mdIngresoGato.cs">
       <SubType>Form</SubType>
@@ -309,11 +321,17 @@
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdCategoriaGasto.resx">
+      <DependentUpon>mdCategoriaGasto.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="modales\mdCliente.resx">
       <DependentUpon>mdCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdCodigoVentas.resx">
       <DependentUpon>mdCodigoVentas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdFormaPago.resx">
+      <DependentUpon>mdFormaPago.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdIngresoGato.resx">
       <DependentUpon>mdIngresoGato.cs</DependentUpon>

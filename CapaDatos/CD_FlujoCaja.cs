@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
+
 namespace CapaDatos
 {
     public class CD_FlujoCaja
@@ -147,6 +148,176 @@ namespace CapaDatos
                 }
             }
             return resumen;
+        }
+
+
+        // --- SECCIÓN CATEGORIAS ---
+
+        public List<CategoriaGasto> ListarCategorias()
+        {
+            List<CategoriaGasto> lista = new List<CategoriaGasto>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    // CAMBIO: Ahora usamos el SP en lugar de texto directo
+                    SqlCommand cmd = new SqlCommand("SP_ListarCategoriaGasto", oconexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new CategoriaGasto()
+                            {
+                                IdCategoriaGasto = Convert.ToInt32(dr["IdCategoriaGasto"]),
+                                Descripcion = dr["Descripcion"].ToString()
+                            });
+                        }
+                    }
+                }
+                catch (Exception) { lista = new List<CategoriaGasto>(); }
+            }
+            return lista;
+        }
+
+        public bool RegistrarCategoria(CategoriaGasto obj, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarCategoriaGasto", oconexion);
+                    cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
+                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                    Mensaje = ex.Message;
+                }
+            }
+            return respuesta;
+        }
+
+        public bool EliminarCategoria(int id, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_EliminarCategoriaGasto", oconexion);
+                    cmd.Parameters.AddWithValue("IdCategoriaGasto", id);
+                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+                catch (Exception ex) { respuesta = false; Mensaje = ex.Message; }
+            }
+            return respuesta;
+        }
+
+        // --- SECCIÓN FORMA DE PAGO ---
+
+        public List<FormaPago> ListarFormasPago()
+        {
+            List<FormaPago> lista = new List<FormaPago>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_ListarFormaPago", oconexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new FormaPago()
+                            {
+                                IdFormaPago = Convert.ToInt32(dr["IdFormaPago"]),
+                                Descripcion = dr["Descripcion"].ToString()
+                            });
+                        }
+                    }
+                }
+                catch (Exception) { lista = new List<FormaPago>(); }
+            }
+            return lista;
+        }
+
+        public bool RegistrarFormaPago(FormaPago obj, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarFormaPago", oconexion);
+                    cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
+                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                    Mensaje = ex.Message;
+                }
+            }
+            return respuesta;
+        }
+
+        public bool EliminarFormaPago(int id, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_EliminarFormaPago", oconexion);
+                    cmd.Parameters.AddWithValue("IdFormaPago", id);
+                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+                catch (Exception ex) { respuesta = false; Mensaje = ex.Message; }
+            }
+            return respuesta;
         }
     }
 }

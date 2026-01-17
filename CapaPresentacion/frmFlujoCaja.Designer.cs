@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,6 +65,14 @@
             this.label9 = new System.Windows.Forms.Label();
             this.lblTotaldgvDataGastosOperativos = new System.Windows.Forms.Label();
             this.dgvDataGastosOperativos = new System.Windows.Forms.DataGridView();
+            this.IdGasto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label21 = new System.Windows.Forms.Label();
             this.gpbutilidad = new System.Windows.Forms.GroupBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -104,14 +112,6 @@
             this.iconButton5 = new FontAwesome.Sharp.IconButton();
             this.gpbDeudores = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.IdGasto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.gpbGastosOperativos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataGastosOperativos)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -493,6 +493,63 @@
             this.dgvDataGastosOperativos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDataGastosOperativos_CellContentClick);
             this.dgvDataGastosOperativos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvDataGastosOperativos_CellPainting);
             // 
+            // IdGasto
+            // 
+            this.IdGasto.HeaderText = "IdGasto";
+            this.IdGasto.Name = "IdGasto";
+            this.IdGasto.ReadOnly = true;
+            this.IdGasto.Visible = false;
+            // 
+            // Categoria
+            // 
+            this.Categoria.HeaderText = "Categoria";
+            this.Categoria.Name = "Categoria";
+            this.Categoria.ReadOnly = true;
+            this.Categoria.Width = 180;
+            // 
+            // FormaPago
+            // 
+            this.FormaPago.HeaderText = "Forma de Pago";
+            this.FormaPago.Name = "FormaPago";
+            this.FormaPago.ReadOnly = true;
+            this.FormaPago.Width = 180;
+            // 
+            // Descripción
+            // 
+            this.Descripción.HeaderText = "Descripción";
+            this.Descripción.Name = "Descripción";
+            this.Descripción.ReadOnly = true;
+            this.Descripción.Width = 220;
+            // 
+            // Fecha
+            // 
+            this.Fecha.HeaderText = "Fecha";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            this.Fecha.Width = 70;
+            // 
+            // Referencia
+            // 
+            this.Referencia.HeaderText = "Referencia";
+            this.Referencia.Name = "Referencia";
+            this.Referencia.ReadOnly = true;
+            this.Referencia.Width = 180;
+            // 
+            // Monto
+            // 
+            this.Monto.HeaderText = "Monto";
+            this.Monto.Name = "Monto";
+            this.Monto.ReadOnly = true;
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.HeaderText = "";
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.ReadOnly = true;
+            this.btnEliminar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.btnEliminar.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.btnEliminar.Width = 40;
+            // 
             // label21
             // 
             this.label21.AllowDrop = true;
@@ -693,6 +750,7 @@
             this.btnAgregarCategoria.Size = new System.Drawing.Size(27, 23);
             this.btnAgregarCategoria.TabIndex = 95;
             this.btnAgregarCategoria.UseVisualStyleBackColor = true;
+            this.btnAgregarCategoria.Click += new System.EventHandler(this.btnAgregarCategoria_Click);
             // 
             // btnAgregarFormaPago
             // 
@@ -703,6 +761,7 @@
             this.btnAgregarFormaPago.Size = new System.Drawing.Size(27, 23);
             this.btnAgregarFormaPago.TabIndex = 98;
             this.btnAgregarFormaPago.UseVisualStyleBackColor = true;
+            this.btnAgregarFormaPago.Click += new System.EventHandler(this.btnAgregarFormaPago_Click);
             // 
             // btnBuscar
             // 
@@ -772,16 +831,16 @@
             this.VentasVSGastos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VentasVSGastos.BorderlineColor = System.Drawing.Color.WhiteSmoke;
-            chartArea3.Name = "ChartArea1";
-            this.VentasVSGastos.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.VentasVSGastos.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.VentasVSGastos.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.VentasVSGastos.Legends.Add(legend1);
             this.VentasVSGastos.Location = new System.Drawing.Point(1451, 64);
             this.VentasVSGastos.Name = "VentasVSGastos";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.VentasVSGastos.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.VentasVSGastos.Series.Add(series1);
             this.VentasVSGastos.Size = new System.Drawing.Size(452, 99);
             this.VentasVSGastos.TabIndex = 104;
             this.VentasVSGastos.Text = "chart1";
@@ -955,63 +1014,6 @@
             this.label16.Size = new System.Drawing.Size(248, 23);
             this.label16.TabIndex = 104;
             this.label16.Text = "Lista de Deudores";
-            // 
-            // IdGasto
-            // 
-            this.IdGasto.HeaderText = "IdGasto";
-            this.IdGasto.Name = "IdGasto";
-            this.IdGasto.ReadOnly = true;
-            this.IdGasto.Visible = false;
-            // 
-            // Categoria
-            // 
-            this.Categoria.HeaderText = "Categoria";
-            this.Categoria.Name = "Categoria";
-            this.Categoria.ReadOnly = true;
-            this.Categoria.Width = 180;
-            // 
-            // FormaPago
-            // 
-            this.FormaPago.HeaderText = "Forma de Pago";
-            this.FormaPago.Name = "FormaPago";
-            this.FormaPago.ReadOnly = true;
-            this.FormaPago.Width = 180;
-            // 
-            // Descripción
-            // 
-            this.Descripción.HeaderText = "Descripción";
-            this.Descripción.Name = "Descripción";
-            this.Descripción.ReadOnly = true;
-            this.Descripción.Width = 220;
-            // 
-            // Fecha
-            // 
-            this.Fecha.HeaderText = "Fecha";
-            this.Fecha.Name = "Fecha";
-            this.Fecha.ReadOnly = true;
-            this.Fecha.Width = 70;
-            // 
-            // Referencia
-            // 
-            this.Referencia.HeaderText = "Referencia";
-            this.Referencia.Name = "Referencia";
-            this.Referencia.ReadOnly = true;
-            this.Referencia.Width = 180;
-            // 
-            // Monto
-            // 
-            this.Monto.HeaderText = "Monto";
-            this.Monto.Name = "Monto";
-            this.Monto.ReadOnly = true;
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.HeaderText = "";
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.ReadOnly = true;
-            this.btnEliminar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.btnEliminar.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.btnEliminar.Width = 40;
             // 
             // frmFlujoCaja
             // 

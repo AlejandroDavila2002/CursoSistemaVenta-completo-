@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace CapaPresentacion
 {
@@ -31,8 +32,9 @@ namespace CapaPresentacion
 
             // Cargar datos por defecto (del día de hoy)
             CargarGastosOperativos();
+            CalcularFinanzas();
 
-            
+
 
         }
 
@@ -102,7 +104,9 @@ namespace CapaPresentacion
                 total += g.Monto;
             }
 
-            lblTotaldgvDataGastosOperativos.Text = total.ToString("N2");
+            lblTotaldgvDataGastosOperativos.Text =  "- "+ total.ToString("N2");
+            lblTotaldgvDataGastosOperativos.ForeColor = Color.Red;
+
         }
 
         // --- BOTÓN GUARDAR ---
@@ -127,6 +131,7 @@ namespace CapaPresentacion
                 MessageBox.Show("Gasto registrado correctamente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimpiarCampos();
                 CargarGastosOperativos();
+                CalcularFinanzas();
             }
             else
             {
@@ -158,6 +163,7 @@ namespace CapaPresentacion
                         dgvDataGastosOperativos.Rows.RemoveAt(e.RowIndex);
                         // Recalcular total visualmente sin ir a BD si prefieres optimizar, o recargar todo:
                         CargarGastosOperativos();
+                        CalcularFinanzas();
                     }
                     else
                     {
@@ -233,8 +239,82 @@ namespace CapaPresentacion
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             CargarGastosOperativos();
+
+            CalcularFinanzas();
         }
 
-       
+
+        private void CalcularFinanzas()
+        {
+            string fechaInicio = txtInicio.Value.ToString("yyyy-MM-dd");
+            string fechaFin = txtFin.Value.ToString("yyyy-MM-dd");
+
+            // Obtenemos el resumen y nos aseguramos de no tener null
+            var resumen = new CN_FlujoCaja().ObtenerResumen(fechaInicio, fechaFin) ?? new Dictionary<string, decimal>();
+
+            // Valores por defecto
+            decimal ingresos = 0m;
+            decimal egresosMercancia = 0m;
+            decimal gastosOperativos = 0m;
+
+            // Intentamos leer las claves de forma segura
+            resumen.TryGetValue("TotalIngresos", out ingresos);
+            resumen.TryGetValue("TotalEgresosMercancia", out egresosMercancia);
+            resumen.TryGetValue("TotalGastosOperativos", out gastosOperativos);
+
+            lblCantidadIngresos.Text = ingresos.ToString("N2");
+            lblCantidadEgresos.Text = egresosMercancia.ToString("N2");
+
+            decimal totalSalidasReales = egresosMercancia + gastosOperativos;
+            decimal utilidadNeta = ingresos - totalSalidasReales;
+
+            lblUtilidadNeta.Text = utilidadNeta.ToString("N2");
+
+            if (utilidadNeta >= 0)
+            {
+                lblUtilidadNeta.ForeColor = Color.White;
+                lblUtilidadNeta.Text = "+ " + lblUtilidadNeta.Text;
+            }
+            else
+            {
+                lblUtilidadNeta.ForeColor = Color.Red;
+            }
+
+            CargarGrafico(ingresos, totalSalidasReales);
+        }
+
+        private void CargarGrafico(decimal ingresos, decimal gastosTotales)
+        {
+            // Limpiamos configuración previa
+            VentasVSGastos.Series.Clear();
+            VentasVSGastos.Titles.Clear();
+            VentasVSGastos.Titles.Add("Balance Financiero");
+
+            // Creamos la serie
+            Series serie = new Series("Finanzas");
+            serie.ChartType = SeriesChartType.Doughnut; // Tipo Dona (o Pie)
+            serie.IsValueShownAsLabel = true; // Mostrar valor en el gráfico
+            serie.LabelFormat = "N2";
+
+            // Agregamos los puntos
+            // Punto 1: Ingresos (Verde)
+            DataPoint pIngresos = new DataPoint(0, (double)ingresos);
+            pIngresos.LegendText = "Ingresos";
+            pIngresos.Color = Color.SeaGreen;
+            serie.Points.Add(pIngresos);
+
+            // Punto 2: Gastos Totales (Rojo)
+            DataPoint pGastos = new DataPoint(0, (double)gastosTotales);
+            pGastos.LegendText = "Egresos Totales";
+            pGastos.Color = Color.IndianRed;
+            serie.Points.Add(pGastos);
+
+            // Agregamos la serie al chart
+            VentasVSGastos.Series.Add(serie);
+
+            // Forzamos actualización visual
+            VentasVSGastos.Update();
+        }
+
     }
 }

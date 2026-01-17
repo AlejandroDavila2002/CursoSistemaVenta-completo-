@@ -104,5 +104,49 @@ namespace CapaDatos
             }
             return respuesta;
         }
+
+
+        // MÉTODO NUEVO PARA OBTENER RESUMEN FINANCIERO
+        public Dictionary<string, decimal> ObtenerResumenFinanciero(string fechaInicio, string fechaFin)
+        {
+            // Inicializamos con valores por defecto para garantizar que siempre existan las claves
+            Dictionary<string, decimal> resumen = new Dictionary<string, decimal>()
+            {
+                { "TotalIngresos", 0m },
+                { "TotalEgresosMercancia", 0m },
+                { "TotalGastosOperativos", 0m }
+            };
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_ResumenFinanciero", oconexion))
+                    {
+                        cmd.Parameters.AddWithValue("FechaInicio", fechaInicio);
+                        cmd.Parameters.AddWithValue("FechaFin", fechaFin);
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        oconexion.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                // Comprobación de DBNull para evitar excepciones
+                                resumen["TotalIngresos"] = dr["TotalIngresos"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalIngresos"]);
+                                resumen["TotalEgresosMercancia"] = dr["TotalEgresosMercancia"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalEgresosMercancia"]);
+                                resumen["TotalGastosOperativos"] = dr["TotalGastosOperativos"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalGastosOperativos"]);
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    // En caso de error devolvemos los valores por defecto ya inicializados.
+                    // Si quieres, aquí puedes registrar el error en un log.
+                }
+            }
+            return resumen;
+        }
     }
 }

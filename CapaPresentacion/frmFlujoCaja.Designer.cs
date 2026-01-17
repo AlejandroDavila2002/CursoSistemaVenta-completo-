@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,19 +65,11 @@
             this.label9 = new System.Windows.Forms.Label();
             this.lblTotaldgvDataGastosOperativos = new System.Windows.Forms.Label();
             this.dgvDataGastosOperativos = new System.Windows.Forms.DataGridView();
-            this.IdGasto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label21 = new System.Windows.Forms.Label();
             this.gpbutilidad = new System.Windows.Forms.GroupBox();
             this.label22 = new System.Windows.Forms.Label();
             this.lblMargenUtilidad = new System.Windows.Forms.Label();
-            this.lblCantidadUtilidad = new System.Windows.Forms.Label();
+            this.lblUtilidadNeta = new System.Windows.Forms.Label();
             this.iconPictureBox1 = new FontAwesome.Sharp.IconPictureBox();
             this.gpbIngreso = new System.Windows.Forms.GroupBox();
             this.label24 = new System.Windows.Forms.Label();
@@ -112,6 +104,14 @@
             this.iconButton5 = new FontAwesome.Sharp.IconButton();
             this.gpbDeudores = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.IdGasto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.gpbGastosOperativos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataGastosOperativos)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -381,7 +381,7 @@
             this.gpbGastosOperativos.Controls.Add(this.dgvDataGastosOperativos);
             this.gpbGastosOperativos.Controls.Add(this.label21);
             this.gpbGastosOperativos.Controls.Add(this.label2);
-            this.gpbGastosOperativos.Location = new System.Drawing.Point(340, 170);
+            this.gpbGastosOperativos.Location = new System.Drawing.Point(340, 169);
             this.gpbGastosOperativos.Name = "gpbGastosOperativos";
             this.gpbGastosOperativos.Size = new System.Drawing.Size(1030, 669);
             this.gpbGastosOperativos.TabIndex = 64;
@@ -493,62 +493,6 @@
             this.dgvDataGastosOperativos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDataGastosOperativos_CellContentClick);
             this.dgvDataGastosOperativos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvDataGastosOperativos_CellPainting);
             // 
-            // IdGasto
-            // 
-            this.IdGasto.HeaderText = "IdGasto";
-            this.IdGasto.Name = "IdGasto";
-            this.IdGasto.ReadOnly = true;
-            this.IdGasto.Visible = false;
-            // 
-            // Categoria
-            // 
-            this.Categoria.HeaderText = "Categoria";
-            this.Categoria.Name = "Categoria";
-            this.Categoria.ReadOnly = true;
-            this.Categoria.Width = 180;
-            // 
-            // FormaPago
-            // 
-            this.FormaPago.HeaderText = "Forma de Pago";
-            this.FormaPago.Name = "FormaPago";
-            this.FormaPago.ReadOnly = true;
-            this.FormaPago.Width = 180;
-            // 
-            // Descripción
-            // 
-            this.Descripción.HeaderText = "Descripción";
-            this.Descripción.Name = "Descripción";
-            this.Descripción.ReadOnly = true;
-            this.Descripción.Width = 220;
-            // 
-            // Fecha
-            // 
-            this.Fecha.HeaderText = "Fecha";
-            this.Fecha.Name = "Fecha";
-            this.Fecha.ReadOnly = true;
-            // 
-            // Referencia
-            // 
-            this.Referencia.HeaderText = "Referencia";
-            this.Referencia.Name = "Referencia";
-            this.Referencia.ReadOnly = true;
-            this.Referencia.Width = 180;
-            // 
-            // Monto
-            // 
-            this.Monto.HeaderText = "Monto";
-            this.Monto.Name = "Monto";
-            this.Monto.ReadOnly = true;
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.HeaderText = "";
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.ReadOnly = true;
-            this.btnEliminar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.btnEliminar.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.btnEliminar.Width = 40;
-            // 
             // label21
             // 
             this.label21.AllowDrop = true;
@@ -565,7 +509,7 @@
             this.gpbutilidad.BackColor = System.Drawing.Color.RoyalBlue;
             this.gpbutilidad.Controls.Add(this.label22);
             this.gpbutilidad.Controls.Add(this.lblMargenUtilidad);
-            this.gpbutilidad.Controls.Add(this.lblCantidadUtilidad);
+            this.gpbutilidad.Controls.Add(this.lblUtilidadNeta);
             this.gpbutilidad.Controls.Add(this.iconPictureBox1);
             this.gpbutilidad.Location = new System.Drawing.Point(1079, 60);
             this.gpbutilidad.Name = "gpbutilidad";
@@ -595,16 +539,16 @@
             this.lblMargenUtilidad.TabIndex = 2;
             this.lblMargenUtilidad.Text = "% Margen Ganancia";
             // 
-            // lblCantidadUtilidad
+            // lblUtilidadNeta
             // 
-            this.lblCantidadUtilidad.AutoSize = true;
-            this.lblCantidadUtilidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCantidadUtilidad.ForeColor = System.Drawing.Color.Cornsilk;
-            this.lblCantidadUtilidad.Location = new System.Drawing.Point(18, 43);
-            this.lblCantidadUtilidad.Name = "lblCantidadUtilidad";
-            this.lblCantidadUtilidad.Size = new System.Drawing.Size(81, 20);
-            this.lblCantidadUtilidad.TabIndex = 1;
-            this.lblCantidadUtilidad.Text = "Cantidad";
+            this.lblUtilidadNeta.AutoSize = true;
+            this.lblUtilidadNeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUtilidadNeta.ForeColor = System.Drawing.Color.Cornsilk;
+            this.lblUtilidadNeta.Location = new System.Drawing.Point(18, 43);
+            this.lblUtilidadNeta.Name = "lblUtilidadNeta";
+            this.lblUtilidadNeta.Size = new System.Drawing.Size(81, 20);
+            this.lblUtilidadNeta.TabIndex = 1;
+            this.lblUtilidadNeta.Text = "Cantidad";
             // 
             // iconPictureBox1
             // 
@@ -828,16 +772,16 @@
             this.VentasVSGastos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VentasVSGastos.BorderlineColor = System.Drawing.Color.WhiteSmoke;
-            chartArea1.Name = "ChartArea1";
-            this.VentasVSGastos.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.VentasVSGastos.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.VentasVSGastos.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.VentasVSGastos.Legends.Add(legend3);
             this.VentasVSGastos.Location = new System.Drawing.Point(1451, 64);
             this.VentasVSGastos.Name = "VentasVSGastos";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.VentasVSGastos.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.VentasVSGastos.Series.Add(series3);
             this.VentasVSGastos.Size = new System.Drawing.Size(452, 99);
             this.VentasVSGastos.TabIndex = 104;
             this.VentasVSGastos.Text = "chart1";
@@ -1012,6 +956,63 @@
             this.label16.TabIndex = 104;
             this.label16.Text = "Lista de Deudores";
             // 
+            // IdGasto
+            // 
+            this.IdGasto.HeaderText = "IdGasto";
+            this.IdGasto.Name = "IdGasto";
+            this.IdGasto.ReadOnly = true;
+            this.IdGasto.Visible = false;
+            // 
+            // Categoria
+            // 
+            this.Categoria.HeaderText = "Categoria";
+            this.Categoria.Name = "Categoria";
+            this.Categoria.ReadOnly = true;
+            this.Categoria.Width = 180;
+            // 
+            // FormaPago
+            // 
+            this.FormaPago.HeaderText = "Forma de Pago";
+            this.FormaPago.Name = "FormaPago";
+            this.FormaPago.ReadOnly = true;
+            this.FormaPago.Width = 180;
+            // 
+            // Descripción
+            // 
+            this.Descripción.HeaderText = "Descripción";
+            this.Descripción.Name = "Descripción";
+            this.Descripción.ReadOnly = true;
+            this.Descripción.Width = 220;
+            // 
+            // Fecha
+            // 
+            this.Fecha.HeaderText = "Fecha";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            this.Fecha.Width = 70;
+            // 
+            // Referencia
+            // 
+            this.Referencia.HeaderText = "Referencia";
+            this.Referencia.Name = "Referencia";
+            this.Referencia.ReadOnly = true;
+            this.Referencia.Width = 180;
+            // 
+            // Monto
+            // 
+            this.Monto.HeaderText = "Monto";
+            this.Monto.Name = "Monto";
+            this.Monto.ReadOnly = true;
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.HeaderText = "";
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.ReadOnly = true;
+            this.btnEliminar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.btnEliminar.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.btnEliminar.Width = 40;
+            // 
             // frmFlujoCaja
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1105,7 +1106,7 @@
         private System.Windows.Forms.GroupBox gpbutilidad;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label lblMargenUtilidad;
-        private System.Windows.Forms.Label lblCantidadUtilidad;
+        private System.Windows.Forms.Label lblUtilidadNeta;
         private FontAwesome.Sharp.IconPictureBox iconPictureBox1;
         private System.Windows.Forms.GroupBox gpbIngreso;
         private System.Windows.Forms.Label label24;

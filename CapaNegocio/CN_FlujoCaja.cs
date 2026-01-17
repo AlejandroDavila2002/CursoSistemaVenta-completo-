@@ -46,5 +46,12 @@ namespace CapaNegocio
         {
             return objcd.EliminarGasto(id, out Mensaje);
         }
+
+
+     
+        public Dictionary<string, decimal> ObtenerResumen(string fechaInicio, string fechaFin)
+        {
+            return objcd.ObtenerResumenFinanciero(fechaInicio, fechaFin);
+        }
     }
 }

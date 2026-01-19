@@ -309,8 +309,8 @@ namespace CapaPresentacion
             txtCodigoProducto.Text = "";
             txtCodigoProducto.BackColor = Color.White;
             txtNombreProducto.Text = "";
-            txtPrecio.Text = "N2";
-            txtStock.Text = "N2";
+            txtPrecio.Text = "0.00";
+            txtStock.Text = "0.00";
             txtCantidad.Value = 1;
             txtCodigoProducto.Select();
         }

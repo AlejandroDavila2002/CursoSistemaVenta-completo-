@@ -50,16 +50,16 @@ namespace CapaPresentacion
 
         private void CargarDatosReporte()
         {
-            // Obtenemos la lista desde la Capa de Negocio
+            // 1. Obtenemos la lista (Ya viene con cálculos correctos desde SQL)
             List<ReporteInventario> lista = new CN_Reporte().ObtenerInventario();
 
-            // Limpiamos los 4 DataGridViews antes de llenar
+            // 2. Limpiamos las tablas
             dgvDataProducto.Rows.Clear();
             dgvDataCosto.Rows.Clear();
             dvgDataVenta.Rows.Clear();
             dgvDataAccion.Rows.Clear();
 
-            // Variables para los contadores de los GroupBox
+            // 3. Variables para los totales
             decimal sumCostoTotal = 0;
             decimal sumVentaTotal = 0;
             int contadorBajo = 0;
@@ -67,32 +67,42 @@ namespace CapaPresentacion
 
             foreach (ReporteInventario item in lista)
             {
-                // 1. Llenar dgvDataProducto
-                dgvDataProducto.Rows.Add(new object[] { "", item.Codigo, item.Producto, item.Stock });
+                    // A. Tabla Producto
+                    dgvDataProducto.Rows.Add(new object[] { "", item.Codigo, item.Producto, item.Stock });
 
-                // 2. Llenar dgvDataCosto
-                dgvDataCosto.Rows.Add(new object[] { item.CostoUnitario.ToString("N2"), item.TotalCosto.ToString("N2") });
+                    // B. Tabla Costo (Agregamos "$ " para que se vea profesional)
+                    dgvDataCosto.Rows.Add(new object[] {
+                        "$ " + item.CostoUnitario.ToString("N2"),
+                        "$ " + item.TotalCosto.ToString("N2")
+                    });
 
-                // 3. Llenar dvgDataVenta
-                dvgDataVenta.Rows.Add(new object[] { item.PrecioVenta.ToString("N2"), item.TotalVenta.ToString("N2") });
+                    // C. Tabla Venta (Agregamos "$ ")
+                    dvgDataVenta.Rows.Add(new object[] {
+                        "$ " + item.PrecioVenta.ToString("N2"),
+                        "$ " + item.TotalVenta.ToString("N2")
+                    });
 
-                // 4. Llenar dgvDataAccion
-                dgvDataAccion.Rows.Add(new object[] { item.Estado, "VER DETALLE" });
+                    // D. Tabla Acción
+                    dgvDataAccion.Rows.Add(new object[] { item.Estado, "VER DETALLE" });
 
-                // --- CÁLCULOS PARA LOS GROUPBOX ---
-                sumCostoTotal += item.TotalCosto;
-                sumVentaTotal += item.TotalVenta;
+                    // --- ACUMULADORES ---
+                    sumCostoTotal += item.TotalCosto;
+                    sumVentaTotal += item.TotalVenta;
 
-                if (item.Stock == 0) contadorAgotado++;
-                else if (item.Stock < 4) contadorBajo++;
+                    // Contadores de alertas
+                    if (item.Stock == 0) contadorAgotado++;
+                    else if (item.Stock < 4) contadorBajo++;
             }
 
-            // --- ACTUALIZAR LABELS EN VIVO ---
-            totalproductos.Text = lista.Count.ToString(); // groupBox1
-            valorInventario_Costo.Text = sumCostoTotal.ToString("N2"); // groupBox2
-            valorInventario_Venta.Text = sumVentaTotal.ToString("N2"); // groupBox3
-            ProductosBajo.Text = contadorBajo.ToString(); // groupBox4
-            ProductosAgotados.Text = contadorAgotado.ToString(); // groupBox5
+            // 4. Actualizar las Tarjetas Superiores (Totales)
+            totalproductos.Text = lista.Count.ToString();
+
+            // Aquí también ponemos el signo de Dólar
+            valorInventario_Costo.Text = "$ " + sumCostoTotal.ToString("N2");
+            valorInventario_Venta.Text = "$ " + sumVentaTotal.ToString("N2");
+
+            ProductosBajo.Text = contadorBajo.ToString();
+            ProductosAgotados.Text = contadorAgotado.ToString();
         }
 
         private void dgvDataProducto_Scroll(object sender, ScrollEventArgs e)

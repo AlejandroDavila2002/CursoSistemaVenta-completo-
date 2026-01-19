@@ -43,8 +43,8 @@ namespace CapaPresentacion
                 decimal nuevoSubTotalBs = (precioUSD * cantidad) * nuevaTasa;
 
                 // 4. Actualizamos las celdas del Grid dinámicamente
-                row.Cells["PrecioBs"].Value = nuevoPrecioBs.ToString("0.00", CultureInfo.InvariantCulture);
-                row.Cells["SubTotalBs"].Value = nuevoSubTotalBs.ToString("0.00", CultureInfo.InvariantCulture);
+                row.Cells["PrecioBs"].Value = nuevoPrecioBs.ToString("N2", CultureInfo.InvariantCulture);
+                row.Cells["SubTotalBs"].Value = nuevoSubTotalBs.ToString("N2", CultureInfo.InvariantCulture);
             }
 
             // 5. Finalmente, recalculamos los totales generales para actualizar el txtTotalapagar
@@ -124,7 +124,7 @@ namespace CapaPresentacion
                     txtCodigoProducto.BackColor = Color.White;
                     txtCodigoProducto.Text = mdProductos._Producto.Codigo;
                     txtNombreProducto.Text = mdProductos._Producto.NombreProducto;
-                    txtPrecio.Text = mdProductos._Producto.PrecioVenta.ToString("0.00");
+                    txtPrecio.Text = mdProductos._Producto.PrecioVenta.ToString("N2");
                     txtStock.Text = mdProductos._Producto.Stock.ToString();
                     txtCantidad.Select();
                 }
@@ -222,11 +222,11 @@ namespace CapaPresentacion
                     dgvData.Rows.Add(new object[] {
                         txtIdProducto.Text,
                         txtNombreProducto.Text,
-                        precioUSD.ToString("0.00", CultureInfo.InvariantCulture),
-                        precioVES.ToString("0.00", CultureInfo.InvariantCulture), // Nueva Columna PrecioBs
+                        precioUSD.ToString("N2", CultureInfo.InvariantCulture),
+                        precioVES.ToString("N2", CultureInfo.InvariantCulture), // Nueva Columna PrecioBs
                         txtCantidad.Value.ToString(),
-                        subtotalUSD.ToString("0.00", CultureInfo.InvariantCulture),
-                        subtotalVES.ToString("0.00", CultureInfo.InvariantCulture)
+                        subtotalUSD.ToString("N2", CultureInfo.InvariantCulture),
+                        subtotalVES.ToString("N2", CultureInfo.InvariantCulture)
                     });
 
                     CalcularTotal();
@@ -282,7 +282,7 @@ namespace CapaPresentacion
             else
             {
                 // Muestra Dólares
-                txtTotalapagar.Text = _totalUSD.ToString("0.00", CultureInfo.InvariantCulture);
+                txtTotalapagar.Text = _totalUSD.ToString("N2", CultureInfo.InvariantCulture);
                 label13.Text = "Paga con ($):"; // Actualizamos la etiqueta
             }
 
@@ -300,7 +300,7 @@ namespace CapaPresentacion
 
             // Limpieza de seguridad
             txtPagocon.Text = "";
-            txtCambio.Text = "0.00";
+            txtCambio.Text = "N2";
         }
 
         private void LImpiarProducto()
@@ -309,8 +309,8 @@ namespace CapaPresentacion
             txtCodigoProducto.Text = "";
             txtCodigoProducto.BackColor = Color.White;
             txtNombreProducto.Text = "";
-            txtPrecio.Text = "0.00";
-            txtStock.Text = "0.00";
+            txtPrecio.Text = "N2";
+            txtStock.Text = "N2";
             txtCantidad.Value = 1;
             txtCodigoProducto.Select();
         }
@@ -405,7 +405,7 @@ namespace CapaPresentacion
             // Si el texto está vacío, pon 0.00
             if (string.IsNullOrEmpty(txtPrecio.Text))
             {
-                txtPrecio.Text = "0.00";
+                txtPrecio.Text = "N2";
             }
             else
             {
@@ -414,12 +414,12 @@ namespace CapaPresentacion
                 if (decimal.TryParse(txtPrecio.Text, out valor))
                 {
                     // Si funciona, le damos formato de 2 decimales
-                    txtPrecio.Text = valor.ToString("0.00");
+                    txtPrecio.Text = valor.ToString("N2");
                 }
                 else
                 {
                     // Si escribió algo raro que se pasó el filtro (muy difícil), lo limpiamos
-                    txtPrecio.Text = "0.00";
+                    txtPrecio.Text = "N2";
                 }
             }
         }
@@ -487,7 +487,7 @@ namespace CapaPresentacion
             // Si el texto está vacío, pon 0.00
             if (string.IsNullOrEmpty(txtTotalapagar.Text))
             {
-                txtTotalapagar.Text = "0.00";
+                txtTotalapagar.Text = "N2";
             }
             else
             {
@@ -496,12 +496,12 @@ namespace CapaPresentacion
                 if (decimal.TryParse(txtTotalapagar.Text, out valor))
                 {
                     // Si funciona, le damos formato de 2 decimales
-                    txtTotalapagar.Text = valor.ToString("0.00");
+                    txtTotalapagar.Text = valor.ToString("N2");
                 }
                 else
                 {
                     // Si escribió algo raro que se pasó el filtro (muy difícil), lo limpiamos
-                    txtTotalapagar.Text = "0.00";
+                    txtTotalapagar.Text = "N2";
                 }
             }
         }
@@ -542,12 +542,12 @@ namespace CapaPresentacion
                 if (pagocon < total)
                 {
                     MessageBox.Show("El monto con el que se paga no puede ser menor al total a pagar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    txtCambio.Text = "0.00";
+                    txtCambio.Text = "N2";
                 }
                 else
                 {
                     decimal cambio = pagocon - total;
-                    txtCambio.Text = cambio.ToString("0.00");
+                    txtCambio.Text = cambio.ToString("N2");
                 }
             }
             else
@@ -647,7 +647,7 @@ namespace CapaPresentacion
             _totalUSD = 0;
             _totalVES = 0;
             txtPagocon.Text = "";
-            txtCambio.Text = "0.00";
+            txtCambio.Text = "N2";
             RefrescarMontoPantalla();
             LImpiarProducto();
         }

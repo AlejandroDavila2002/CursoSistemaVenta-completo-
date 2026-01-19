@@ -23,7 +23,7 @@ namespace CapaPresentacion
             if (txtBusqueda.Text.Trim() == "")
             {
                 MessageBox.Show("Debe colocar el codigo del Documento", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return; // El 'return' detiene el código aquí, no sigue bajando.
+                return; 
             }
 
 
@@ -89,7 +89,7 @@ namespace CapaPresentacion
                 if (oCompra.EsCompraEnBs)
                 {
                     // Si fue en Bs: Multiplicamos el Total en USD por la Tasa Histórica
-                    decimal totalEnBs = oCompra.MontoTotal * oCompra.TasaCambio;
+                    decimal totalEnBs = oCompra.MontoTotal;
 
                     txtTotalaPagar.Text = totalEnBs.ToString("N2");
                     //label12.Text = "Total a Pagar Bs:";

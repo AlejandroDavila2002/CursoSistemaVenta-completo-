@@ -102,14 +102,14 @@ namespace CapaPresentacion
                     if (chkCompraEnBs.Checked)
                     {
                         // Si está activado, mostramos YA convertido en Bs
-                        txtCompraProducto.Text = (precioCompraBase * tasa).ToString("0.00");
-                        txtVentaProducto.Text = (precioVentaBase * tasa).ToString("0.00");
+                        txtCompraProducto.Text = (precioCompraBase * tasa).ToString("N2");
+                        txtVentaProducto.Text = (precioVentaBase * tasa).ToString("N2");
                     }
                     else
                     {
                         // Si no, mostramos en USD normal
-                        txtCompraProducto.Text = precioCompraBase.ToString("0.00");
-                        txtVentaProducto.Text = precioVentaBase.ToString("0.00");
+                        txtCompraProducto.Text = precioCompraBase.ToString("N2");
+                        txtVentaProducto.Text = precioVentaBase.ToString("N2");
                     }
                     // -----------------------
 
@@ -138,13 +138,13 @@ namespace CapaPresentacion
                     if (chkCompraEnBs.Checked)
                     {
                         // Convertimos a Bs INMEDIATAMENTE al cargar
-                        txtCompraProducto.Text = (precioCompraBase * tasa).ToString("0.00");
-                        txtVentaProducto.Text = (precioVentaBase * tasa).ToString("0.00");
+                        txtCompraProducto.Text = (precioCompraBase * tasa).ToString("N2");
+                        txtVentaProducto.Text = (precioVentaBase * tasa).ToString("N2");
                     }
                     else
                     {
-                        txtCompraProducto.Text = precioCompraBase.ToString("0.00");
-                        txtVentaProducto.Text = precioVentaBase.ToString("0.00");
+                        txtCompraProducto.Text = precioCompraBase.ToString("N2");
+                        txtVentaProducto.Text = precioVentaBase.ToString("N2");
                     }
                     // -----------------------
 
@@ -247,8 +247,8 @@ namespace CapaPresentacion
             txtCodigoProducto.Text = "";
             txtCodigoProducto.BackColor = Color.White;
             txtNombreProducto.Text = "";
-            txtCompraProducto.Text = "0.00";
-            txtVentaProducto.Text = "0.00";
+            txtCompraProducto.Text = "N2";
+            txtVentaProducto.Text = "N2";
             txtCantidad.Value = 1;
         }
 
@@ -438,7 +438,7 @@ namespace CapaPresentacion
             // Si el texto está vacío, pon 0.00
             if (string.IsNullOrEmpty(txtVentaProducto.Text))
             {
-                txtVentaProducto.Text = "0.00";
+                txtVentaProducto.Text = "N2";
             }
             else
             {
@@ -452,7 +452,7 @@ namespace CapaPresentacion
                 else
                 {
                     // Si escribió algo raro que se pasó el filtro (muy difícil), lo limpiamos
-                    txtVentaProducto.Text = "0.00";
+                    txtVentaProducto.Text = "N2";
                 }
             }
         }
@@ -601,10 +601,10 @@ namespace CapaPresentacion
                 // C. Convertir los Inputs: De USD a Bs (Multiplicar)
                 // Solo convertimos si tienen valores mayores a 0 para no llenar de ceros innecesarios
                 if (precioCompraInput > 0)
-                    txtCompraProducto.Text = (precioCompraInput * tasa).ToString("0.00");
+                    txtCompraProducto.Text = (precioCompraInput * tasa).ToString("N2");
 
                 if (precioVentaInput > 0)
-                    txtVentaProducto.Text = (precioVentaInput * tasa).ToString("0.00");
+                    txtVentaProducto.Text = (precioVentaInput * tasa).ToString("N2");
 
                 // D. Convertir la Grilla
                 RecalcularGrilla(true, tasa);
@@ -624,10 +624,10 @@ namespace CapaPresentacion
 
                 // C. Convertir los Inputs: De Bs a USD (Dividir)
                 if (precioCompraInput > 0)
-                    txtCompraProducto.Text = (precioCompraInput / tasa).ToString("0.00");
+                    txtCompraProducto.Text = (precioCompraInput / tasa).ToString("N2");
 
                 if (precioVentaInput > 0)
-                    txtVentaProducto.Text = (precioVentaInput / tasa).ToString("0.00");
+                    txtVentaProducto.Text = (precioVentaInput / tasa).ToString("N2");
 
                 // D. Convertir la Grilla
                 RecalcularGrilla(false, tasa);

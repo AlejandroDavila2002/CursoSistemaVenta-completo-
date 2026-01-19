@@ -68,16 +68,16 @@ namespace CapaPresentacion
                     {
                         dv.oProducto.IdProducto,
                         dv.oProducto.NombreProducto,
-                        dv.PrecioVenta.ToString("0.00", CultureInfo.InvariantCulture),
-                        precioBs.ToString("0.00", CultureInfo.InvariantCulture),
+                        dv.PrecioVenta.ToString("N2", CultureInfo.InvariantCulture),
+                        precioBs.ToString("N2", CultureInfo.InvariantCulture),
                         dv.Cantidad,
-                        dv.SubTotal.ToString("0.00", CultureInfo.InvariantCulture),
-                        dv.SubTotalBs.ToString("0.00", CultureInfo.InvariantCulture)
+                        dv.SubTotal.ToString("N2", CultureInfo.InvariantCulture),
+                        dv.SubTotalBs.ToString("N2", CultureInfo.InvariantCulture)
                     });
                 }
 
                 // 3. Totales en Labels
-                txtMontoTotal.Text = oVenta.MontoTotal.ToString("0.00", CultureInfo.InvariantCulture);
+                txtMontoTotal.Text = oVenta.MontoTotal.ToString("N2", CultureInfo.InvariantCulture);
                 txtMontoTotalBs.Text = oVenta.MontoBs.ToString("N2", CultureInfo.InvariantCulture);
 
                 // --- LÓGICA PARA MOSTRAR SÍMBOLO DE MONEDA EN PANTALLA ---
@@ -91,11 +91,11 @@ namespace CapaPresentacion
                 }
 
                 // Asignamos el texto con el símbolo incluido
-                txtMontoCambio.Text = string.Format("{0} {1}", simbolo, oVenta.MontoCambio.ToString("0.00", CultureInfo.InvariantCulture));
-                txtMontoPago.Text = string.Format("{0} {1}", simbolo, oVenta.MontoPago.ToString("0.00", CultureInfo.InvariantCulture));
+                txtMontoCambio.Text = string.Format("{0} {1}", simbolo, oVenta.MontoCambio.ToString("N2", CultureInfo.InvariantCulture));
+                txtMontoPago.Text = string.Format("{0} {1}", simbolo, oVenta.MontoPago.ToString("N2", CultureInfo.InvariantCulture));
 
                 // Mostrar la tasa histórica de la venta
-                txtTasaVenta.Text = oVenta.TasaCambio.ToString("0.00", CultureInfo.InvariantCulture);
+                txtTasaVenta.Text = oVenta.TasaCambio.ToString("N2", CultureInfo.InvariantCulture);
             }
             else
             {

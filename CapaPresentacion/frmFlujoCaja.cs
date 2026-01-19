@@ -256,37 +256,58 @@ namespace CapaPresentacion
             string fechaInicio = txtInicio.Value.ToString("yyyy-MM-dd");
             string fechaFin = txtFin.Value.ToString("yyyy-MM-dd");
 
-            // Obtenemos el resumen y nos aseguramos de no tener null
-            var resumen = new CN_FlujoCaja().ObtenerResumen(fechaInicio, fechaFin) ?? new Dictionary<string, decimal>();
+            // 1. Obtenemos los datos totales desde la BD
+            var resumen = new CN_FlujoCaja().ObtenerResumen(fechaInicio, fechaFin);
 
-            // Valores por defecto
-            decimal ingresos = 0m;
-            decimal egresosMercancia = 0m;
-            decimal gastosOperativos = 0m;
+            decimal ingresos = resumen["TotalIngresos"];          // Total Ventas
+            decimal egresosMercancia = resumen["TotalEgresosMercancia"]; // Total Compras
+            decimal gastosOperativos = resumen["TotalGastosOperativos"]; // Total Gastos (Luz, Nomina...)
 
-            // Intentamos leer las claves de forma segura
-            resumen.TryGetValue("TotalIngresos", out ingresos);
-            resumen.TryGetValue("TotalEgresosMercancia", out egresosMercancia);
-            resumen.TryGetValue("TotalGastosOperativos", out gastosOperativos);
-
-            lblCantidadIngresos.Text = ingresos.ToString("N2");
-            lblCantidadEgresos.Text = egresosMercancia.ToString("N2");
-
+            // 2. Calculamos Resultados Monetarios
             decimal totalSalidasReales = egresosMercancia + gastosOperativos;
             decimal utilidadNeta = ingresos - totalSalidasReales;
 
+            // 3. Mostramos Montos (Formato Moneda)
+            lblCantidadIngresos.Text = ingresos.ToString("N2");
+
+            // Aquí mostramos SOLO lo gastado en mercancía (Compras), según tu requerimiento anterior
+            lblCantidadEgresos.Text = egresosMercancia.ToString("N2");
+
             lblUtilidadNeta.Text = utilidadNeta.ToString("N2");
 
+            // --- 4. CÁLCULO DE MÁRGENES (PORCENTAJES) ---
+            // Usamos validación (ingresos > 0) para evitar error de "división entre cero"
+
+            // A. Margen Bruto (En Ingresos): Cuánto ganamos sobre el producto vendido
+            // Nota: Si es negativo, significa que compramos más mercancía de la que vendimos (stock)
+            decimal margenIngresos = ingresos > 0 ? ((ingresos - egresosMercancia) / ingresos) * 100 : 0;
+            lblMargenIngresos.Text = string.Format("{0:N2}%", margenIngresos);
+
+            // B. Margen Egresos (En Egresos): Qué % de la venta se va en reponer mercancía
+            decimal margenEgresos = ingresos > 0 ? (egresosMercancia / ingresos) * 100 : 0;
+            lblMargenEgresos.Text = string.Format("{0:N2}%", margenEgresos);
+
+            // C. Margen Utilidad (Neto): El % real de ganancia final
+            decimal margenUtilidad = ingresos > 0 ? (utilidadNeta / ingresos) * 100 : 0;
+            lblMargenUtilidad.Text = string.Format("{0:N2}%", margenUtilidad);
+
+            // --- 5. COLORES INTELIGENTES ---
+
+            // Si la utilidad es positiva, verde. Negativa, rojo.
             if (utilidadNeta >= 0)
             {
                 lblUtilidadNeta.ForeColor = Color.White;
+                lblMargenUtilidad.ForeColor = Color.White;
                 lblUtilidadNeta.Text = "+ " + lblUtilidadNeta.Text;
             }
             else
             {
-                lblUtilidadNeta.ForeColor = Color.Red;
+                lblUtilidadNeta.ForeColor = Color.IndianRed;
+                lblMargenUtilidad.ForeColor = Color.IndianRed;
             }
 
+            // 6. Actualizar Gráfico
+            // Enviamos Ingresos vs Salidas Totales (Compras + Gastos) para ver la realidad
             CargarGrafico(ingresos, totalSalidasReales);
         }
 

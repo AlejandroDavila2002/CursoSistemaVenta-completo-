@@ -9,6 +9,9 @@ namespace CapaPresentacion.modales
 {
     public partial class mdCategoriaGasto : Form
     {
+        // Bandera para avisar al formulario padre si debe actualizarse
+        private bool _seHicieronCambios = false;
+
         public mdCategoriaGasto()
         {
             InitializeComponent();
@@ -26,8 +29,7 @@ namespace CapaPresentacion.modales
 
             foreach (CategoriaGasto item in lista)
             {
-                // Asumo que tu dgvData tiene columnas: Id, Descripcion, btnEliminar (en ese orden o similar)
-                // Ajusta el orden según tu diseño visual
+                // Aseguramos el orden: ID (0), Descripción (1), Botón (2)
                 dgvData.Rows.Add(new object[] {
                     item.IdCategoriaGasto,
                     item.Descripcion,
@@ -38,6 +40,12 @@ namespace CapaPresentacion.modales
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
+            {
+                MessageBox.Show("Escriba una descripción.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             string mensaje = string.Empty;
             CategoriaGasto obj = new CategoriaGasto() { Descripcion = txtDescripcion.Text };
 
@@ -47,23 +55,24 @@ namespace CapaPresentacion.modales
             {
                 MessageBox.Show("Categoría registrada correctamente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtDescripcion.Text = "";
-                CargarDatos(); // Recargamos la grilla para ver el nuevo dato
-                this.DialogResult = DialogResult.OK; // Indicamos que hubo cambios
+                CargarDatos();
+                _seHicieronCambios = true; // Marcamos que hubo cambios
+                // NO CERRAMOS EL FORMULARIO para permitir seguir agregando
             }
             else
             {
-                MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
-        // Evento para ELIMINAR
+      
         private void dgvData_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvData.Columns[e.ColumnIndex].Name == "BtnEliminar" && e.RowIndex >= 0)
             {
                 if (MessageBox.Show("¿Desea eliminar esta categoría?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    int id = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells["Id"].Value); // Asegurate que la columna ID se llame "Id" o "IdCategoria"
+                    int id = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells["Id"].Value); // Verifica el nombre de tu columna ID
                     string mensaje = string.Empty;
 
                     bool respuesta = new CN_FlujoCaja().EliminarCategoria(id, out mensaje);
@@ -81,7 +90,40 @@ namespace CapaPresentacion.modales
             }
         }
 
-        // Pintar icono de basura (Igual que en frmFlujoCaja)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Evento que se dispara al cerrar el formulario (X o Cerrar)
+        private void mdCategoriaGasto_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Si hubo cambios, devolvemos OK para que frmFlujoCaja actualice los combos
+            if (_seHicieronCambios)
+            {
+                this.DialogResult = DialogResult.OK;
+            }
+        }
 
         private void dgvData_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {

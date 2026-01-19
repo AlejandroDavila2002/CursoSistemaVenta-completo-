@@ -66,10 +66,10 @@
             this.lblTotaldgvDataGastosOperativos = new System.Windows.Forms.Label();
             this.dgvDataGastosOperativos = new System.Windows.Forms.DataGridView();
             this.IdGasto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripción = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormaPago = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Referencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -478,10 +478,10 @@
             this.dgvDataGastosOperativos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDataGastosOperativos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.IdGasto,
-            this.Categoria,
-            this.FormaPago,
-            this.Descripción,
             this.Fecha,
+            this.Categoria,
+            this.Descripción,
+            this.FormaPago,
             this.Referencia,
             this.Monto,
             this.btnEliminar});
@@ -500,19 +500,19 @@
             this.IdGasto.ReadOnly = true;
             this.IdGasto.Visible = false;
             // 
+            // Fecha
+            // 
+            this.Fecha.HeaderText = "Fecha";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            this.Fecha.Width = 70;
+            // 
             // Categoria
             // 
             this.Categoria.HeaderText = "Categoria";
             this.Categoria.Name = "Categoria";
             this.Categoria.ReadOnly = true;
             this.Categoria.Width = 180;
-            // 
-            // FormaPago
-            // 
-            this.FormaPago.HeaderText = "Forma de Pago";
-            this.FormaPago.Name = "FormaPago";
-            this.FormaPago.ReadOnly = true;
-            this.FormaPago.Width = 180;
             // 
             // Descripción
             // 
@@ -521,12 +521,12 @@
             this.Descripción.ReadOnly = true;
             this.Descripción.Width = 220;
             // 
-            // Fecha
+            // FormaPago
             // 
-            this.Fecha.HeaderText = "Fecha";
-            this.Fecha.Name = "Fecha";
-            this.Fecha.ReadOnly = true;
-            this.Fecha.Width = 70;
+            this.FormaPago.HeaderText = "Forma de Pago";
+            this.FormaPago.Name = "FormaPago";
+            this.FormaPago.ReadOnly = true;
+            this.FormaPago.Width = 180;
             // 
             // Referencia
             // 
@@ -765,7 +765,6 @@
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -774,7 +773,7 @@
             this.btnBuscar.IconColor = System.Drawing.Color.Black;
             this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnBuscar.IconSize = 24;
-            this.btnBuscar.Location = new System.Drawing.Point(1845, 20);
+            this.btnBuscar.Location = new System.Drawing.Point(1849, 21);
             this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
@@ -784,11 +783,10 @@
             // 
             // label13
             // 
-            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(1670, 24);
+            this.label13.Location = new System.Drawing.Point(1674, 25);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(67, 15);
             this.label13.TabIndex = 102;
@@ -796,21 +794,19 @@
             // 
             // txtFin
             // 
-            this.txtFin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFin.CustomFormat = "dd/MM/yyyy";
             this.txtFin.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.txtFin.Location = new System.Drawing.Point(1744, 21);
+            this.txtFin.Location = new System.Drawing.Point(1748, 22);
             this.txtFin.Name = "txtFin";
             this.txtFin.Size = new System.Drawing.Size(95, 20);
             this.txtFin.TabIndex = 101;
             // 
             // label14
             // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(1493, 25);
+            this.label14.Location = new System.Drawing.Point(1497, 26);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(72, 15);
             this.label14.TabIndex = 100;
@@ -818,10 +814,9 @@
             // 
             // txtInicio
             // 
-            this.txtInicio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtInicio.CustomFormat = "dd/MM/yyyy";
             this.txtInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.txtInicio.Location = new System.Drawing.Point(1569, 22);
+            this.txtInicio.Location = new System.Drawing.Point(1573, 23);
             this.txtInicio.Name = "txtInicio";
             this.txtInicio.Size = new System.Drawing.Size(95, 20);
             this.txtInicio.TabIndex = 99;
@@ -835,15 +830,14 @@
             this.VentasVSGastos.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.VentasVSGastos.Legends.Add(legend1);
-            this.VentasVSGastos.Location = new System.Drawing.Point(1451, 64);
+            this.VentasVSGastos.Location = new System.Drawing.Point(1451, 63);
             this.VentasVSGastos.Name = "VentasVSGastos";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.VentasVSGastos.Series.Add(series1);
-            this.VentasVSGastos.Size = new System.Drawing.Size(452, 99);
+            this.VentasVSGastos.Size = new System.Drawing.Size(452, 100);
             this.VentasVSGastos.TabIndex = 104;
-            this.VentasVSGastos.Text = "chart1";
             // 
             // label12
             // 
@@ -1150,10 +1144,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Empleado;
         private System.Windows.Forms.DataGridViewTextBoxColumn FechaDeuda;
         private System.Windows.Forms.DataGridViewTextBoxColumn IdGasto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Categoria;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FormaPago;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Descripción;
         private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Categoria;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Descripción;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FormaPago;
         private System.Windows.Forms.DataGridViewTextBoxColumn Referencia;
         private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
         private System.Windows.Forms.DataGridViewButtonColumn btnEliminar;

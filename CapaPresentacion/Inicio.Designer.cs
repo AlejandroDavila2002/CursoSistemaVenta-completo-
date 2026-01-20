@@ -46,6 +46,7 @@
             this.reportesDeComprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportesDeVentasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportesDeInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuflujo_caja = new FontAwesome.Sharp.IconMenuItem();
             this.menusistema_cambiario = new FontAwesome.Sharp.IconMenuItem();
             this.menuacerdade = new FontAwesome.Sharp.IconMenuItem();
             this.menutitulo = new System.Windows.Forms.MenuStrip();
@@ -54,7 +55,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.lbltasa = new System.Windows.Forms.Label();
-            this.menuflujo_caja = new FontAwesome.Sharp.IconMenuItem();
+            this.creditosPendientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -145,14 +146,15 @@
             this.menuventas.AutoSize = false;
             this.menuventas.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.submenuregistrarVenta,
-            this.submenuverdetalleVenta});
+            this.submenuverdetalleVenta,
+            this.creditosPendientesToolStripMenuItem});
             this.menuventas.IconChar = FontAwesome.Sharp.IconChar.Tags;
             this.menuventas.IconColor = System.Drawing.Color.Black;
             this.menuventas.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.menuventas.IconSize = 50;
             this.menuventas.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.menuventas.Name = "menuventas";
-            this.menuventas.Size = new System.Drawing.Size(80, 69);
+            this.menuventas.Size = new System.Drawing.Size(122, 69);
             this.menuventas.Text = "Ventas";
             this.menuventas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             // 
@@ -162,7 +164,7 @@
             this.submenuregistrarVenta.IconColor = System.Drawing.Color.Black;
             this.submenuregistrarVenta.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenuregistrarVenta.Name = "submenuregistrarVenta";
-            this.submenuregistrarVenta.Size = new System.Drawing.Size(129, 22);
+            this.submenuregistrarVenta.Size = new System.Drawing.Size(180, 22);
             this.submenuregistrarVenta.Text = "Registrar";
             this.submenuregistrarVenta.Click += new System.EventHandler(this.submenuregistrarVenta_Click_1);
             // 
@@ -172,7 +174,7 @@
             this.submenuverdetalleVenta.IconColor = System.Drawing.Color.Black;
             this.submenuverdetalleVenta.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenuverdetalleVenta.Name = "submenuverdetalleVenta";
-            this.submenuverdetalleVenta.Size = new System.Drawing.Size(129, 22);
+            this.submenuverdetalleVenta.Size = new System.Drawing.Size(180, 22);
             this.submenuverdetalleVenta.Text = "Ver Detalle";
             this.submenuverdetalleVenta.Click += new System.EventHandler(this.submenuverdetalleVenta_Click);
             // 
@@ -277,6 +279,20 @@
             this.reportesDeInventarioToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.reportesDeInventarioToolStripMenuItem.Text = "Reportes de Inventario";
             this.reportesDeInventarioToolStripMenuItem.Click += new System.EventHandler(this.reportesDeInventarioToolStripMenuItem_Click);
+            // 
+            // menuflujo_caja
+            // 
+            this.menuflujo_caja.AutoSize = false;
+            this.menuflujo_caja.IconChar = FontAwesome.Sharp.IconChar.MoneyBillWaveAlt;
+            this.menuflujo_caja.IconColor = System.Drawing.Color.Black;
+            this.menuflujo_caja.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.menuflujo_caja.IconSize = 50;
+            this.menuflujo_caja.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.menuflujo_caja.Name = "menuflujo_caja";
+            this.menuflujo_caja.Size = new System.Drawing.Size(86, 69);
+            this.menuflujo_caja.Text = "Flujo de Caja";
+            this.menuflujo_caja.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.menuflujo_caja.Click += new System.EventHandler(this.menuflujo_caja_Click);
             // 
             // menusistema_cambiario
             // 
@@ -384,19 +400,12 @@
             this.lbltasa.Text = "toolStripStatusLabel";
             this.lbltasa.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // menuflujo_caja
+            // creditosPendientesToolStripMenuItem
             // 
-            this.menuflujo_caja.AutoSize = false;
-            this.menuflujo_caja.IconChar = FontAwesome.Sharp.IconChar.MoneyBillWaveAlt;
-            this.menuflujo_caja.IconColor = System.Drawing.Color.Black;
-            this.menuflujo_caja.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.menuflujo_caja.IconSize = 50;
-            this.menuflujo_caja.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.menuflujo_caja.Name = "menuflujo_caja";
-            this.menuflujo_caja.Size = new System.Drawing.Size(86, 69);
-            this.menuflujo_caja.Text = "Flujo de Caja";
-            this.menuflujo_caja.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.menuflujo_caja.Click += new System.EventHandler(this.menuflujo_caja_Click);
+            this.creditosPendientesToolStripMenuItem.Name = "creditosPendientesToolStripMenuItem";
+            this.creditosPendientesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.creditosPendientesToolStripMenuItem.Text = "Creditos Pendientes";
+            this.creditosPendientesToolStripMenuItem.Click += new System.EventHandler(this.creditosPendientesToolStripMenuItem_Click);
             // 
             // Inicio
             // 
@@ -452,6 +461,7 @@
         private System.Windows.Forms.ToolStripMenuItem reportesDeInventarioToolStripMenuItem;
         private System.Windows.Forms.Label lbltasa;
         private FontAwesome.Sharp.IconMenuItem menuflujo_caja;
+        private System.Windows.Forms.ToolStripMenuItem creditosPendientesToolStripMenuItem;
     }
 }
 

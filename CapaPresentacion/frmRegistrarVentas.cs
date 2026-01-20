@@ -87,7 +87,7 @@ namespace CapaPresentacion
 
             txtTotalapagar.Text = "0";
             txtPagocon.Text = "";
-            txtCambio.Text = "";
+            txtCambio.Text = "0.00";
         }
 
         private void btnBuscarCliente_Click(object sender, EventArgs e)
@@ -316,7 +316,7 @@ namespace CapaPresentacion
 
             // Limpieza de seguridad
             txtPagocon.Text = "";
-            txtCambio.Text = "N2";
+            txtCambio.Text = "0.00";
         }
 
         private void LImpiarProducto()
@@ -557,13 +557,13 @@ namespace CapaPresentacion
             {
                 if (pagocon < total)
                 {
-                    MessageBox.Show("El monto con el que se paga no puede ser menor al total a pagar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    txtCambio.Text = "N2";
+                    //MessageBox.Show("El monto con el que se paga no puede ser menor al total a pagar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    txtCambio.Text = "0.00";
                 }
                 else
                 {
                     decimal cambio = pagocon - total;
-                    txtCambio.Text = cambio.ToString("N2");
+                    txtCambio.Text = cambio.ToString("0.00");
                 }
             }
             else
@@ -582,27 +582,97 @@ namespace CapaPresentacion
             }
         }
 
+
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            // Validaciones iniciales
-            if (string.IsNullOrWhiteSpace(txtDocumento.Text)) { MessageBox.Show("Seleccione cliente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (dgvData.Rows.Count < 1) { MessageBox.Show("Agregue productos", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrWhiteSpace(txtPagocon.Text)) { MessageBox.Show("Ingrese el monto de pago", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-
-            decimal pagoCon = Convert.ToDecimal(txtPagocon.Text, CultureInfo.InvariantCulture);
-            decimal totalActual = Convert.ToDecimal(txtTotalapagar.Text, CultureInfo.InvariantCulture);
-
-            if (pagoCon < totalActual)
+            // --- 1. VALIDACIONES INICIALES ---
+            if (string.IsNullOrWhiteSpace(txtDocumento.Text))
             {
-                MessageBox.Show("El pago no cubre el total", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Seleccione un cliente válido.", "Falta Información", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // --- CORRECCIÓN: Calcular el cambio aquí mismo ---
-            // Esto evita el error si txtCambio.Text está vacío
-            decimal montoCambioCalculado = pagoCon - totalActual;
+            if (dgvData.Rows.Count < 1)
+            {
+                MessageBox.Show("Debe agregar productos a la venta.", "Carrito Vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            // PREPARAR DATATABLE PARA SQL
+            // Si el campo pago está vacío, asumimos 0
+            if (string.IsNullOrWhiteSpace(txtPagocon.Text)) txtPagocon.Text = "0";
+
+            // --- 2. PREPARACIÓN DE MONTOS ---
+            decimal pagoCon = Convert.ToDecimal(txtPagocon.Text, CultureInfo.InvariantCulture);
+            decimal totalActual = Convert.ToDecimal(txtTotalapagar.Text, CultureInfo.InvariantCulture);
+            decimal montoCambioCalculado = 0;
+
+            // Variable para guardar el plan de pago (si aplica)
+            CuentaPorCobrar oPlanPago = null;
+
+            // --- 3. LÓGICA DE CRÉDITO INTELIGENTE ---
+            if (pagoCon < totalActual)
+            {
+                // Hay deuda (Crédito Total o Parcial)
+                decimal deuda = totalActual - pagoCon;
+                string mensajeCredito = "";
+
+                if (pagoCon == 0)
+                    mensajeCredito = $"El pago es 0. Se generará una deuda total de {deuda:N2}.";
+                else
+                    mensajeCredito = $"Pago parcial ({pagoCon:N2}). Queda un saldo de {deuda:N2}.";
+
+                // PREGUNTA CLAVE: ¿Configurar Plan o Crédito Rápido?
+                DialogResult result = MessageBox.Show(
+                    mensajeCredito + "\n\n¿Desea configurar las CUOTAS y FECHAS de pago ahora?\n\n" +
+                    "[SÍ] - Abrir asistente de cuotas.\n" +
+                    "[NO] - Crédito simple (Vence en 7 días).\n" +
+                    "[CANCELAR] - Volver.",
+                    "Gestión de Crédito",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Cancel) return; // Se cancela la venta
+
+                if (result == DialogResult.Yes)
+                {
+                    // --- ABRIR MODAL DE PLAN DE PAGO ---
+                    using (var modal = new modales.mdPlanPago(deuda))
+                    {
+                        modal.ShowDialog();
+
+                        if (modal._Confirmado)
+                        {
+                            // Capturamos el plan configurado por el usuario
+                            oPlanPago = modal._DatosPlan;
+                        }
+                        else
+                        {
+                            // Si cerró el modal sin confirmar, cancelamos todo por seguridad
+                            return;
+                        }
+                    }
+                }
+                else // Eligió NO (Crédito Rápido / Fiado simple)
+                {
+                    // Creamos un plan por defecto: 7 Dias.
+                    oPlanPago = new CuentaPorCobrar()
+                    {
+                        FechaVencimiento = DateTime.Now.AddDays(7).ToString("yyyy-MM-dd"),
+                        DescripcionPlan = "Crédito Rápido (1 semana)",
+                        PorcentajeMora = 0
+                    };
+                }
+
+                montoCambioCalculado = 0; // No hay vuelto en crédito
+            }
+            else
+            {
+                // Venta de Contado
+                montoCambioCalculado = pagoCon - totalActual;
+                oPlanPago = null; // No hay plan de pago
+            }
+
+            // --- 4. PREPARAR DETALLE PARA SQL ---
             DataTable detalleVenta = new DataTable();
             detalleVenta.Columns.Add("IdProducto", typeof(int));
             detalleVenta.Columns.Add("PrecioVenta", typeof(decimal));
@@ -621,6 +691,7 @@ namespace CapaPresentacion
                 );
             }
 
+            // --- 5. DATOS FINALES ---
             decimal tasaActual = _UsuarioActual.oTasaGeneral != null ? _UsuarioActual.oTasaGeneral.Valor : 0;
             int idCorrelativo = new CN_Venta().ObtenerCorrelativo();
             string NumeroDocumento = string.Format("{0:00000}", idCorrelativo);
@@ -633,7 +704,6 @@ namespace CapaPresentacion
                 DocumentoCliente = txtDocumento.Text.Trim(),
                 NombreCliente = txtNombreCliente.Text.Trim(),
                 MontoPago = pagoCon,
-                // USAMOS LA VARIABLE CALCULADA, NO EL TEXTBOX
                 MontoCambio = montoCambioCalculado,
                 MontoTotal = _totalUSD,
                 MontoBs = _totalVES,
@@ -642,18 +712,31 @@ namespace CapaPresentacion
             };
 
             string mensaje = string.Empty;
-            bool resultado = new CN_Venta().RegistrarVenta(oVenta, detalleVenta, out mensaje);
+          
+            bool resultado = new CN_Venta().RegistrarVenta(oVenta, detalleVenta, oPlanPago, out mensaje);
 
             if (resultado)
             {
-                MessageBox.Show("Venta registrada: " + NumeroDocumento, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string msjExito = $"Venta registrada: {NumeroDocumento}";
+
+                if (oPlanPago != null)
+                {
+                    msjExito += $"\n\nVENTA A CRÉDITO ASIGNADO:\n{oPlanPago.DescripcionPlan}";
+                }
+                else if (montoCambioCalculado > 0)
+                {
+                    msjExito += $"\n\nSu Cambio es: {montoCambioCalculado:N2}";
+                }
+
+                MessageBox.Show(msjExito, "Venta Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimpiarFormularioCompleto();
             }
             else
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, "Error al Registrar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void LimpiarFormularioCompleto()
         {

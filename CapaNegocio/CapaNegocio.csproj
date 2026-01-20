@@ -95,6 +95,7 @@
     <Compile Include="CN_Categoria.cs" />
     <Compile Include="CN_Cliente.cs" />
     <Compile Include="CN_Compra.cs" />
+    <Compile Include="CN_CuentaPorCobrar.cs" />
     <Compile Include="CN_DetallesNegocio.cs" />
     <Compile Include="CN_FlujoCaja.cs" />
     <Compile Include="CN_Permiso.cs" />

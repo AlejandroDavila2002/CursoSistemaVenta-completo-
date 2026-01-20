@@ -177,6 +177,20 @@ namespace CapaPresentacion
             AbrirFormulario(menuventas, formulario);
         }
 
+        // Evento para abrir el formulario de Ventas a credito.
+        private void creditosPendientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmGestionCredito formulario = new frmGestionCredito(UsuarioActual);
+
+            int anchoNecesario = formulario.Width;
+            int altoNecesario = formulario.Height + contenedor.Location.Y;
+
+            this.ClientSize = new Size(anchoNecesario + 20, altoNecesario + 20);
+
+            AbrirFormulario(menuventas, formulario);
+
+        }
+
 
         // Evento para abrir el formulario de registro de compras
         private void submenuregistrarCompra_Click(object sender, EventArgs e)
@@ -323,5 +337,7 @@ namespace CapaPresentacion
 
             AbrirFormulario(menuflujo_caja, formulario);
         }
+
+       
     }
 }

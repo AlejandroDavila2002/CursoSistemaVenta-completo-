@@ -138,7 +138,7 @@
             this.Descripción.HeaderText = "Descripción";
             this.Descripción.Name = "Descripción";
             this.Descripción.ReadOnly = true;
-            this.Descripción.Width = 255;
+            this.Descripción.Width = 315;
             // 
             // BtnEliminar
             // 
@@ -178,8 +178,8 @@
         private System.Windows.Forms.Label label3;
         private FontAwesome.Sharp.IconButton btnGuardar;
         private System.Windows.Forms.DataGridView dgvData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descripción;
         private System.Windows.Forms.DataGridViewButtonColumn BtnEliminar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
     }
 }

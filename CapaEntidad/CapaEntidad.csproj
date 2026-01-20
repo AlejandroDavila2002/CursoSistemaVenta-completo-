@@ -45,6 +45,7 @@
     <Compile Include="CategoriaGasto.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Compra.cs" />
+    <Compile Include="CuentaPorCobrar.cs" />
     <Compile Include="Detalles_Negocio.cs" />
     <Compile Include="Detalle_Compra.cs" />
     <Compile Include="Detalle_Venta.cs" />

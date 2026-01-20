@@ -148,6 +148,12 @@
     <Compile Include="frmFlujoCaja.Designer.cs">
       <DependentUpon>frmFlujoCaja.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmGestionCredito.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGestionCredito.Designer.cs">
+      <DependentUpon>frmGestionCredito.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmRegistrarCompras.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,6 +262,18 @@
     <Compile Include="modales\mdIngresoGato.Designer.cs">
       <DependentUpon>mdIngresoGato.cs</DependentUpon>
     </Compile>
+    <Compile Include="modales\mdlDetalleCuotas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdlDetalleCuotas.Designer.cs">
+      <DependentUpon>mdlDetalleCuotas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="modales\mdPlanPago.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdPlanPago.Designer.cs">
+      <DependentUpon>mdPlanPago.cs</DependentUpon>
+    </Compile>
     <Compile Include="modales\mdProductos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +308,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmFlujoCaja.resx">
       <DependentUpon>frmFlujoCaja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGestionCredito.resx">
+      <DependentUpon>frmGestionCredito.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRegistrarCompras.resx">
       <DependentUpon>frmRegistrarCompras.cs</DependentUpon>
@@ -344,6 +365,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdIngresoGato.resx">
       <DependentUpon>mdIngresoGato.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdlDetalleCuotas.resx">
+      <DependentUpon>mdlDetalleCuotas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdPlanPago.resx">
+      <DependentUpon>mdPlanPago.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdProductos.resx">
       <DependentUpon>mdProductos.cs</DependentUpon>

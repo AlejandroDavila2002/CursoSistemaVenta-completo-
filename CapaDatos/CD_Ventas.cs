@@ -102,7 +102,7 @@ namespace CapaDatos
         }
 
 
-        public bool RegistrarVenta(Venta obj, DataTable DetalleVenta, out string Mensaje)
+        public bool RegistrarVenta(Venta obj, DataTable DetalleVenta, CuentaPorCobrar oCuenta, out string Mensaje)
         {
             bool Resultado = false;
             Mensaje = string.Empty;
@@ -112,32 +112,41 @@ namespace CapaDatos
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
                 {
                     SqlCommand cmd = new SqlCommand("SP_RegistrarVenta", oconexion);
-
-                    // --- PARÁMETROS BÁSICOS ---
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
                     cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
                     cmd.Parameters.AddWithValue("NombreCliente", obj.NombreCliente);
 
-                    // --- MONTOS DE PAGO (Pueden venir en BS o USD según el CheckBox del Form) ---
+                    // --- Biomoneda ---
                     cmd.Parameters.AddWithValue("MontoPago", obj.MontoPago);
                     cmd.Parameters.AddWithValue("MontoCambio", obj.MontoCambio);
+                    cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
+                    cmd.Parameters.AddWithValue("MontoBs", obj.MontoBs);
+                    cmd.Parameters.AddWithValue("TasaCambio", obj.TasaCambio);
+                    cmd.Parameters.AddWithValue("TipoMoneda", obj.TipoMoneda);
 
-                    // --- TOTALES Y TASA (BIMONEDA) ---
-                    cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal); // Total en USD
-                    cmd.Parameters.AddWithValue("MontoBs", obj.MontoBs);       // Total en VES
-                    cmd.Parameters.AddWithValue("TasaCambio", obj.TasaCambio); // Tasa aplicada
-
-                    // --- BANDERA DE PAGO (BIMONEDA) ---
-                    cmd.Parameters.AddWithValue("TipoMoneda", obj.TipoMoneda); // Moneda con la que se pago. (Bs vs USD)
-
-                    // --- DETALLE DE VENTA (DataTable con 5 columnas: IdProd, Precio, Cant, SubUSD, SubVES) ---
                     SqlParameter t_detalle = cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
                     t_detalle.SqlDbType = SqlDbType.Structured;
                     t_detalle.TypeName = "dbo.EDetalle_Venta";
 
-                    // --- PARÁMETROS DE SALIDA ---
+                    // --- NUEVOS PARAMETROS PARA PLAN DE PAGO ---
+                    if (oCuenta != null)
+                    {
+                        // Si hay crédito, mandamos los datos
+                        // Convertimos la fecha string a DateTime para SQL
+                        cmd.Parameters.AddWithValue("FechaVencimiento", Convert.ToDateTime(oCuenta.FechaVencimiento));
+                        cmd.Parameters.AddWithValue("DescripcionPlan", oCuenta.DescripcionPlan);
+                        cmd.Parameters.AddWithValue("PorcentajeMora", oCuenta.PorcentajeMora);
+                    }
+                    else
+                    {
+                        // Si es contado, mandamos NULL
+                        cmd.Parameters.AddWithValue("FechaVencimiento", DBNull.Value);
+                        cmd.Parameters.AddWithValue("DescripcionPlan", DBNull.Value);
+                        cmd.Parameters.AddWithValue("PorcentajeMora", 0);
+                    }
+
                     cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
 
@@ -154,7 +163,6 @@ namespace CapaDatos
                 Resultado = false;
                 Mensaje = ex.Message;
             }
-
             return Resultado;
         }
 

@@ -40,6 +40,13 @@ namespace CapaNegocio
        }
 
 
+        // Dentro de la clase CN_Compra
+        public List<Compra> Listar()
+        {
+            return objcd_Compra.ListarCompras();
+        }
+
+
     }
 }
 

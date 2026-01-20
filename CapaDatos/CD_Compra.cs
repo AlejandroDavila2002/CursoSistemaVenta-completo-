@@ -176,6 +176,65 @@ namespace CapaDatos
 
 
         }
+
+
+
+
+        public List<Compra> ListarCompras()
+        {
+            List<Compra> lista = new List<Compra>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+
+                    // SQL ROBUSTO:
+                    query.AppendLine("select c.IdCompra, c.NumeroDocumento, p.RazonSocial, c.MontoTotal, c.EsCompraEnBs, c.TasaCambio, convert(char(10),c.FechaRegistro,103)[FechaRegistro]");
+                    query.AppendLine("from COMPRA c");
+                    query.AppendLine("inner join PROVEEDOR p on p.IdProveedor = c.IdProveedor");
+
+                    // 1. FILTRO SQL: Ignoramos las filas donde la configuración de moneda sea NULA
+                    // Esto cumple con "no tomarlas en cuenta"
+                    query.AppendLine("WHERE c.EsCompraEnBs IS NOT NULL");
+
+                    query.AppendLine("order by c.IdCompra desc");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Compra()
+                            {
+                                IdCompra = Convert.ToInt32(dr["IdCompra"]),
+                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+
+                                // 2. VALIDACIÓN C#: Usamos lógica condicional para evitar crashes si llega un NULL
+                                MontoTotal = dr["MontoTotal"] != DBNull.Value ? Convert.ToDecimal(dr["MontoTotal"]) : 0,
+                                EsCompraEnBs = dr["EsCompraEnBs"] != DBNull.Value && Convert.ToBoolean(dr["EsCompraEnBs"]), // Si es null, asume falso
+                                TasaCambio = dr["TasaCambio"] != DBNull.Value ? Convert.ToDecimal(dr["TasaCambio"]) : 0,
+
+                                FechaRegistro = dr["FechaRegistro"].ToString(),
+                                oProveedor = new Proveedor()
+                                {
+                                    RazonSocial = dr["RazonSocial"].ToString()
+                                }
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // En caso de error, devolvemos la lista vacía para no romper el programa
+                    lista = new List<Compra>();
+                }
+            }
+            return lista;
+        }
     }
 
 }

@@ -1,11 +1,12 @@
 ﻿using CapaEntidad;
 using CapaNegocio;
+using CapaPresentacion.modales;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using iTextSharp.tool.xml;
 
 
 
@@ -18,18 +19,43 @@ namespace CapaPresentacion
             InitializeComponent();
         }
 
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+            // 1. Si el campo de búsqueda está vacío, abrimos el modal
             if (txtBusqueda.Text.Trim() == "")
             {
-                MessageBox.Show("Debe colocar el codigo del Documento", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return; 
+                using (var modal = new mdCodigoCompra())
+                {
+                    var result = modal.ShowDialog();
+
+                    if (result == DialogResult.OK)
+                    {
+                        // Asignamos el documento seleccionado al txtBusqueda
+                        txtBusqueda.Text = modal.DocumentoSeleccionado;
+
+                        // Ejecutamos la búsqueda automáticamente
+                        CargarDetalleCompra();
+                    }
+                    else
+                    {
+                        // Si el usuario cancela o cierra el modal sin seleccionar, salimos
+                        return;
+                    }
+                }
             }
+            else
+            {
+                // 2. Si ya hay texto, buscamos directamente
+                CargarDetalleCompra();
+            }
+        }
 
-
+        private void CargarDetalleCompra()
+        {
             Compra oCompra = new CN_Compra().ObtenerCompra(txtBusqueda.Text);
 
-            if(oCompra != null && oCompra.IdCompra != 0)
+            if (oCompra != null && oCompra.IdCompra != 0)
             {
                 nrmDocumento.Text = oCompra.NumeroDocumento;
 
@@ -53,7 +79,6 @@ namespace CapaPresentacion
                     LbTasa.Visible = false;
                 }
 
-                // Configuramos visibilidad de columnas Bs
                 dgvData.Columns["PrecioCompraBs"].Visible = esBolivares;
                 dgvData.Columns["PrecioVentaBs"].Visible = esBolivares;
                 dgvData.Columns["SubTotalBs"].Visible = esBolivares;
@@ -61,51 +86,48 @@ namespace CapaPresentacion
                 label12.Text = esBolivares ? "Total a Pagar Bs:" : "Total a Pagar $:";
 
                 dgvData.Rows.Clear();
-                foreach(Detalle_Compra dc in oCompra.oDetalleCommpra)
+                foreach (Detalle_Compra dc in oCompra.oDetalleCommpra)
                 {
                     decimal tasa = oCompra.TasaCambio;
-
                     decimal precioCompraBs = dc.PrecioCompra * tasa;
                     decimal precioVentaBs = dc.PrecioVenta * tasa;
                     decimal subTotalBs = dc.MontoTotal * tasa;
-                    
 
                     dgvData.Rows.Add(new object[] {
-                        dc.oProducto.IdProducto,
-                        dc.oProducto.NombreProducto,
-                        dc.PrecioCompra.ToString("N2"),     // Precio USD
-                        precioCompraBs.ToString("N2"),      // Precio Bs (Nuevo)
-                        dc.PrecioVenta.ToString("N2"),      // Venta USD
-                        precioVentaBs.ToString("N2"),       // Venta Bs (Nuevo)
-                        dc.Cantidad,
-                        dc.MontoTotal.ToString("N2"),       // Subtotal USD
-                        subTotalBs.ToString("N2")           // Subtotal Bs (Nuevo)
-                    });
-
-
+                dc.oProducto.IdProducto,
+                dc.oProducto.NombreProducto,
+                dc.PrecioCompra.ToString("N2"),
+                precioCompraBs.ToString("N2"),
+                dc.PrecioVenta.ToString("N2"),
+                precioVentaBs.ToString("N2"),
+                dc.Cantidad,
+                dc.MontoTotal.ToString("N2"),
+                subTotalBs.ToString("N2")
+            });
                 }
-
 
                 if (oCompra.EsCompraEnBs)
                 {
-                    // Si fue en Bs: Multiplicamos el Total en USD por la Tasa Histórica
-                    decimal totalEnBs = oCompra.MontoTotal;
-
+                    // Nota: Aquí asumo que quieres calcular el total en Bs basado en lo almacenado o calculado
+                    // Si tienes un campo MontoTotalBs en la BD, úsalo. Si no, calcúlalo:
+                    decimal totalEnBs = oCompra.MontoTotal * oCompra.TasaCambio;
                     txtTotalaPagar.Text = totalEnBs.ToString("N2");
-                    //label12.Text = "Total a Pagar Bs:";
                 }
                 else
                 {
-                    // Si fue en USD: Mostramos el monto directo (ya está en USD)
                     txtTotalaPagar.Text = oCompra.MontoTotal.ToString("N2");
-                    //label12.Text = "Total a Pagar $:";
                 }
             }
             else
             {
                 MessageBox.Show("No se encontró una compra con ese número de documento", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtBusqueda.Select();
             }
         }
+
+
+
+
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {

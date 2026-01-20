@@ -117,6 +117,22 @@ namespace CapaPresentacion
 
             using (modales.mdProductos mdProductos = new modales.mdProductos())
             {
+
+                // 1. CREAR LA LISTA DE EXCLUIDOS
+                List<int> idsEnGrilla = new List<int>();
+
+                // 2. RECORRER EL DATAGRIDVIEW ACTUAL
+                foreach (DataGridViewRow row in dgvData.Rows)
+                {
+                    if (row.Cells["IdProducto"].Value != null)
+                    {
+                        idsEnGrilla.Add(Convert.ToInt32(row.Cells["IdProducto"].Value));
+                    }
+                }
+
+                // 3. PASAR LA LISTA AL MODAL
+                mdProductos._ListaNegra = idsEnGrilla;
+
                 mdProductos.ShowDialog();
                 if (mdProductos._Producto != null)
                 {
@@ -646,8 +662,8 @@ namespace CapaPresentacion
             dgvData.Rows.Clear();
             _totalUSD = 0;
             _totalVES = 0;
-            txtPagocon.Text = "";
-            txtCambio.Text = "N2";
+            txtPagocon.Text = "0.00";
+            txtCambio.Text = "0.00";
             RefrescarMontoPantalla();
             LImpiarProducto();
         }

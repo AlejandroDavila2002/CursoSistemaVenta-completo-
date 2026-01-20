@@ -44,7 +44,8 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 4);
+            this.label1.Location = new System.Drawing.Point(14, 5);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(150, 24);
             this.label1.TabIndex = 0;
@@ -58,24 +59,27 @@
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label2.Location = new System.Drawing.Point(2, -1);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(360, 408);
+            this.label2.Size = new System.Drawing.Size(420, 471);
             this.label2.TabIndex = 1;
             // 
             // txtDescripcion
             // 
             this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDescripcion.Location = new System.Drawing.Point(15, 31);
+            this.txtDescripcion.Location = new System.Drawing.Point(18, 36);
+            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(328, 20);
+            this.txtDescripcion.Size = new System.Drawing.Size(382, 21);
             this.txtDescripcion.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 62);
+            this.label3.Location = new System.Drawing.Point(14, 72);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(0, 18);
             this.label3.TabIndex = 3;
@@ -93,10 +97,10 @@
             this.btnGuardar.IconColor = System.Drawing.Color.White;
             this.btnGuardar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnGuardar.IconSize = 24;
-            this.btnGuardar.Location = new System.Drawing.Point(15, 56);
+            this.btnGuardar.Location = new System.Drawing.Point(18, 65);
             this.btnGuardar.Margin = new System.Windows.Forms.Padding(2);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(328, 32);
+            this.btnGuardar.Size = new System.Drawing.Size(383, 37);
             this.btnGuardar.TabIndex = 87;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -115,9 +119,10 @@
             this.Id,
             this.Descripción,
             this.BtnEliminar});
-            this.dgvData.Location = new System.Drawing.Point(15, 93);
+            this.dgvData.Location = new System.Drawing.Point(18, 107);
+            this.dgvData.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dgvData.Name = "dgvData";
-            this.dgvData.Size = new System.Drawing.Size(328, 303);
+            this.dgvData.Size = new System.Drawing.Size(383, 350);
             this.dgvData.TabIndex = 88;
             this.dgvData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellContentClick);
             this.dgvData.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvData_CellPainting);
@@ -143,16 +148,18 @@
             // 
             // mdCategoriaGasto
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 408);
+            this.ClientSize = new System.Drawing.Size(426, 471);
             this.Controls.Add(this.dgvData);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "mdCategoriaGasto";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "mdCategoriaGasto";
@@ -171,7 +178,6 @@
         private System.Windows.Forms.Label label3;
         private FontAwesome.Sharp.IconButton btnGuardar;
         private System.Windows.Forms.DataGridView dgvData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descripción;
         private System.Windows.Forms.DataGridViewButtonColumn BtnEliminar;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;

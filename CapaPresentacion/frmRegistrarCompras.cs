@@ -84,6 +84,22 @@ namespace CapaPresentacion
         {
             using (var modal = new mdProductos())
             {
+                // 1. CREAR LA LISTA DE EXCLUIDOS
+                List<int> idsEnGrilla = new List<int>();
+
+                // 2. RECORRER EL DATAGRIDVIEW ACTUAL
+                foreach (DataGridViewRow row in dgvData.Rows)
+                {
+                    // Aseguramos que el valor no sea nulo antes de convertir
+                    if (row.Cells["IdProducto"].Value != null)
+                    {
+                        idsEnGrilla.Add(Convert.ToInt32(row.Cells["IdProducto"].Value));
+                    }
+                }
+
+                // 3. PASAR LA LISTA AL MODAL
+                modal._ListaNegra = idsEnGrilla;
+
                 var result = modal.ShowDialog();
 
                 if (result == DialogResult.OK)
@@ -202,11 +218,6 @@ namespace CapaPresentacion
                 if (pregunta == DialogResult.No) return;
             }
 
-            // --- LÓGICA CORE CORREGIDA ---
-            // NO CONVERTIMOS NADA AQUÍ. 
-            // Si el checkbox está en Bs, el txtCompraProducto ya tiene Bs.
-            // Si el checkbox está en USD, el txtCompraProducto ya tiene USD.
-            // Agregamos a la grilla EXACTAMENTE lo que ve el usuario para mantener la sincronización.
 
             foreach (DataGridViewRow fila in dgvData.Rows)
             {
@@ -226,7 +237,7 @@ namespace CapaPresentacion
                 // Calculamos el subtotal con el valor visual actual
                 decimal subtotal = precioCompra * txtCantidad.Value;
 
-                    dgvData.Rows.Add(new object[] {
+                dgvData.Rows.Add(new object[] {
                     txtIdProducto.Text,
                     txtNombreProducto.Text,
                     precioCompra.ToString("N2"), // Precio tal cual se ve en pantalla
@@ -247,8 +258,8 @@ namespace CapaPresentacion
             txtCodigoProducto.Text = "";
             txtCodigoProducto.BackColor = Color.White;
             txtNombreProducto.Text = "";
-            txtCompraProducto.Text = "N2";
-            txtVentaProducto.Text = "N2";
+            txtCompraProducto.Text = "0.00";
+            txtVentaProducto.Text = "0.00";
             txtCantidad.Value = 1;
         }
 
@@ -543,7 +554,7 @@ namespace CapaPresentacion
 
             if (respuesta)
             {
-                var result = MessageBox.Show("Numero de compra generada" + numeroDocumento + "\n\nDesea copiar al portapapeles??", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = MessageBox.Show("Numero de compra generada " + numeroDocumento + " \n\nDesea copiar al portapapeles??", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -688,10 +699,8 @@ namespace CapaPresentacion
             }
         }
 
-    
+
     }
 
 
 }
-
-

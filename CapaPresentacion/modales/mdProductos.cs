@@ -16,6 +16,9 @@ namespace CapaPresentacion.modales
     public partial class mdProductos : Form
     {
         public Producto _Producto { get; set; }
+
+        public List<int> _ListaNegra { get; set; } = new List<int>();
+
         public mdProductos()
         {
             InitializeComponent();
@@ -24,8 +27,17 @@ namespace CapaPresentacion.modales
         // por defecto, solamente deberian ser visibles el codigo, el nombre del producto y categoria
         // pero se dejan los demas por si en el futuro se requieren. 20/11/2025
         // Adicionalmente, el boton de busqueda no estara visible, pero se dejara por si en el futuro se requiere.
+
         private void mdProductos_Load(object sender, EventArgs e)
         {
+
+            if (dgvData.Columns.Contains("PrecioVenta"))
+            {
+                dgvData.Columns["PrecioVenta"].Visible = true;
+                // Opcional: Darle formato de moneda visualmente
+                dgvData.Columns["PrecioVenta"].DefaultCellStyle.Format = "N2";
+            }
+
             foreach (DataGridViewColumn columna in dgvData.Columns)
             {
                 if (columna.Visible == true && columna.Name != "btnSeleccionar")
@@ -39,9 +51,15 @@ namespace CapaPresentacion.modales
 
 
 
+
             List<Producto> listaProductos = new CN_Producto().listar();
             foreach (Producto item in listaProductos)
             {
+                if (_ListaNegra.Contains(item.IdProducto))
+                {
+                    continue; // Pasa al siguiente producto sin agregarlo a la grilla
+                }
+
                 dgvData.Rows.Add(new object[] {
                     "",
                     item.IdProducto,
@@ -180,10 +198,7 @@ namespace CapaPresentacion.modales
                 };
                 this.Close();
                 this.DialogResult = DialogResult.OK;
-                if (DialogResult == DialogResult.OK)
-                {
-                    MessageBox.Show("Producto seleccionado correctamente", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+               
             }
         }
 

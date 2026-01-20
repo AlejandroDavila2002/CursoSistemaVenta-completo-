@@ -3,30 +3,30 @@ using CapaNegocio;
 using CapaPresentacion.utilidades;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CapaPresentacion.modales
 {
-    public partial class mdCodigoVentas : Form
+    public partial class mdCodigoCompra : Form
     {
-        public string NumeroFacturaSeleccionada { get; set; }
-        private List<Venta> _listaVentas;
-        public mdCodigoVentas()
+        // Propiedad para devolver el documento seleccionado al formulario padre
+        public string DocumentoSeleccionado { get; set; }
+
+        private List<Compra> _listaCompras;
+
+        public mdCodigoCompra()
         {
             InitializeComponent();
         }
 
-        private void mdCodigoVentas_Load(object sender, EventArgs e)
+        private void mdCodigoCompra_Load(object sender, EventArgs e)
         {
-            // Cargamos la lista completa una sola vez
-            _listaVentas = new CN_Venta().ListarVentasResumen();
+            // 1. Cargar la lista de compras desde la BD
+            _listaCompras = new CN_Compra().Listar();
 
+            // 2. Llenar el ComboBox con las columnas visibles del Grid
             foreach (DataGridViewColumn columna in dgvData.Columns)
             {
                 // Solo agregamos las columnas que son visibles y no botones
@@ -41,80 +41,78 @@ namespace CapaPresentacion.modales
             cboBusqueda.ValueMember = "Valor";
             cboBusqueda.SelectedIndex = 0;
 
-
-            MostrarVentas(); // Método para llenar el Grid
+            // 3. Mostrar los datos en el Grid
+            MostrarCompras();
         }
 
-        private void MostrarVentas()
+        private void MostrarCompras()
         {
             dgvData.Rows.Clear();
 
-            // Determinamos qué bandera buscar según el estado del CheckBox
-            // Si está marcado, filtramos por Bolívares (VES), si no, por Dólares (USD)
-            string monedaABuscar = cbVerEnBs.Checked ? "VES" : "USD";
+            // Lógica de filtro de moneda (igual que en ventas)
+            // Si el checkbox está marcado, buscamos compras en BS (EsCompraEnBs == true)
+            // Si no, buscamos en USD (EsCompraEnBs == false)
+            bool buscarEnBs = cbVerEnBs.Checked;
 
-            if (_listaVentas != null)
+            if (_listaCompras != null)
             {
-                // Filtramos la lista original para obtener solo las ventas de la moneda seleccionada
-                var listaFiltrada = _listaVentas.Where(v => v.TipoMoneda == monedaABuscar).ToList();
+                // Filtramos la lista según la moneda
+                var listaFiltrada = _listaCompras.Where(c => c.EsCompraEnBs == buscarEnBs).ToList();
 
-                foreach (Venta v in listaFiltrada)
+                foreach (Compra c in listaFiltrada)
                 {
                     string montoFormateado;
 
-                    if (monedaABuscar == "VES")
+                    if (buscarEnBs)
                     {
-                        // Formateamos con el símbolo de Bolívares
-                        montoFormateado = $"Bs. {v.MontoBs.ToString("N2")}";
+                        // Calculamos el monto en Bs usando la tasa histórica de esa compra
+                        decimal montoEnBs = c.MontoTotal * c.TasaCambio; // O el campo que uses para total en Bs
+                        montoFormateado = $"Bs. {montoEnBs.ToString("N2")}";
                     }
                     else
                     {
-                        // Formateamos con el símbolo de Dólares
-                        montoFormateado = $"$ {v.MontoTotal.ToString("N2")}";
+                        // Monto en Dólares
+                        montoFormateado = $"$ {c.MontoTotal.ToString("N2")}";
                     }
 
                     // Añadimos la fila al DataGridView
                     int indice = dgvData.Rows.Add();
 
-                    dgvData.Rows[indice].Cells["CodigoVenta"].Value = v.NumeroDocumento;
-                    dgvData.Rows[indice].Cells["NombreCliente"].Value = v.NombreCliente;
-                    dgvData.Rows[indice].Cells["PrecioVenta"].Value = montoFormateado;
-                    dgvData.Rows[indice].Cells["FechaRegistro"].Value = v.FechaRegistro;
+                    dgvData.Rows[indice].Cells["CodigoCompra"].Value = c.NumeroDocumento;
+                    dgvData.Rows[indice].Cells["NombreProveedor"].Value = c.oProveedor.RazonSocial; // O NombreCompleto
+                    dgvData.Rows[indice].Cells["MontoTotal"].Value = montoFormateado;
+                    dgvData.Rows[indice].Cells["FechaRegistro"].Value = c.FechaRegistro;
 
-                    // Opcional: Aplicar un color distintivo a la celda si es Bolívares
-                    if (monedaABuscar == "VES")
+                    // Estilo de color según moneda
+                    if (buscarEnBs)
                     {
-                        dgvData.Rows[indice].Cells["PrecioVenta"].Style.ForeColor = Color.DarkGreen;
-                        dgvData.Rows[indice].Cells["PrecioVenta"].Style.SelectionForeColor = Color.LimeGreen;
+                        dgvData.Rows[indice].Cells["MontoTotal"].Style.ForeColor = Color.DarkGreen;
+                        dgvData.Rows[indice].Cells["MontoTotal"].Style.SelectionForeColor = Color.LimeGreen;
                     }
                     else
                     {
-                        dgvData.Rows[indice].Cells["PrecioVenta"].Style.ForeColor = Color.Blue;
+                        dgvData.Rows[indice].Cells["MontoTotal"].Style.ForeColor = Color.Blue;
                     }
                 }
             }
         }
 
-        // Evento del CheckBox para refrescar el Grid al cambiar
         private void cbVerEnBs_CheckedChanged(object sender, EventArgs e)
         {
-            MostrarVentas();
+            MostrarCompras();
         }
-
 
         private void dgvData_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             int iRow = e.RowIndex;
             if (iRow >= 0)
             {
-                // Usamos "CodigoVenta" que es el nombre real en el Designer
-                NumeroFacturaSeleccionada = dgvData.Rows[iRow].Cells["CodigoVenta"].Value.ToString();
+                // Obtenemos el número de documento de la celda correspondiente
+                DocumentoSeleccionado = dgvData.Rows[iRow].Cells["CodigoCompra"].Value.ToString();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
         }
-
-
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -150,10 +148,5 @@ namespace CapaPresentacion.modales
             // Opcional: Reiniciar el combo al primero
             // cboBusqueda.SelectedIndex = 0; 
         }
-
-
-
-
-
     }
 }

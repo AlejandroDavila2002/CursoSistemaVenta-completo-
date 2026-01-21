@@ -27,6 +27,11 @@ namespace CapaNegocio
             return objcd_cuenta.Eliminar(idCuenta, out Mensaje);
         }
 
+        public List<Abono> ListarAbonos(int idCuenta)
+        {
+            return objcd_cuenta.ListarAbonos(idCuenta);
+        }
+
 
     }
 }

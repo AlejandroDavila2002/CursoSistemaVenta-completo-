@@ -38,6 +38,21 @@ namespace CapaNegocio
                 Mensaje += "Es necesario la descripcion\n";
             }
 
+            // --- VALIDACIONES AGREGADAS ---
+            if (obj.Stock < 0)
+            {
+                Mensaje += "El Stock no puede ser negativo\n";
+            }
+            if (obj.PrecioCompra < 0)
+            {
+                Mensaje += "El Precio de Compra no puede ser negativo\n";
+            }
+            if (obj.PrecioVenta < 0)
+            {
+                Mensaje += "El Precio de Venta no puede ser negativo\n";
+            }
+            // ------------------------------
+
             if (Mensaje != string.Empty)
             {
                 return 0;
@@ -54,12 +69,12 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
 
-            if(obj.Codigo == "")
+            if (obj.Codigo == "")
             {
                 Mensaje += "Es necesario el Codigo\n";
             }
 
-            if(obj.NombreProducto == "")
+            if (obj.NombreProducto == "")
             {
                 Mensaje += "Es necesario el nombre del producto\n";
             }
@@ -68,6 +83,21 @@ namespace CapaNegocio
             {
                 Mensaje += "Es necesario la descripcion\n";
             }
+
+            // --- VALIDACIONES AGREGADAS ---
+            if (obj.Stock < 0)
+            {
+                Mensaje += "El Stock no puede ser negativo\n";
+            }
+            if (obj.PrecioCompra < 0)
+            {
+                Mensaje += "El Precio de Compra no puede ser negativo\n";
+            }
+            if (obj.PrecioVenta < 0)
+            {
+                Mensaje += "El Precio de Venta no puede ser negativo\n";
+            }
+            // ------------------------------
 
             if (Mensaje != string.Empty)
             {

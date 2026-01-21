@@ -15,11 +15,15 @@ namespace CapaNegocio
 
         public bool RestarStock(int idProducto, int cantidad)
         {
+             // VALIDACIÓN: Evitar restar stock negativo o cero
+             if (cantidad <= 0) return false;
              return objcd_Venta.RestarStock(idProducto, cantidad);
         }
 
         public bool sumarStock(int IdProducto, int Cantidad)
         {
+            // VALIDACIÓN: Evitar sumar stock negativo o cero
+            if (Cantidad <= 0) return false;
             return objcd_Venta.sumarStock(IdProducto, Cantidad);
         }
 

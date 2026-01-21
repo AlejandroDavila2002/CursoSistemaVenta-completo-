@@ -50,28 +50,26 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("update PRODUCTO set Stock = Stock - @Cantidad where IdProducto = @IdProducto");
+                    // CAMBIO CLAVE: Agregamos la condición "AND Stock >= @Cantidad"
+                    // Esto asegura que SOLO reste si hay suficiente stock real en la BD en ese milisegundo.
+                    query.AppendLine("update PRODUCTO set Stock = Stock - @Cantidad where IdProducto = @IdProducto AND Stock >= @Cantidad");
+                    
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.Parameters.AddWithValue("@Cantidad", cantidad);
                     cmd.Parameters.AddWithValue("@IdProducto", idProducto);
                     cmd.CommandType = CommandType.Text;
                     oconexion.Open();
 
+                    // Si filas afectadas > 0, significa que sí había stock y se restó.
+                    // Si es 0, significa que ya no había stock suficiente (concurrencia).
                     Resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
-
-
                 }
                 catch (Exception ex)
                 {
                     Resultado = false;
-
                 }
-
-
             }
-
             return Resultado;
-
         }
 
         public bool sumarStock(int IdProducto, int Cantidad)

@@ -29,6 +29,10 @@ namespace CapaPresentacion
 
         private void frmRegistrarCompras_Load(object sender, EventArgs e)
         {
+            // --- CORRECCIÓN AQUÍ: AUMENTAR EL LÍMITE DEL CONTROL ---
+            txtCantidad.Maximum = 1000000; 
+            // --------------------------------------------------------
+
             decimal tasaActual = _usuarioActual.oTasaGeneral != null ? _usuarioActual.oTasaGeneral.Valor : 0;
 
             if (tasaActual <= 0)

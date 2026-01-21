@@ -37,11 +37,13 @@ namespace CapaPresentacion
 
         private void CargarDatos()
         {
-            // 1. Configurar columnas (Limpiamos y recreamos para asegurar orden y nuevos campos)
+            // 1. Configurar columnas
             dgvData.Columns.Clear();
 
-            // Columnas Ocultas o de Control
+            // --- CORRECCIÓN AQUÍ: AGREGAMOS LA COLUMNA IdVenta OCULTA ---
             var colId = dgvData.Columns.Add("IdCuentaPorCobrar", "ID"); dgvData.Columns[colId].Visible = false;
+            var colIdVenta = dgvData.Columns.Add("IdVenta", "IdVenta"); dgvData.Columns[colIdVenta].Visible = false; // <--- LÍNEA NUEVA
+                                                                                                                     // -----------------------------------------------------------
 
             // Columnas Visibles
             dgvData.Columns.Add("NroVenta", "Nro Venta");
@@ -56,7 +58,7 @@ namespace CapaPresentacion
             dgvData.Columns.Add("MontoPagado", "Abonado");
             dgvData.Columns.Add("SaldoPendiente", "Saldo Actual");
 
-            // Columna de Botón al final (o al principio si prefieres)
+            // Columna de Botón
             DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
             btn.HeaderText = "Seleccionar";
             btn.Name = "btnSeleccionar";
@@ -69,7 +71,6 @@ namespace CapaPresentacion
             dgvData.ReadOnly = true;
             dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-
             // 2. Llenar Datos
             List<CuentaPorCobrar> lista = new CN_CuentaPorCobrar().Listar();
 
@@ -78,25 +79,27 @@ namespace CapaPresentacion
                 int indice = dgvData.Rows.Add();
 
                 dgvData.Rows[indice].Cells["IdCuentaPorCobrar"].Value = item.IdCuentaPorCobrar;
+
+                // --- CORRECCIÓN AQUÍ: LLENAMOS LA CELDA IdVenta ---
+                dgvData.Rows[indice].Cells["IdVenta"].Value = item.oVenta.IdVenta; // <--- LÍNEA NUEVA
+                                                                                   // --------------------------------------------------
+
                 dgvData.Rows[indice].Cells["NroVenta"].Value = item.oVenta.NumeroDocumento;
                 dgvData.Rows[indice].Cells["DocumentoCliente"].Value = item.oCliente.Documento;
                 dgvData.Rows[indice].Cells["NombreCliente"].Value = item.oCliente.NombreCompleto;
 
                 // Datos nuevos
                 dgvData.Rows[indice].Cells["DescripcionPlan"].Value = item.DescripcionPlan;
-                dgvData.Rows[indice].Cells["FechaVencimiento"].Value = item.FechaVencimiento; // Ya viene formateada dd/MM/yyyy
+                dgvData.Rows[indice].Cells["FechaVencimiento"].Value = item.FechaVencimiento;
 
                 dgvData.Rows[indice].Cells["MontoTotal"].Value = item.MontoTotal;
                 dgvData.Rows[indice].Cells["MontoPagado"].Value = item.MontoPagado;
                 dgvData.Rows[indice].Cells["SaldoPendiente"].Value = item.SaldoPendiente;
 
                 // --- LÓGICA VISUAL: ALERTA DE VENCIMIENTO ---
-                // Convertimos la fecha string a DateTime para comparar
                 if (!string.IsNullOrEmpty(item.FechaVencimiento))
                 {
                     DateTime fechaVence;
-
-                    // 2. Usamos TryParseExact: Intenta convertir sin romper el programa si falla
                     bool esValida = DateTime.TryParseExact(
                         item.FechaVencimiento,
                         "dd/MM/yyyy",
@@ -105,7 +108,6 @@ namespace CapaPresentacion
                         out fechaVence
                     );
 
-                    // 3. Solo si es válida y la fecha ya pasó, aplicamos el color rojo
                     if (esValida && fechaVence < DateTime.Now.Date)
                     {
                         dgvData.Rows[indice].DefaultCellStyle.BackColor = Color.MistyRose;
@@ -115,7 +117,6 @@ namespace CapaPresentacion
                 }
                 else
                 {
-                    // Si es una venta antigua sin plan de pago
                     dgvData.Rows[indice].Cells["FechaVencimiento"].Value = "N/A";
                 }
             }
@@ -200,37 +201,52 @@ namespace CapaPresentacion
 
         private void btnRegistrarAbono_Click(object sender, EventArgs e)
         {
+            // 1. Validar que se haya seleccionado una cuenta
             if (_idCuentaSeleccionada == 0)
             {
-                MessageBox.Show("Por favor, seleccione una cuenta de la lista (Click en el botón de la primera columna)", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Por favor, seleccione una cuenta de la lista para realizar el abono.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            decimal abono = 0;
-            if (!decimal.TryParse(txtMontoAbono.Text, out abono))
+            // 2. Validar formato numérico
+            decimal montoAbono = 0;
+            if (string.IsNullOrWhiteSpace(txtMontoAbono.Text) || !decimal.TryParse(txtMontoAbono.Text, out montoAbono))
             {
-                MessageBox.Show("Formato de moneda incorrecto", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ingrese un monto válido.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (abono <= 0 || abono > _saldoActual)
+            // 3. Validar montos lógicos
+            if (montoAbono <= 0)
             {
-                MessageBox.Show("El abono debe ser mayor a 0 y no puede superar la deuda actual.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El monto del abono debe ser mayor a 0.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            // Proceder a registrar
-            string mensaje = string.Empty;
-            bool resultado = new CN_CuentaPorCobrar().RegistrarAbono(_idCuentaSeleccionada, abono, out mensaje);
-
-            if (resultado)
+            if (montoAbono > _saldoActual)
             {
-                MessageBox.Show("Abono registrado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                CargarDatos(); // Recargar lista
+                MessageBox.Show($"El monto del abono no puede ser mayor al saldo pendiente ({_saldoActual.ToString("0.00")}).", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
-            else
+
+            // 4. Confirmar y Registrar
+            if (MessageBox.Show("¿Desea registrar el abono de " + montoAbono.ToString("N2") + "?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string mensaje = string.Empty;
+                
+                // Llamamos a la capa de negocio
+                bool resultado = new CN_CuentaPorCobrar().RegistrarAbono(_idCuentaSeleccionada, montoAbono, out mensaje);
+
+                if (resultado)
+                {
+                    MessageBox.Show("Abono registrado correctamente.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Recargamos la grilla para actualizar saldos
+                    CargarDatos();
+                }
+                else
+                {
+                    MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -322,6 +338,46 @@ namespace CapaPresentacion
                 e.Handled = false; return;
             }
             e.Handled = true;
+        }
+
+        private void dgvData_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                try
+                {
+                    // CAMBIO PRINCIPAL: Usamos "IdCuentaPorCobrar" en lugar de "IdVenta"
+                    int idCuenta = 0;
+                    string fechaVencimiento = "";
+
+                    // Obtenemos el ID de la Cuenta por Cobrar (que es el que usa ListarAbonos)
+                    if (dgvData.Columns.Contains("IdCuentaPorCobrar") && dgvData.Rows[e.RowIndex].Cells["IdCuentaPorCobrar"].Value != null)
+                    {
+                        idCuenta = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells["IdCuentaPorCobrar"].Value);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se encontró el ID de la Cuenta en la grilla.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Obtener la fecha de vencimiento
+                    if (dgvData.Columns.Contains("FechaVencimiento") && dgvData.Rows[e.RowIndex].Cells["FechaVencimiento"].Value != null)
+                    {
+                        fechaVencimiento = dgvData.Rows[e.RowIndex].Cells["FechaVencimiento"].Value.ToString();
+                    }
+
+                    // Pasar el ID correcto al modal
+                    using (var modal = new CapaPresentacion.modales.mdlDetalleCuotas(idCuenta, fechaVencimiento))
+                    {
+                        var result = modal.ShowDialog();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el detalle: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

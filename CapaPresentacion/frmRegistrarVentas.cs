@@ -76,6 +76,8 @@ namespace CapaPresentacion
         }
         private void frmRegistrarVentas_Load(object sender, EventArgs e)
         {
+            txtCantidad.Maximum = 1000000;
+
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Boleta", Texto = "Boleta" });
             cboTipoDocumento.Items.Add(new OpcionCombo() { Valor = "Factura", Texto = "Factura" });
             cboTipoDocumento.DisplayMember = "Texto";
@@ -223,6 +225,7 @@ namespace CapaPresentacion
 
             if (!productoExiste)
             {
+                // Ahora esta línea devolverá FALSE si alguien más ganó el stock
                 bool resultado = new CN_Venta().RestarStock(int.Parse(txtIdProducto.Text), Convert.ToInt32(txtCantidad.Value));
 
                 if (resultado)
@@ -247,6 +250,11 @@ namespace CapaPresentacion
 
                     CalcularTotal();
                     LImpiarProducto();
+                }
+                else
+                {
+                    // MENSAJE DE PROTECCIÓN
+                    MessageBox.Show("No se pudo agregar el producto. El stock ha cambiado o es insuficiente.", "Stock Agotado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else
@@ -536,7 +544,6 @@ namespace CapaPresentacion
 
 
 
-
         private void CalcularCambio()
         {
             if (txtTotalapagar.Text.Trim() == "")
@@ -717,6 +724,11 @@ namespace CapaPresentacion
 
             if (resultado)
             {
+                // --- CORRECCIÓN INTEGRAL: NO RESTAR STOCK DE NUEVO ---
+                // El stock ya se restó visualmente fila por fila con RestarStock al agregar al carrito.
+                // NO necesitamos llamar a NADA que reste stock aquí.
+                // -----------------------------------------------------
+
                 string msjExito = $"Venta registrada: {NumeroDocumento}";
 
                 if (oPlanPago != null)
@@ -734,6 +746,8 @@ namespace CapaPresentacion
             else
             {
                 MessageBox.Show(mensaje, "Error al Registrar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Si la venta falla en SQL, debemos devolver el stock que ya habíamos restado en memoria
+                DevolverStockCompleto(); // <--- CORRECCIÓN IMPORTANTE 2
             }
         }
 

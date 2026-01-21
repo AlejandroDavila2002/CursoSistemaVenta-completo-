@@ -132,5 +132,42 @@ namespace CapaDatos
             }
             return respuesta;
         }
+
+
+        // Asegúrate de agregar: using CapaEntidad;
+        public List<Abono> ListarAbonos(int idCuenta)
+        {
+            List<Abono> lista = new List<Abono>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    // Usamos el SP que ya tienes en tu base de datos
+                    SqlCommand cmd = new SqlCommand("SP_ListarAbonosPorCuenta", oconexion);
+                    cmd.Parameters.AddWithValue("@IdCuentaPorCobrar", idCuenta);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Abono()
+                            {
+                                IdAbono = Convert.ToInt32(dr["IdAbono"]),
+                                Monto = Convert.ToDecimal(dr["Monto"]),
+                                FechaRegistro = dr["Fecha"].ToString(), // Tu SP devuelve columna 'Fecha'
+                                Nota = dr["Nota"].ToString()
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<Abono>();
+                }
+            }
+            return lista;
+        }
     }
 }

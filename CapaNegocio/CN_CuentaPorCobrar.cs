@@ -91,5 +91,10 @@ namespace CapaNegocio
         {
             return objCD_Cuenta.Eliminar(id, out Mensaje);
         }
+
+        public List<Abono> ListarAbonosPorVenta(int idVenta)
+        {
+            return objCD_Cuenta.ListarAbonosPorVenta(idVenta);
+        }
     }
 }

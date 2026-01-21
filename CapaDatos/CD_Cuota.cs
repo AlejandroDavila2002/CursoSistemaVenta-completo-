@@ -154,5 +154,38 @@ namespace CapaDatos
             return lista;
         }
 
+
+        // Método para guardar cuotas manualmente (SQL DIRECTO)
+        public bool RegistrarCuotaDirecta(int idVenta, Cuota obj)
+        {
+            bool respuesta = false;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    // Insertamos directo en la tabla, usando IdVenta como enlace
+                    string query = "INSERT INTO CUOTA (IdVenta, NumeroCuota, FechaProgramada, MontoCuota, Estado) VALUES (@IdVenta, @NumeroCuota, @FechaProgramada, @MontoCuota, 'Pendiente')";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@IdVenta", idVenta);
+                    cmd.Parameters.AddWithValue("@NumeroCuota", obj.NumeroCuota);
+                    // Convertimos fecha string a DateTime para SQL
+                    cmd.Parameters.AddWithValue("@FechaProgramada", Convert.ToDateTime(obj.FechaProgramada));
+                    cmd.Parameters.AddWithValue("@MontoCuota", obj.MontoCuota);
+
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    // Si inserta filas, es true
+                    respuesta = cmd.ExecuteNonQuery() > 0;
+                }
+                catch (Exception)
+                {
+                    respuesta = false;
+                }
+            }
+            return respuesta;
+        }
+
     }
 }

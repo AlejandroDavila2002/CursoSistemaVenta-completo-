@@ -40,12 +40,23 @@ namespace CapaPresentacion
             // 1. Configurar columnas
             dgvData.Columns.Clear();
 
-            // --- CORRECCIÓN AQUÍ: AGREGAMOS LA COLUMNA IdVenta OCULTA ---
+            // --- CORRECCIÓN: AGREGAMOS EL BOTÓN PRIMERO (Índice 0) ---
+            // Para que coincida con dgvData_CellPainting (e.ColumnIndex == 0)
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+            btn.HeaderText = "";
+            btn.Name = "btnSeleccionar";
+            btn.Text = "";
+            btn.UseColumnTextForButtonValue = true;
+            btn.Width = 30;
+            dgvData.Columns.Add(btn);
+            // -------------------------------------------------------------
+
+            // --- IDs (Quedarán en índices posteriores)     ---
             var colId = dgvData.Columns.Add("IdCuentaPorCobrar", "ID"); dgvData.Columns[colId].Visible = false;
             var colIdVenta = dgvData.Columns.Add("IdVenta", "IdVenta"); dgvData.Columns[colIdVenta].Visible = false; // <--- LÍNEA NUEVA
-                                                                                                                     // -----------------------------------------------------------
+                                                                                                                    
 
-            // Columnas Visibles
+            //Columnas Visibles
             dgvData.Columns.Add("NroVenta", "Nro Venta");
             dgvData.Columns.Add("DocumentoCliente", "Doc. Cliente");
             dgvData.Columns.Add("NombreCliente", "Nombre Cliente");
@@ -59,17 +70,15 @@ namespace CapaPresentacion
             dgvData.Columns.Add("SaldoPendiente", "Saldo Actual");
 
             // Columna de Botón
-            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
-            btn.HeaderText = "Seleccionar";
-            btn.Name = "btnSeleccionar";
-            btn.Text = "Ver";
-            btn.UseColumnTextForButtonValue = true;
-            dgvData.Columns.Add(btn);
+        
 
             // Ajustes de diseño
             dgvData.AllowUserToAddRows = false;
             dgvData.ReadOnly = true;
             dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvData.Columns["btnSeleccionar"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgvData.Columns["btnSeleccionar"].Width = 40; 
 
             // 2. Llenar Datos
             List<CuentaPorCobrar> lista = new CN_CuentaPorCobrar().Listar();
@@ -160,43 +169,74 @@ namespace CapaPresentacion
             {
                 int index = e.RowIndex;
 
-                // Obtenemos el ID de forma segura
-                // Usamos TryParse por si la celda viniera nula o con formato erróneo
+                // 1. Obtención de Datos de la fila
+                // Usamos el ID oculto para la lógica interna
+                // Asegúrate de que la columna se llame "IdCuentaPorCobrar" en el Diseñador
                 string idStr = dgvData.Rows[index].Cells["IdCuentaPorCobrar"].Value.ToString();
                 _idCuentaSeleccionada = int.Parse(idStr);
 
                 string nombreCliente = dgvData.Rows[index].Cells["NombreCliente"].Value.ToString();
 
-                // Guardamos el saldo exacto del renglón para validaciones
+                // Obtenemos el saldo para validaciones futuras
                 _saldoActual = Convert.ToDecimal(dgvData.Rows[index].Cells["SaldoPendiente"].Value);
 
-                // Llenar panel lateral
+                if (CopiarDeuda.Checked)
+                {
+                    txtMontoAbono.Text = txtSaldoPendiente.Text;
+                }
+                else
+                {
+                    txtMontoAbono.Text = ""; 
+                }
+
+                // 2. Llenar panel lateral (Visualización)
                 txtClienteSeleccionado.Text = nombreCliente;
                 txtSaldoPendiente.Text = _saldoActual.ToString("N2");
 
-                // Preparar para abono
+                // 3. Preparar campo de abono (UX)
                 txtMontoAbono.Text = "";
                 txtMontoAbono.Select();
+
+                // 4. CARGAR LA GRILLA DE ABAJO (Historial)
+                // Este método busca los abonos usando el IdVenta de esa fila
+                CargarAbonosSeleccionados();
             }
         }
 
         private void dgvData_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+
         {
+
             if (e.RowIndex < 0)
+
                 return;
 
+
+
             if (e.ColumnIndex == 0)
+
             {
 
+
+
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
                 var w = Properties.Resources.icons8_comprobado_20.Width;
+
                 var h = Properties.Resources.icons8_comprobado_20.Height;
+
                 var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+
                 var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 2;
+
                 e.Graphics.DrawImage(Properties.Resources.icons8_comprobado_20, new Rectangle(x, y, w, h));
+
                 e.Handled = true;
 
+
+
             }
+
         }
 
         private void btnRegistrarAbono_Click(object sender, EventArgs e)
@@ -254,6 +294,7 @@ namespace CapaPresentacion
                     // Recargamos la grilla para actualizar saldos
                     CargarDatos();
                     LimpiarPanelAccion();
+                    CopiarDeuda.Checked = false;
                 }
                 else
                 {
@@ -390,6 +431,72 @@ namespace CapaPresentacion
                 {
                     MessageBox.Show("Error al abrir el detalle: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtMontoAbono_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void dgvData_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            CargarAbonosSeleccionados();
+        }
+       
+        
+        private void CargarAbonosSeleccionados()
+        {
+            if (dgvData.CurrentRow != null)
+            {
+                // 1. Obtener el IdVenta de la fila seleccionada
+                // (Asegúrate que la columna "IdVenta" exista y tenga datos, aunque esté oculta)
+                int idVenta = Convert.ToInt32(dgvData.CurrentRow.Cells["IdVenta"].Value);
+
+                // 2. Traer el historial usando el nuevo método con JOIN
+                List<Abono> listaAbonos = new CN_CuentaPorCobrar().ListarAbonosPorVenta(idVenta);
+
+                // 3. Mostrar en la segunda grilla
+                dgvAbonos.Rows.Clear();
+
+                foreach (Abono item in listaAbonos)
+                {
+                        dgvAbonos.Rows.Add(new object[] {
+                        item.FechaRegistro, // O item.Fecha según tu clase
+                        item.Monto.ToString("N2"),
+                        item.Nota
+                        });
+                }
+
+                // Opcional: Si la lista está vacía, puedes limpiar o mostrar un mensaje en un label
+            }
+        }
+
+        private void CopiarDeuda_CheckedChanged(object sender, EventArgs e)
+        {
+            // Verificamos si el usuario activó la casilla
+            if (CopiarDeuda.Checked)
+            {
+                // Validamos que haya un cliente seleccionado y un saldo visible
+                if (!string.IsNullOrEmpty(txtSaldoPendiente.Text))
+                {
+                    // COPIAMOS EL SALDO RESTANTE (ej. 300) AL CAMPO DE ABONO
+                    txtMontoAbono.Text = txtSaldoPendiente.Text;
+                }
+            }
+            else
+            {
+                // Si la desmarca, limpiamos el campo para que escriba manualmente
+                txtMontoAbono.Text = "";
+                txtMontoAbono.Focus();
             }
         }
     }

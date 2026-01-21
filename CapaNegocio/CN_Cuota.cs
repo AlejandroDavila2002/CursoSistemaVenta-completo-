@@ -27,5 +27,11 @@ namespace CapaNegocio
         {
             return objCD_Cuota.ActualizarEstadoCuota(idCuota, estado, fechaPago);
         }
+
+        // En CN_Cuota.cs
+        public bool RegistrarCuotaDirecta(int idVenta, Cuota obj)
+        {
+            return objCD_Cuota.RegistrarCuotaDirecta(idVenta, obj);
+        }
     }
 }

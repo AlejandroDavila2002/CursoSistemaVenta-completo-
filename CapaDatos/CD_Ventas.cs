@@ -305,6 +305,36 @@ namespace CapaDatos
             }
             return lista;
         }
+
+        // Método auxiliar para obtener el ID de la venta recién creada
+        public int ObtenerIdVenta(string numeroDocumento)
+        {
+            int idVenta = 0;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    // Consulta simple para recuperar el ID
+                    string query = "SELECT IdVenta FROM VENTA WHERE NumeroDocumento = @nro";
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@nro", numeroDocumento);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    // Ejecutamos y convertimos el resultado
+                    object resultado = cmd.ExecuteScalar();
+                    if (resultado != null)
+                    {
+                        idVenta = Convert.ToInt32(resultado);
+                    }
+                }
+                catch (Exception)
+                {
+                    idVenta = 0;
+                }
+            }
+            return idVenta;
+        }
     }
 
 }

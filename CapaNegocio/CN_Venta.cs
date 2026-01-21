@@ -57,6 +57,11 @@ namespace CapaNegocio
             return objcd_Venta.ListarVentasResumen();
         }
 
+        // En CN_Venta.cs
+        public int ObtenerIdVenta(string numeroDocumento)
+        {
+            return objcd_Venta.ObtenerIdVenta(numeroDocumento);
+        }
 
     }
 }

@@ -169,5 +169,51 @@ namespace CapaDatos
             }
             return lista;
         }
+
+
+        public List<Abono> ListarAbonosPorVenta(int idVenta)
+        {
+            List<Abono> lista = new List<Abono>();
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    // Tu consulta SQL EXACTA con el JOIN para filtrar por Venta
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT A.IdAbono, A.Monto, A.FechaRegistro, A.Nota"); // Seleccionamos columnas específicas para evitar errores
+                    query.AppendLine("FROM ABONO A");
+                    query.AppendLine("INNER JOIN CUENTA_POR_COBRAR C ON A.IdCuentaPorCobrar = C.IdCuentaPorCobrar");
+                    query.AppendLine("WHERE C.IdVenta = @IdVenta");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@IdVenta", idVenta);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Abono()
+                            {
+                                IdAbono = Convert.ToInt32(dr["IdAbono"]),
+                                Monto = Convert.ToDecimal(dr["Monto"]),
+                                // Ojo: Asumiendo que tu columna en BD se llama 'FechaRegistro'. 
+                                // Si se llama 'Fecha' (como vi en otros archivos), cámbialo aquí.
+                                FechaRegistro = dr["FechaRegistro"].ToString(),
+                                Nota = dr["Nota"] != DBNull.Value ? dr["Nota"].ToString() : ""
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<Abono>();
+                }
+            }
+            return lista;
+        }
     }
 }

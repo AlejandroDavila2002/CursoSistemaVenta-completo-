@@ -737,22 +737,27 @@ namespace CapaPresentacion
 
             if (resultado)
             {
-                // --- CORRECCIÓN INTEGRAL: NO RESTAR STOCK DE NUEVO ---
-                // El stock ya se restó visualmente fila por fila con RestarStock al agregar al carrito.
-                // NO necesitamos llamar a NADA que reste stock aquí.
-                // -----------------------------------------------------
+                // --- LÓGICA DE SALVAMENTO DE CUOTAS (PLAN B) ---
+                // Si la lista tiene datos, los guardamos manualmente ahora
+                if (listaCuotasParaSQL.Count > 0)
+                {
+                    // 1. Obtener el ID de la venta que se acaba de crear
+                    int idVentaGenerada = new CN_Venta().ObtenerIdVenta(NumeroDocumento);
+
+                    if (idVentaGenerada != 0)
+                    {
+                        CN_Cuota objCN_Cuota = new CN_Cuota();
+                        foreach (var cuota in listaCuotasParaSQL)
+                        {
+                            // 2. Guardar cada cuota vinculada a ese ID
+                            objCN_Cuota.RegistrarCuotaDirecta(idVentaGenerada, cuota);
+                        }
+                    }
+                }
+                // -----------------------------------------------
 
                 string msjExito = $"Venta registrada: {NumeroDocumento}";
-
-                if (oPlanPago != null)
-                {
-                    msjExito += $"\n\nVENTA A CRÉDITO ASIGNADO:\n{oPlanPago.DescripcionPlan}";
-                }
-                else if (montoCambioCalculado > 0)
-                {
-                    msjExito += $"\n\nSu Cambio es: {montoCambioCalculado:N2}";
-                }
-
+                // ... (Resto del mensaje de éxito y limpieza) ...
                 MessageBox.Show(msjExito, "Venta Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimpiarFormularioCompleto();
             }

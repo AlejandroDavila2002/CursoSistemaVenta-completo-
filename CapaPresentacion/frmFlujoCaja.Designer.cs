@@ -100,18 +100,17 @@
             this.label12 = new System.Windows.Forms.Label();
             this.txtMonto = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.cboBusquedaDeudores = new System.Windows.Forms.ComboBox();
+            this.txtBusquedaDeudores = new System.Windows.Forms.TextBox();
             this.dgvDataDeudores = new System.Windows.Forms.DataGridView();
-            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MontoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Empleado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FechaDeuda = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.iconButton6 = new FontAwesome.Sharp.IconButton();
+            this.btnBuscarDeudores = new FontAwesome.Sharp.IconButton();
             this.lblTotalDeudoresPendientes = new System.Windows.Forms.Label();
-            this.iconButton5 = new FontAwesome.Sharp.IconButton();
+            this.btnLimpiarDeudores = new FontAwesome.Sharp.IconButton();
             this.gpbDeudores = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MontoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FechaDeuda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gpbGastosOperativos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataGastosOperativos)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -871,24 +870,24 @@
             this.label15.TabIndex = 107;
             this.label15.Text = "Monto";
             // 
-            // comboBox3
+            // cboBusquedaDeudores
             // 
-            this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox3.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(9, 59);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(215, 21);
-            this.comboBox3.TabIndex = 105;
+            this.cboBusquedaDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboBusquedaDeudores.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.cboBusquedaDeudores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboBusquedaDeudores.FormattingEnabled = true;
+            this.cboBusquedaDeudores.Location = new System.Drawing.Point(9, 59);
+            this.cboBusquedaDeudores.Name = "cboBusquedaDeudores";
+            this.cboBusquedaDeudores.Size = new System.Drawing.Size(215, 21);
+            this.cboBusquedaDeudores.TabIndex = 105;
             // 
-            // textBox3
+            // txtBusquedaDeudores
             // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(230, 59);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(179, 20);
-            this.textBox3.TabIndex = 106;
+            this.txtBusquedaDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBusquedaDeudores.Location = new System.Drawing.Point(230, 59);
+            this.txtBusquedaDeudores.Name = "txtBusquedaDeudores";
+            this.txtBusquedaDeudores.Size = new System.Drawing.Size(179, 20);
+            this.txtBusquedaDeudores.TabIndex = 106;
             // 
             // dgvDataDeudores
             // 
@@ -900,56 +899,30 @@
             this.dgvDataDeudores.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Cliente,
             this.MontoCliente,
-            this.Empleado,
             this.FechaDeuda});
             this.dgvDataDeudores.Location = new System.Drawing.Point(10, 85);
             this.dgvDataDeudores.Name = "dgvDataDeudores";
             this.dgvDataDeudores.Size = new System.Drawing.Size(505, 541);
             this.dgvDataDeudores.TabIndex = 0;
             // 
-            // Cliente
+            // btnBuscarDeudores
             // 
-            this.Cliente.HeaderText = "Cliente";
-            this.Cliente.Name = "Cliente";
-            this.Cliente.ReadOnly = true;
-            this.Cliente.Width = 180;
-            // 
-            // MontoCliente
-            // 
-            this.MontoCliente.HeaderText = "Monto";
-            this.MontoCliente.Name = "MontoCliente";
-            this.MontoCliente.ReadOnly = true;
-            // 
-            // Empleado
-            // 
-            this.Empleado.HeaderText = "Empleado";
-            this.Empleado.Name = "Empleado";
-            this.Empleado.Width = 180;
-            // 
-            // FechaDeuda
-            // 
-            this.FechaDeuda.HeaderText = "Fecha de Deuda";
-            this.FechaDeuda.Name = "FechaDeuda";
-            this.FechaDeuda.ReadOnly = true;
-            this.FechaDeuda.Width = 150;
-            // 
-            // iconButton6
-            // 
-            this.iconButton6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton6.BackColor = System.Drawing.SystemColors.Control;
-            this.iconButton6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton6.ForeColor = System.Drawing.Color.Gray;
-            this.iconButton6.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.iconButton6.IconColor = System.Drawing.Color.Black;
-            this.iconButton6.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton6.IconSize = 24;
-            this.iconButton6.Location = new System.Drawing.Point(414, 57);
-            this.iconButton6.Margin = new System.Windows.Forms.Padding(2);
-            this.iconButton6.Name = "iconButton6";
-            this.iconButton6.Size = new System.Drawing.Size(48, 23);
-            this.iconButton6.TabIndex = 107;
-            this.iconButton6.UseVisualStyleBackColor = false;
+            this.btnBuscarDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBuscarDeudores.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBuscarDeudores.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBuscarDeudores.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBuscarDeudores.ForeColor = System.Drawing.Color.Gray;
+            this.btnBuscarDeudores.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.btnBuscarDeudores.IconColor = System.Drawing.Color.Black;
+            this.btnBuscarDeudores.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnBuscarDeudores.IconSize = 24;
+            this.btnBuscarDeudores.Location = new System.Drawing.Point(414, 57);
+            this.btnBuscarDeudores.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBuscarDeudores.Name = "btnBuscarDeudores";
+            this.btnBuscarDeudores.Size = new System.Drawing.Size(48, 23);
+            this.btnBuscarDeudores.TabIndex = 107;
+            this.btnBuscarDeudores.UseVisualStyleBackColor = false;
+            this.btnBuscarDeudores.Click += new System.EventHandler(this.btnBuscarDeudores_Click);
             // 
             // lblTotalDeudoresPendientes
             // 
@@ -962,23 +935,24 @@
             this.lblTotalDeudoresPendientes.Text = "Totales ";
             this.lblTotalDeudoresPendientes.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // iconButton5
+            // btnLimpiarDeudores
             // 
-            this.iconButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconButton5.BackColor = System.Drawing.SystemColors.Control;
-            this.iconButton5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton5.ForeColor = System.Drawing.Color.Gray;
-            this.iconButton5.IconChar = FontAwesome.Sharp.IconChar.Broom;
-            this.iconButton5.IconColor = System.Drawing.Color.Black;
-            this.iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton5.IconSize = 24;
-            this.iconButton5.Location = new System.Drawing.Point(466, 57);
-            this.iconButton5.Margin = new System.Windows.Forms.Padding(2);
-            this.iconButton5.Name = "iconButton5";
-            this.iconButton5.Size = new System.Drawing.Size(48, 23);
-            this.iconButton5.TabIndex = 108;
-            this.iconButton5.UseVisualStyleBackColor = false;
+            this.btnLimpiarDeudores.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLimpiarDeudores.BackColor = System.Drawing.SystemColors.Control;
+            this.btnLimpiarDeudores.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiarDeudores.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimpiarDeudores.ForeColor = System.Drawing.Color.Gray;
+            this.btnLimpiarDeudores.IconChar = FontAwesome.Sharp.IconChar.Broom;
+            this.btnLimpiarDeudores.IconColor = System.Drawing.Color.Black;
+            this.btnLimpiarDeudores.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnLimpiarDeudores.IconSize = 24;
+            this.btnLimpiarDeudores.Location = new System.Drawing.Point(466, 57);
+            this.btnLimpiarDeudores.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLimpiarDeudores.Name = "btnLimpiarDeudores";
+            this.btnLimpiarDeudores.Size = new System.Drawing.Size(48, 23);
+            this.btnLimpiarDeudores.TabIndex = 108;
+            this.btnLimpiarDeudores.UseVisualStyleBackColor = false;
+            this.btnLimpiarDeudores.Click += new System.EventHandler(this.btnLimpiarDeudores_Click);
             // 
             // gpbDeudores
             // 
@@ -986,12 +960,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gpbDeudores.BackColor = System.Drawing.Color.WhiteSmoke;
             this.gpbDeudores.Controls.Add(this.label16);
-            this.gpbDeudores.Controls.Add(this.iconButton5);
+            this.gpbDeudores.Controls.Add(this.btnLimpiarDeudores);
             this.gpbDeudores.Controls.Add(this.lblTotalDeudoresPendientes);
-            this.gpbDeudores.Controls.Add(this.iconButton6);
+            this.gpbDeudores.Controls.Add(this.btnBuscarDeudores);
             this.gpbDeudores.Controls.Add(this.dgvDataDeudores);
-            this.gpbDeudores.Controls.Add(this.textBox3);
-            this.gpbDeudores.Controls.Add(this.comboBox3);
+            this.gpbDeudores.Controls.Add(this.txtBusquedaDeudores);
+            this.gpbDeudores.Controls.Add(this.cboBusquedaDeudores);
             this.gpbDeudores.Location = new System.Drawing.Point(1372, 169);
             this.gpbDeudores.Name = "gpbDeudores";
             this.gpbDeudores.Size = new System.Drawing.Size(527, 670);
@@ -1008,6 +982,27 @@
             this.label16.Size = new System.Drawing.Size(248, 23);
             this.label16.TabIndex = 104;
             this.label16.Text = "Lista de Deudores";
+            // 
+            // Cliente
+            // 
+            this.Cliente.HeaderText = "Cliente";
+            this.Cliente.Name = "Cliente";
+            this.Cliente.ReadOnly = true;
+            this.Cliente.Width = 180;
+            // 
+            // MontoCliente
+            // 
+            this.MontoCliente.HeaderText = "Monto";
+            this.MontoCliente.Name = "MontoCliente";
+            this.MontoCliente.ReadOnly = true;
+            this.MontoCliente.Width = 150;
+            // 
+            // FechaDeuda
+            // 
+            this.FechaDeuda.HeaderText = "Fecha de Deuda";
+            this.FechaDeuda.Name = "FechaDeuda";
+            this.FechaDeuda.ReadOnly = true;
+            this.FechaDeuda.Width = 150;
             // 
             // frmFlujoCaja
             // 
@@ -1131,18 +1126,14 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox txtMonto;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.ComboBox cboBusquedaDeudores;
+        private System.Windows.Forms.TextBox txtBusquedaDeudores;
         private System.Windows.Forms.DataGridView dgvDataDeudores;
-        private FontAwesome.Sharp.IconButton iconButton6;
+        private FontAwesome.Sharp.IconButton btnBuscarDeudores;
         private System.Windows.Forms.Label lblTotalDeudoresPendientes;
-        private FontAwesome.Sharp.IconButton iconButton5;
+        private FontAwesome.Sharp.IconButton btnLimpiarDeudores;
         private System.Windows.Forms.GroupBox gpbDeudores;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MontoCliente;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Empleado;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FechaDeuda;
         private System.Windows.Forms.DataGridViewTextBoxColumn IdGasto;
         private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
         private System.Windows.Forms.DataGridViewTextBoxColumn Categoria;
@@ -1151,5 +1142,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Referencia;
         private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
         private System.Windows.Forms.DataGridViewButtonColumn btnEliminar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MontoCliente;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FechaDeuda;
     }
 }

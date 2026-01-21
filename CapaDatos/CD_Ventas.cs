@@ -335,6 +335,49 @@ namespace CapaDatos
             }
             return idVenta;
         }
+
+
+
+        // Agrega este método en CN_Venta.cs
+        public List<Venta> ListarVentasContado()
+        {
+            List<Venta> lista = new List<Venta>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    // SELECT idéntico al Resumen, pero agregamos el WHERE para filtrar
+                    query.AppendLine("select NumeroDocumento, NombreCliente, MontoTotal, MontoBs, TasaCambio, TipoMoneda, FechaRegistro");
+                    query.AppendLine("from VENTA");
+                    query.AppendLine("where MontoPago >= MontoTotal"); // <--- FILTRO CLAVE: Solo Contado
+                    query.AppendLine("order by IdVenta desc");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Venta()
+                            {
+                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                NombreCliente = dr["NombreCliente"].ToString(),
+                                MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                                MontoBs = dr["MontoBs"] != DBNull.Value ? Convert.ToDecimal(dr["MontoBs"]) : 0,
+                                TipoMoneda = dr["TipoMoneda"].ToString(),
+                                FechaRegistro = dr["FechaRegistro"] != DBNull.Value ?
+                                    Convert.ToDateTime(dr["FechaRegistro"]).ToString("dd/MM/yyyy") : ""
+                            });
+                        }
+                    }
+                }
+                catch { lista = new List<Venta>(); }
+            }
+            return lista;
+        }
     }
 
 }

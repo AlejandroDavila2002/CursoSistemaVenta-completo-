@@ -66,6 +66,7 @@ namespace CapaPresentacion.modales
             if (dgvCuotas.Columns.Contains("NumeroCuota")) dgvCuotas.Columns["NumeroCuota"].HeaderText = "Nro";
             if (dgvCuotas.Columns.Contains("FechaProgramada")) dgvCuotas.Columns["FechaProgramada"].HeaderText = "Fecha Venc.";
             if (dgvCuotas.Columns.Contains("MontoCuota")) dgvCuotas.Columns["MontoCuota"].HeaderText = "Monto";
+               dgvCuotas.Columns["MontoCuota"].DefaultCellStyle.Format = "N2";
             if (dgvCuotas.Columns.Contains("FechaPago")) dgvCuotas.Columns["FechaPago"].HeaderText = "Fecha Pago";
 
             dgvCuotas.Columns["NumeroCuota"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;

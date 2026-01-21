@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 
 namespace CapaDatos
@@ -108,43 +109,75 @@ namespace CapaDatos
 
 
         // MÉTODO NUEVO PARA OBTENER RESUMEN FINANCIERO
+        // Dentro de CapaDatos/CD_FlujoCaja.cs
+
         public Dictionary<string, decimal> ObtenerResumenFinanciero(string fechaInicio, string fechaFin)
         {
-            // Inicializamos con valores por defecto para garantizar que siempre existan las claves
             Dictionary<string, decimal> resumen = new Dictionary<string, decimal>()
-            {
-                { "TotalIngresos", 0m },
-                { "TotalEgresosMercancia", 0m },
-                { "TotalGastosOperativos", 0m }
-            };
+    {
+        { "TotalIngresos", 0m },
+        { "TotalEgresosMercancia", 0m },
+        { "TotalGastosOperativos", 0m }
+    };
 
             using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
             {
                 try
                 {
-                    using (SqlCommand cmd = new SqlCommand("SP_ResumenFinanciero", oconexion))
-                    {
-                        cmd.Parameters.AddWithValue("FechaInicio", fechaInicio);
-                        cmd.Parameters.AddWithValue("FechaFin", fechaFin);
-                        cmd.CommandType = CommandType.StoredProcedure;
+                    StringBuilder query = new StringBuilder();
 
-                        oconexion.Open();
-                        using (SqlDataReader dr = cmd.ExecuteReader())
+                    // 1. INGRESOS POR VENTAS (Solo lo que se pagó en caja al momento: Iniciales o Contado)
+                    //    IMPORTANTE: Aquí usamos 'MontoPago', NO 'MontoTotal'. 
+                    //    Si la venta fue a crédito sin inicial, MontoPago es 0, así que no suma nada.
+                    query.AppendLine("DECLARE @DineroVentas DECIMAL(18,2) = (");
+                    query.AppendLine("    SELECT ISNULL(SUM(MontoPago), 0) FROM VENTA");
+                    query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
+                    query.AppendLine(");");
+
+                    // 2. INGRESOS POR ABONOS (El dinero que entra después por cobros de créditos)
+                    //    Sumamos todo lo registrado en la tabla ABONO en ese rango de fechas.
+                    query.AppendLine("DECLARE @DineroAbonos DECIMAL(18,2) = (");
+                    query.AppendLine("    SELECT ISNULL(SUM(Monto), 0) FROM ABONO");
+                    query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
+                    query.AppendLine(");");
+
+                    // 3. EGRESOS POR COMPRAS (Mercancía)
+                    query.AppendLine("DECLARE @EgresosCompras DECIMAL(18,2) = (");
+                    query.AppendLine("    SELECT ISNULL(SUM(MontoTotal), 0) FROM COMPRA");
+                    query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
+                    query.AppendLine(");");
+
+                    // 4. GASTOS OPERATIVOS (Luz, agua, nómina, etc.)
+                    query.AppendLine("DECLARE @GastosOperativos DECIMAL(18,2) = (");
+                    query.AppendLine("    SELECT ISNULL(SUM(Monto), 0) FROM GASTO");
+                    query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
+                    query.AppendLine(");");
+
+                    // RESULTADO FINAL: Sumamos Ventas(Caja) + Abonos(Cobros)
+                    query.AppendLine("SELECT ");
+                    query.AppendLine("(@DineroVentas + @DineroAbonos) AS TotalIngresosReal,");
+                    query.AppendLine("@EgresosCompras AS TotalCompras,");
+                    query.AppendLine("@GastosOperativos AS TotalGastos");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@FInicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@FFin", fechaFin);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
                         {
-                            if (dr.Read())
-                            {
-                                // Comprobación de DBNull para evitar excepciones
-                                resumen["TotalIngresos"] = dr["TotalIngresos"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalIngresos"]);
-                                resumen["TotalEgresosMercancia"] = dr["TotalEgresosMercancia"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalEgresosMercancia"]);
-                                resumen["TotalGastosOperativos"] = dr["TotalGastosOperativos"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalGastosOperativos"]);
-                            }
+                            resumen["TotalIngresos"] = dr["TotalIngresosReal"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalIngresosReal"]);
+                            resumen["TotalEgresosMercancia"] = dr["TotalCompras"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalCompras"]);
+                            resumen["TotalGastosOperativos"] = dr["TotalGastos"] == DBNull.Value ? 0m : Convert.ToDecimal(dr["TotalGastos"]);
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // En caso de error devolvemos los valores por defecto ya inicializados.
-                    // Si quieres, aquí puedes registrar el error en un log.
+                    // Opcional: Console.WriteLine(ex.Message);
                 }
             }
             return resumen;

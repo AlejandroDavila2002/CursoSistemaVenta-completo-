@@ -15,9 +15,9 @@ namespace CapaNegocio
 
         public bool RestarStock(int idProducto, int cantidad)
         {
-             // VALIDACIÓN: Evitar restar stock negativo o cero
-             if (cantidad <= 0) return false;
-             return objcd_Venta.RestarStock(idProducto, cantidad);
+            // VALIDACIÓN: Evitar restar stock negativo o cero
+            if (cantidad <= 0) return false;
+            return objcd_Venta.RestarStock(idProducto, cantidad);
         }
 
         public bool sumarStock(int IdProducto, int Cantidad)
@@ -63,5 +63,24 @@ namespace CapaNegocio
             return objcd_Venta.ObtenerIdVenta(numeroDocumento);
         }
 
+
+
+        public List<Venta> ListarVentasContado()
+        {
+            return objcd_Venta.ListarVentasContado();
+        }
+
+
+        // Obtener Detalle Venta de CD_Ventas
+        public List<Detalle_Venta> ObtenerDetalleVenta(int idVenta)
+        {
+            return objcd_Venta.ObtenerDetalleVenta(idVenta);
+        }
+
+
+
+
     }
+
+
 }

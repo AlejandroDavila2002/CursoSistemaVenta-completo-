@@ -609,7 +609,15 @@ namespace CapaPresentacion
             // Si el campo pago está vacío, asumimos 0
             if (string.IsNullOrWhiteSpace(txtPagocon.Text)) txtPagocon.Text = "0";
 
-            // --- 2. PREPARACIÓN DE MONTOS ---
+            // --- 2. PREPARACIÓN DE VALORES Y TASAS (MOVIDO AL INICIO) ---
+            // Definimos la tasa y moneda AHORA, porque el modal de crédito las necesita antes de guardar.
+            decimal tasaActual = _UsuarioActual.oTasaGeneral != null ? _UsuarioActual.oTasaGeneral.Valor : 0;
+
+            // Si usas un txtCotizacion en pantalla que pueda ser diferente a la global, úsalo aquí:
+            // decimal.TryParse(txtCotizacion.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out tasaActual);
+
+            bool esVentaEnBs = CambioMoneda.Checked; // Asumiendo que Checked = VES (Bolívares)
+
             decimal pagoCon = Convert.ToDecimal(txtPagocon.Text, CultureInfo.InvariantCulture);
             decimal totalActual = Convert.ToDecimal(txtTotalapagar.Text, CultureInfo.InvariantCulture);
             decimal montoCambioCalculado = 0;
@@ -643,16 +651,17 @@ namespace CapaPresentacion
 
                 if (result == DialogResult.Yes)
                 {
-                    // --- ABRIR MODAL DE PLAN DE PAGO ---
-                    using (var modal = new modales.mdPlanPago(deuda))
+                    // --- ABRIR MODAL DE PLAN DE PAGO (CONVERTIDOR INTEGRADO) ---
+                    // Pasamos: Deuda, Tasa y la Bandera de si es Bolívares
+                    using (var modal = new modales.mdPlanPago(deuda, tasaActual, esVentaEnBs))
                     {
                         modal.ShowDialog();
 
                         if (modal._Confirmado)
                         {
-                            // Capturamos el plan configurado por el usuario
+                            // Capturamos el plan configurado por el usuario (Ya viene en Dólares desde el modal)
                             oPlanPago = modal._DatosPlan;
-                            listaCuotasParaSQL = modal._ListaCuotas; // Rescatamos las cuotas del modal
+                            listaCuotasParaSQL = modal._ListaCuotas;
                         }
                         else
                         {
@@ -664,12 +673,30 @@ namespace CapaPresentacion
                 else // Eligió NO (Crédito Rápido / Fiado simple)
                 {
                     // Creamos un plan por defecto: 7 Dias.
+                    // Si la venta es en Bs, convertimos la deuda a Dólares manualmente aquí para el plan simple
+                    decimal deudaEnDolares = deuda;
+                    if (esVentaEnBs && tasaActual > 0)
+                    {
+                        deudaEnDolares = deuda / tasaActual;
+                    }
+
                     oPlanPago = new CuentaPorCobrar()
                     {
+                        // Importante: Guardamos el monto total de la deuda convertida a USD
+                        MontoTotal = deudaEnDolares,
+                        SaldoPendiente = deudaEnDolares,
                         FechaVencimiento = DateTime.Now.AddDays(7).ToString("yyyy-MM-dd"),
                         DescripcionPlan = "Crédito Rápido (1 semana)",
                         PorcentajeMora = 0
                     };
+
+                    // Creamos una única cuota automática para SQL
+                    listaCuotasParaSQL.Add(new Cuota()
+                    {
+                        NumeroCuota = 1,
+                        MontoCuota = deudaEnDolares,
+                        FechaProgramada = DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")
+                    });
                 }
 
                 montoCambioCalculado = 0; // No hay vuelto en crédito
@@ -681,23 +708,13 @@ namespace CapaPresentacion
                 oPlanPago = null; // No hay plan de pago
             }
 
-            // --- 4. PREPARAR DETALLE PARA SQL ---
+            // --- 4. PREPARAR DETALLES PARA SQL ---
             DataTable detalleVenta = new DataTable();
             detalleVenta.Columns.Add("IdProducto", typeof(int));
             detalleVenta.Columns.Add("PrecioVenta", typeof(decimal));
             detalleVenta.Columns.Add("Cantidad", typeof(int));
             detalleVenta.Columns.Add("SubTotal", typeof(decimal));
             detalleVenta.Columns.Add("SubTotalBs", typeof(decimal));
-
-            DataTable dtCuotas = new DataTable();
-            dtCuotas.Columns.Add("NumeroCuota", typeof(int));
-            dtCuotas.Columns.Add("FechaProgramada", typeof(DateTime));
-            dtCuotas.Columns.Add("MontoCuota", typeof(decimal));
-
-            foreach (var item in listaCuotasParaSQL)
-            {
-                dtCuotas.Rows.Add(item.NumeroCuota, Convert.ToDateTime(item.FechaProgramada), item.MontoCuota);
-            }
 
             foreach (DataGridViewRow row in dgvData.Rows)
             {
@@ -710,8 +727,18 @@ namespace CapaPresentacion
                 );
             }
 
+            // Preparar Tabla de Cuotas
+            DataTable dtCuotas = new DataTable();
+            dtCuotas.Columns.Add("NumeroCuota", typeof(int));
+            dtCuotas.Columns.Add("FechaProgramada", typeof(DateTime));
+            dtCuotas.Columns.Add("MontoCuota", typeof(decimal));
+
+            foreach (var item in listaCuotasParaSQL)
+            {
+                dtCuotas.Rows.Add(item.NumeroCuota, Convert.ToDateTime(item.FechaProgramada), item.MontoCuota);
+            }
+
             // --- 5. DATOS FINALES ---
-            decimal tasaActual = _UsuarioActual.oTasaGeneral != null ? _UsuarioActual.oTasaGeneral.Valor : 0;
             int idCorrelativo = new CN_Venta().ObtenerCorrelativo();
             string NumeroDocumento = string.Format("{0:00000}", idCorrelativo);
 
@@ -727,45 +754,44 @@ namespace CapaPresentacion
                 MontoTotal = _totalUSD,
                 MontoBs = _totalVES,
                 TasaCambio = tasaActual,
-                TipoMoneda = CambioMoneda.Checked ? "VES" : "USD"
+                TipoMoneda = esVentaEnBs ? "VES" : "USD"
             };
 
             string mensaje = string.Empty;
 
-            // Modifica esta línea para pasar el dtCuotas
+            // Enviamos dtCuotas al procedimiento
             bool resultado = new CN_Venta().RegistrarVenta(oVenta, detalleVenta, oPlanPago, dtCuotas, out mensaje);
 
             if (resultado)
             {
                 // --- LÓGICA DE SALVAMENTO DE CUOTAS (PLAN B) ---
-                // Si la lista tiene datos, los guardamos manualmente ahora
-                if (listaCuotasParaSQL.Count > 0)
+                // (Opcional: Solo si el SP principal no inserta las cuotas por alguna razón)
+                if (listaCuotasParaSQL.Count > 0 && oPlanPago != null)
                 {
-                    // 1. Obtener el ID de la venta que se acaba de crear
                     int idVentaGenerada = new CN_Venta().ObtenerIdVenta(NumeroDocumento);
 
                     if (idVentaGenerada != 0)
                     {
                         CN_Cuota objCN_Cuota = new CN_Cuota();
+                       
                         foreach (var cuota in listaCuotasParaSQL)
                         {
-                            // 2. Guardar cada cuota vinculada a ese ID
                             objCN_Cuota.RegistrarCuotaDirecta(idVentaGenerada, cuota);
                         }
+                        
                     }
                 }
                 // -----------------------------------------------
 
                 string msjExito = $"Venta registrada: {NumeroDocumento}";
-                // ... (Resto del mensaje de éxito y limpieza) ...
                 MessageBox.Show(msjExito, "Venta Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimpiarFormularioCompleto();
             }
             else
             {
                 MessageBox.Show(mensaje, "Error al Registrar", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Si la venta falla en SQL, debemos devolver el stock que ya habíamos restado en memoria
-                DevolverStockCompleto(); // <--- CORRECCIÓN IMPORTANTE 2
+                // Si la venta falla en SQL, devolvemos stock visual (si aplica)
+                // DevolverStockCompleto(); 
             }
         }
 

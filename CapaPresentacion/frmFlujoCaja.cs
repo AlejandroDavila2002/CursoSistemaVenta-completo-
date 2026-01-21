@@ -23,20 +23,21 @@ namespace CapaPresentacion
         private void frmFlujoCaja_Load(object sender, EventArgs e)
         {
             dgvDataGastosOperativos.CellPainting += new DataGridViewCellPaintingEventHandler(dgvDataGastosOperativos_CellPainting);
+            dgvDataDeudores.CellDoubleClick += new DataGridViewCellEventHandler(dgvDataDeudores_CellDoubleClick);
 
             // Inicializar fechas al día de hoy
             txtInicio.Value = DateTime.Now;
             txtFin.Value = DateTime.Now;
 
             CargarCombos();
-           // ConfigurarGrid();
+            InicializarComboDeudores();
+            // ConfigurarGrid();
 
             // Cargar datos por defecto (del día de hoy)
             CargarGastosOperativos();
             CalcularFinanzas();
 
-
-
+            CargarDeudores();
         }
 
         private void CargarCombos()
@@ -376,6 +377,130 @@ namespace CapaPresentacion
             }
         }
 
-       
+
+
+        // --- SECCIÓN DEUDORES PENDIENTES (CRÉDITOS) ---
+
+        // Dentro de frmFlujoCaja.cs
+
+        private void CargarDeudores()
+        {
+            // 1. Configuración de Columnas (Programática para seguridad)
+            dgvDataDeudores.Columns.Clear();
+
+            // Columna OCULTA (La llave para abrir el modal)
+            var colId = dgvDataDeudores.Columns.Add("IdVenta", "IdVenta");
+            dgvDataDeudores.Columns[colId].Visible = false;
+
+            // Columnas VISIBLES
+            dgvDataDeudores.Columns.Add("Cliente", "Cliente");
+            dgvDataDeudores.Columns.Add("MontoCliente", "Monto Deuda");
+            dgvDataDeudores.Columns.Add("FechaDeuda", "Fecha Deuda");
+
+            // Ajustes estéticos
+            dgvDataDeudores.AllowUserToAddRows = false;
+            dgvDataDeudores.ReadOnly = true;
+            dgvDataDeudores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvDataDeudores.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Selección de fila completa
+
+            // 2. Obtener datos y llenar
+            List<CuentaPorCobrar> lista = new CN_CuentaPorCobrar().Listar();
+            decimal totalDeudaPendiente = 0;
+
+            foreach (CuentaPorCobrar c in lista)
+            {
+                if (c.SaldoPendiente > 0)
+                {
+                    dgvDataDeudores.Rows.Add(
+                        c.oVenta.IdVenta,                 // Valor Oculto (IdVenta)
+                        c.oCliente.NombreCompleto,        // Cliente
+                        c.SaldoPendiente.ToString("N2"),  // Monto
+                        c.FechaRegistro                   // Fecha
+                    );
+
+                    totalDeudaPendiente += c.SaldoPendiente;
+                }
+            }
+
+            lblTotalDeudoresPendientes.Text = totalDeudaPendiente.ToString("N2");
+        }
+        private void InicializarComboDeudores()
+        {
+            // Configuración del combo de búsqueda para deudores
+            cboBusquedaDeudores.Items.Clear();
+
+            // Agregamos las opciones basadas en las columnas visibles que definimos
+            // Asegúrate que el "Name" de la columna en el diseñador coincida con "Cliente", "Monto", "Fecha" o ajusta aquí
+            cboBusquedaDeudores.Items.Add(new OpcionCombo() { Valor = "Cliente", Texto = "Cliente" });
+            cboBusquedaDeudores.Items.Add(new OpcionCombo() { Valor = "FechaDeuda", Texto = "Fecha" });
+            cboBusquedaDeudores.Items.Add(new OpcionCombo() { Valor = "MontoCliente", Texto = "Monto" });
+
+            cboBusquedaDeudores.DisplayMember = "Texto";
+            cboBusquedaDeudores.ValueMember = "Valor";
+
+            if (cboBusquedaDeudores.Items.Count > 0) cboBusquedaDeudores.SelectedIndex = 0;
+        }
+
+        // --- EVENTOS DE BOTONES (BÚSQUEDA Y LIMPIEZA) ---
+
+        private void btnBuscarDeudores_Click(object sender, EventArgs e)
+        {
+            string columnaFiltro = ((OpcionCombo)cboBusquedaDeudores.SelectedItem).Valor.ToString();
+            string textoBusqueda = txtBusquedaDeudores.Text.Trim().ToUpper();
+
+            if (dgvDataDeudores.Rows.Count > 0)
+            {
+                foreach (DataGridViewRow row in dgvDataDeudores.Rows)
+                {
+                    // Obtenemos el valor de la celda según la columna seleccionada
+                    // NOTA: Asegúrate que las columnas en el diseñador se llamen "Cliente" y "FechaDeuda"
+                    if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(textoBusqueda))
+                    {
+                        row.Visible = true;
+                    }
+                    else
+                    {
+                        row.Visible = false;
+                    }
+                }
+            }
+        }
+
+        private void btnLimpiarDeudores_Click(object sender, EventArgs e)
+        {
+            txtBusquedaDeudores.Text = "";
+            foreach (DataGridViewRow row in dgvDataDeudores.Rows)
+            {
+                row.Visible = true;
+            }
+        }
+
+        private void dgvDataDeudores_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Validamos que el clic sea en una fila válida
+            if (e.RowIndex >= 0)
+            {
+                try
+                {
+                    // 1. Recuperamos el ID de la venta de la columna oculta "IdVenta"
+                    int idVentaSeleccionada = Convert.ToInt32(dgvDataDeudores.Rows[e.RowIndex].Cells["IdVenta"].Value);
+
+                    // 2. Recuperamos la fecha (solo por si el modal la pide visualmente)
+                    string fechaDeuda = dgvDataDeudores.Rows[e.RowIndex].Cells["FechaDeuda"].Value.ToString();
+
+                    // 3. Abrimos el modal reutilizando el que ya existe
+                    using (var modal = new CapaPresentacion.modales.mdlDetalleCuotas(idVentaSeleccionada, fechaDeuda))
+                    {
+                        modal.ShowDialog();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el detalle: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
     }
 }

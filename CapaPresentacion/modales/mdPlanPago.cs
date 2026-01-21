@@ -16,15 +16,28 @@ namespace CapaPresentacion.modales
         public CuentaPorCobrar _DatosPlan { get; set; }
         public bool _Confirmado { get; set; } = false;
 
-        public mdPlanPago(decimal montoDeuda)
+        private decimal _tasaCambio;
+        private bool _esBolivares;
+
+        public mdPlanPago(decimal montoDeuda, decimal tasaCambio, bool esBolivares)
         {
             InitializeComponent();
             _montoDeuda = montoDeuda;
+            _tasaCambio = tasaCambio;
+            _esBolivares = esBolivares;
         }
+
 
         private void mdPlanPago_Load(object sender, EventArgs e)
         {
-            // 1. Mostrar deuda inicial
+            // --- LÓGICA DE CONVERSIÓN DE MONEDA ---
+            // Si la venta se hizo en Bs, convertimos la deuda a Dólares inmediatamente.
+            if (_esBolivares && _tasaCambio > 0)
+            {
+                _montoDeuda = _montoDeuda / _tasaCambio;
+            }
+
+            // 1. Mostrar deuda inicial (Ahora siempre se verá en $)
             lblMontoDeuda.Text = _montoDeuda.ToString("N2");
 
             // 2. Configurar el ComboBox de Frecuencia
@@ -37,23 +50,21 @@ namespace CapaPresentacion.modales
             cboFrecuencia.ValueMember = "Valor";
             cboFrecuencia.SelectedIndex = 1; // Por defecto Quincenal
 
-            // 3. Configurar el DataGridView (LIMPIAR Y CREAR COLUMNAS DE CUOTAS)
-            // Esto corrige las columnas "revueltas" o incorrectas que traías del diseño
+            // 3. Configurar el DataGridView
             dgvData.Columns.Clear();
-
             dgvData.Columns.Add("NroCuota", "N°");
             dgvData.Columns.Add("Monto", "Monto Cuota");
-            dgvData.Columns.Add("FechaPago", "Fecha de Pago"); // Aquí va la fecha que pediste
+            dgvData.Columns.Add("FechaPago", "Fecha de Pago");
 
-            // Estilos del Grid para que se vea bien
+            // Estilos del Grid
             dgvData.AllowUserToAddRows = false;
             dgvData.ReadOnly = true;
-            dgvData.RowHeadersVisible = false; // Ocultar la columna gris de la izquierda
+            dgvData.RowHeadersVisible = false;
             dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             // 4. Valores iniciales
-            numericUpDown1.Value = 1; // Mínimo 1 cuota
-            txtMora.Value = 0;        // Mínimo 0 mora
+            numericUpDown1.Value = 1;
+            txtMora.Value = 0;
 
             CalcularPlan();
         }

@@ -31,6 +31,11 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnLimpiarCombo = new FontAwesome.Sharp.IconButton();
             this.txtBusqueda = new System.Windows.Forms.TextBox();
             this.cboBusqueda = new System.Windows.Forms.ComboBox();
@@ -39,6 +44,15 @@
             this.btnLimpiar = new FontAwesome.Sharp.IconButton();
             this.btnRegistrarAbono = new FontAwesome.Sharp.IconButton();
             this.dgvData = new System.Windows.Forms.DataGridView();
+            this.btnSeleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.IdCuentaPorCobrar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Documento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NroVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DocumentoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MontoTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MontoPagado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SaldoPendiente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label10 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,24 +64,21 @@
             this.BtnEliminar = new FontAwesome.Sharp.IconButton();
             this.label3 = new System.Windows.Forms.Label();
             this.dgvAbonos = new System.Windows.Forms.DataGridView();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.btnSeleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.IdCuentaPorCobrar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Documento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NroVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DocumentoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MontoTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MontoPagado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SaldoPendiente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Nota = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.CopiarDeuda = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.dgvDataProductosDeuda = new System.Windows.Forms.DataGridView();
+            this.Producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SubTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbonos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDataProductosDeuda)).BeginInit();
             this.SuspendLayout();
             // 
             // btnLimpiarCombo
@@ -186,7 +197,7 @@
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(2);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.SteelBlue;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
@@ -201,25 +212,90 @@
             this.MontoTotal,
             this.MontoPagado,
             this.SaldoPendiente});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvData.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvData.Location = new System.Drawing.Point(335, 89);
             this.dgvData.Margin = new System.Windows.Forms.Padding(2);
             this.dgvData.MultiSelect = false;
             this.dgvData.Name = "dgvData";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.Desktop;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvData.RowTemplate.Height = 28;
+            this.dgvData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvData.Size = new System.Drawing.Size(1146, 670);
             this.dgvData.TabIndex = 50;
             this.dgvData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellClick);
             this.dgvData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellContentClick);
             this.dgvData.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellDoubleClick);
             this.dgvData.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvData_CellPainting);
+            // 
+            // btnSeleccionar
+            // 
+            this.btnSeleccionar.HeaderText = "";
+            this.btnSeleccionar.Name = "btnSeleccionar";
+            this.btnSeleccionar.UseColumnTextForButtonValue = true;
+            this.btnSeleccionar.Width = 40;
+            // 
+            // IdCuentaPorCobrar
+            // 
+            this.IdCuentaPorCobrar.HeaderText = "IdUsuario";
+            this.IdCuentaPorCobrar.Name = "IdCuentaPorCobrar";
+            this.IdCuentaPorCobrar.Visible = false;
+            // 
+            // Documento
+            // 
+            this.Documento.HeaderText = "Nro Documento";
+            this.Documento.Name = "Documento";
+            this.Documento.Visible = false;
+            this.Documento.Width = 160;
+            // 
+            // NroVenta
+            // 
+            this.NroVenta.HeaderText = "Numero Venta";
+            this.NroVenta.Name = "NroVenta";
+            this.NroVenta.Width = 200;
+            // 
+            // DocumentoCliente
+            // 
+            this.DocumentoCliente.HeaderText = "Documento Cliente";
+            this.DocumentoCliente.Name = "DocumentoCliente";
+            this.DocumentoCliente.Visible = false;
+            this.DocumentoCliente.Width = 150;
+            // 
+            // NombreCliente
+            // 
+            this.NombreCliente.HeaderText = "Nombre Cliente";
+            this.NombreCliente.Name = "NombreCliente";
+            this.NombreCliente.Width = 180;
+            // 
+            // MontoTotal
+            // 
+            this.MontoTotal.HeaderText = "Monto Total";
+            this.MontoTotal.Name = "MontoTotal";
+            this.MontoTotal.Width = 140;
+            // 
+            // MontoPagado
+            // 
+            this.MontoPagado.HeaderText = "Monto Pagado";
+            this.MontoPagado.Name = "MontoPagado";
+            // 
+            // SaldoPendiente
+            // 
+            this.SaldoPendiente.FillWeight = 80F;
+            this.SaldoPendiente.HeaderText = "Saldo Pendiente";
+            this.SaldoPendiente.Name = "SaldoPendiente";
             // 
             // label10
             // 
@@ -342,27 +418,56 @@
             // dgvAbonos
             // 
             this.dgvAbonos.AllowUserToAddRows = false;
-            this.dgvAbonos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgvAbonos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvAbonos.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvAbonos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAbonos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvAbonos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAbonos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Fecha,
             this.Monto,
             this.Nota});
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAbonos.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgvAbonos.Location = new System.Drawing.Point(1486, 89);
             this.dgvAbonos.Name = "dgvAbonos";
-            this.dgvAbonos.Size = new System.Drawing.Size(327, 670);
+            this.dgvAbonos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAbonos.Size = new System.Drawing.Size(327, 272);
             this.dgvAbonos.TabIndex = 63;
+            // 
+            // Fecha
+            // 
+            this.Fecha.HeaderText = "Fecha Pago";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            this.Fecha.Width = 200;
+            // 
+            // Monto
+            // 
+            this.Monto.HeaderText = "Monto Abonado";
+            this.Monto.Name = "Monto";
+            this.Monto.ReadOnly = true;
+            this.Monto.Width = 200;
+            // 
+            // Nota
+            // 
+            this.Nota.HeaderText = "Nota";
+            this.Nota.Name = "Nota";
+            this.Nota.ReadOnly = true;
+            this.Nota.Visible = false;
             // 
             // label4
             // 
@@ -397,83 +502,6 @@
             this.label6.Text = "Detalles Globales";
             this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // btnSeleccionar
-            // 
-            this.btnSeleccionar.HeaderText = "";
-            this.btnSeleccionar.Name = "btnSeleccionar";
-            this.btnSeleccionar.UseColumnTextForButtonValue = true;
-            this.btnSeleccionar.Width = 40;
-            // 
-            // IdCuentaPorCobrar
-            // 
-            this.IdCuentaPorCobrar.HeaderText = "IdUsuario";
-            this.IdCuentaPorCobrar.Name = "IdCuentaPorCobrar";
-            this.IdCuentaPorCobrar.Visible = false;
-            // 
-            // Documento
-            // 
-            this.Documento.HeaderText = "Nro Documento";
-            this.Documento.Name = "Documento";
-            this.Documento.Visible = false;
-            this.Documento.Width = 160;
-            // 
-            // NroVenta
-            // 
-            this.NroVenta.HeaderText = "Numero Venta";
-            this.NroVenta.Name = "NroVenta";
-            this.NroVenta.Width = 200;
-            // 
-            // DocumentoCliente
-            // 
-            this.DocumentoCliente.HeaderText = "Documento Cliente";
-            this.DocumentoCliente.Name = "DocumentoCliente";
-            this.DocumentoCliente.Visible = false;
-            this.DocumentoCliente.Width = 150;
-            // 
-            // NombreCliente
-            // 
-            this.NombreCliente.HeaderText = "Nombre Cliente";
-            this.NombreCliente.Name = "NombreCliente";
-            this.NombreCliente.Width = 180;
-            // 
-            // MontoTotal
-            // 
-            this.MontoTotal.HeaderText = "Monto Total";
-            this.MontoTotal.Name = "MontoTotal";
-            this.MontoTotal.Width = 140;
-            // 
-            // MontoPagado
-            // 
-            this.MontoPagado.HeaderText = "Monto Pagado";
-            this.MontoPagado.Name = "MontoPagado";
-            // 
-            // SaldoPendiente
-            // 
-            this.SaldoPendiente.FillWeight = 80F;
-            this.SaldoPendiente.HeaderText = "Saldo Pendiente";
-            this.SaldoPendiente.Name = "SaldoPendiente";
-            // 
-            // Fecha
-            // 
-            this.Fecha.HeaderText = "Fecha Pago";
-            this.Fecha.Name = "Fecha";
-            this.Fecha.ReadOnly = true;
-            this.Fecha.Width = 200;
-            // 
-            // Monto
-            // 
-            this.Monto.HeaderText = "Monto Abonado";
-            this.Monto.Name = "Monto";
-            this.Monto.ReadOnly = true;
-            this.Monto.Width = 200;
-            // 
-            // Nota
-            // 
-            this.Nota.HeaderText = "Nota";
-            this.Nota.Name = "Nota";
-            this.Nota.ReadOnly = true;
-            this.Nota.Visible = false;
-            // 
             // CopiarDeuda
             // 
             this.CopiarDeuda.AutoSize = true;
@@ -486,12 +514,90 @@
             this.CopiarDeuda.UseVisualStyleBackColor = false;
             this.CopiarDeuda.CheckedChanged += new System.EventHandler(this.CopiarDeuda_CheckedChanged);
             // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.BackColor = System.Drawing.Color.White;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(1486, 364);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(327, 25);
+            this.label7.TabIndex = 68;
+            this.label7.Text = "Preductos  Asociados";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // dgvDataProductosDeuda
+            // 
+            this.dgvDataProductosDeuda.AllowUserToAddRows = false;
+            this.dgvDataProductosDeuda.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvDataProductosDeuda.BackgroundColor = System.Drawing.SystemColors.ButtonShadow;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDataProductosDeuda.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.dgvDataProductosDeuda.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDataProductosDeuda.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Producto,
+            this.Cantidad,
+            this.SubTotal});
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDataProductosDeuda.DefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvDataProductosDeuda.Location = new System.Drawing.Point(1486, 392);
+            this.dgvDataProductosDeuda.Name = "dgvDataProductosDeuda";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDataProductosDeuda.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            this.dgvDataProductosDeuda.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDataProductosDeuda.Size = new System.Drawing.Size(327, 367);
+            this.dgvDataProductosDeuda.TabIndex = 69;
+            // 
+            // Producto
+            // 
+            this.Producto.HeaderText = "Producto";
+            this.Producto.Name = "Producto";
+            this.Producto.ReadOnly = true;
+            this.Producto.Width = 200;
+            // 
+            // Cantidad
+            // 
+            this.Cantidad.HeaderText = "Cantidad";
+            this.Cantidad.Name = "Cantidad";
+            this.Cantidad.ReadOnly = true;
+            this.Cantidad.Width = 200;
+            // 
+            // SubTotal
+            // 
+            this.SubTotal.HeaderText = "SubTotal";
+            this.SubTotal.Name = "SubTotal";
+            this.SubTotal.ReadOnly = true;
+            this.SubTotal.Visible = false;
+            // 
             // frmGestionCredito
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(1814, 759);
+            this.Controls.Add(this.dgvDataProductosDeuda);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.CopiarDeuda);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -520,6 +626,7 @@
             this.Load += new System.EventHandler(this.frmGestionCredito_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbonos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDataProductosDeuda)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -562,5 +669,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
         private System.Windows.Forms.DataGridViewTextBoxColumn Nota;
         private System.Windows.Forms.CheckBox CopiarDeuda;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DataGridView dgvDataProductosDeuda;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Producto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SubTotal;
     }
 }

@@ -25,7 +25,7 @@ namespace CapaPresentacion.modales
         private void mdCodigoVentas_Load(object sender, EventArgs e)
         {
             // Cargamos la lista completa una sola vez
-            _listaVentas = new CN_Venta().ListarVentasResumen();
+            _listaVentas = new CN_Venta().ListarVentasContado();
 
             foreach (DataGridViewColumn columna in dgvData.Columns)
             {

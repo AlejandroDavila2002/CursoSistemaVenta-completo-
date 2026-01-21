@@ -26,13 +26,21 @@ namespace CapaPresentacion
         {
             // 1. Configurar ComboBox de Busqueda
             cboBusqueda.Items.Add(new OpcionCombo() { Valor = "NroVenta", Texto = "Nro Venta" });
-            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "Cliente", Texto = "Cliente" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "NombreCliente", Texto = "Cliente" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "DocumentoCliente", Texto = "Documento Cliente" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "DescripcionPlan", Texto = "Plan de Pago" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "FechaVencimiento", Texto = "Fecha de Vencimiento" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "MontoTotal", Texto = "Deuda Original" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "MontoPagado", Texto = "Abonado" });
+            cboBusqueda.Items.Add(new OpcionCombo() { Valor = "SaldoPendiente", Texto = "Saldo Actual" });
+
             cboBusqueda.DisplayMember = "Texto";
             cboBusqueda.ValueMember = "Valor";
             cboBusqueda.SelectedIndex = 0;
 
             // 2. Cargar Datos
             CargarDatos();
+            ConfigurarGridProductos();
         }
 
         private void CargarDatos()
@@ -41,15 +49,13 @@ namespace CapaPresentacion
             dgvData.Columns.Clear();
 
             // --- CORRECCIÓN: AGREGAMOS EL BOTÓN PRIMERO (Índice 0) ---
-            // Para que coincida con dgvData_CellPainting (e.ColumnIndex == 0)
             DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
             btn.HeaderText = "";
             btn.Name = "btnSeleccionar";
             btn.Text = "";
             btn.UseColumnTextForButtonValue = true;
-            btn.Width = 30;
+            btn.Width = 30; 
             dgvData.Columns.Add(btn);
-            // -------------------------------------------------------------
 
             // --- IDs (Quedarán en índices posteriores)     ---
             var colId = dgvData.Columns.Add("IdCuentaPorCobrar", "ID"); dgvData.Columns[colId].Visible = false;
@@ -65,18 +71,24 @@ namespace CapaPresentacion
             dgvData.Columns.Add("DescripcionPlan", "Plan de Pago");
             dgvData.Columns.Add("FechaVencimiento", "Vence El");
 
+            // --- APLICAR FORMATO N2 A LAS COLUMNAS NUMÉRICAS ---
             dgvData.Columns.Add("MontoTotal", "Deuda Original");
-            dgvData.Columns.Add("MontoPagado", "Abonado");
-            dgvData.Columns.Add("SaldoPendiente", "Saldo Actual");
+            dgvData.Columns["MontoTotal"].DefaultCellStyle.Format = "N2";
 
-            // Columna de Botón
-        
+            dgvData.Columns.Add("MontoPagado", "Abonado");
+            dgvData.Columns["MontoPagado"].DefaultCellStyle.Format = "N2"; 
+
+            dgvData.Columns.Add("SaldoPendiente", "Saldo Actual");
+            dgvData.Columns["SaldoPendiente"].DefaultCellStyle.Format = "N2"; 
 
             // Ajustes de diseño
             dgvData.AllowUserToAddRows = false;
             dgvData.ReadOnly = true;
+            
+            // 1. Configuramos el modo Fill general
             dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+            // 2. EXCEPCIÓN: Configuramos la columna del botón explícitamente
             dgvData.Columns["btnSeleccionar"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dgvData.Columns["btnSeleccionar"].Width = 40; 
 
@@ -447,9 +459,12 @@ namespace CapaPresentacion
         {
 
         }
+
+
         private void dgvData_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             CargarAbonosSeleccionados();
+            CargarProductosDeuda();
         }
        
         
@@ -480,6 +495,8 @@ namespace CapaPresentacion
             }
         }
 
+
+
         private void CopiarDeuda_CheckedChanged(object sender, EventArgs e)
         {
             // Verificamos si el usuario activó la casilla
@@ -499,5 +516,70 @@ namespace CapaPresentacion
                 txtMontoAbono.Focus();
             }
         }
+
+        // Dentro de frmGestionCredito.cs
+
+        private void ConfigurarGridProductos()
+        {
+            // Limpiamos estilos previos
+            dgvDataProductosDeuda.Rows.Clear();
+            dgvDataProductosDeuda.Columns.Clear();
+
+            // Agregamos las 3 columnas solicitadas
+            dgvDataProductosDeuda.Columns.Add("Producto", "Producto");
+            dgvDataProductosDeuda.Columns.Add("Cantidad", "Cant.");
+            dgvDataProductosDeuda.Columns.Add("SubTotal", "SubTotal");
+
+            // Ajustes visuales
+            dgvDataProductosDeuda.Columns["Producto"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill; // El nombre ocupa espacio
+            dgvDataProductosDeuda.Columns["Cantidad"].Width = 60;
+            dgvDataProductosDeuda.Columns["SubTotal"].Width = 80;
+
+            dgvDataProductosDeuda.AllowUserToAddRows = false;
+            dgvDataProductosDeuda.ReadOnly = true;
+            dgvDataProductosDeuda.RowHeadersVisible = false;
+        }
+
+        // Dentro de frmGestionCredito.cs
+
+        private void CargarProductosDeuda()
+        {
+            // Validamos que haya una fila seleccionada
+            if (dgvData.CurrentRow != null)
+            {
+                // 1. Obtener el IdVenta (Asegúrate de que la columna "IdVenta" exista, aunque esté oculta)
+                // Usamos TryParse para evitar errores si la celda está vacía o nula
+                int idVenta = 0;
+                if (dgvData.CurrentRow.Cells["IdVenta"].Value != null)
+                {
+                    int.TryParse(dgvData.CurrentRow.Cells["IdVenta"].Value.ToString(), out idVenta);
+                }
+
+                if (idVenta != 0)
+                {
+                    // 2. Reutilizamos CN_Venta para traer los detalles
+                    List<Detalle_Venta> listaDetalle = new CN_Venta().ObtenerDetalleVenta(idVenta);
+
+                    // 3. Llenamos la grilla
+                    dgvDataProductosDeuda.Rows.Clear();
+
+                    foreach (Detalle_Venta item in listaDetalle)
+                    {
+                        dgvDataProductosDeuda.Rows.Add(
+                            item.oProducto.NombreProducto,
+                            item.Cantidad,
+                            item.SubTotal.ToString("N2") // Formato moneda
+                        );
+                    }
+                }
+            }
+        }
+
+
+
+
+
     }
+
+
 }

@@ -110,7 +110,8 @@ namespace CapaPresentacion
             if (!decimal.TryParse(txtPrecioVenta.Text, out decimal precioVenta)) precioVenta = 0;
 
             int stockIngresado = 0;
-            if (!int.TryParse(txtStock.Text, out stockIngresado))
+            // Permitir vacío (se queda en 0) o validar si se escribió algo
+            if (!string.IsNullOrWhiteSpace(txtStock.Text) && !int.TryParse(txtStock.Text, out stockIngresado))
             {
                 MessageBox.Show("El formato del stock no es correcto. Debe ser un número entero.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;

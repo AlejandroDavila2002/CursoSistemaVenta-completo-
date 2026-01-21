@@ -1,12 +1,14 @@
-﻿using System;
-using System.Drawing; // Necesario para los colores
+﻿using CapaEntidad;
+using CapaNegocio;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 public partial class mdlDetalleCuotas : Form
 {
     private int _idVenta;
 
-    // Constructor que recibe el ID de la venta/crédito
     public mdlDetalleCuotas(int idVenta)
     {
         InitializeComponent();
@@ -20,78 +22,68 @@ public partial class mdlDetalleCuotas : Form
 
     private void CargarCuotas()
     {
-        // 1. Aquí llamas a tu Capa de Negocio para obtener la lista de cuotas
-        // Ejemplo: List<Cuota> lista = new CN_Cuota().Listar(_idVenta);
-        // dgvCuotas.DataSource = lista;
+        List<Cuota> lista = new CN_Cuota().Listar(_idVenta);
+        dgvCuotas.DataSource = lista;
 
-        // ESTRUCTURA ESPERADA DE LAS COLUMNAS (Asegúrate de traer estos datos):
-        // - NumeroCuota (int)
-        // - FechaProgramada (DateTime) -> Fecha Vencimiento
-        // - FechaPago (DateTime?) -> Puede ser null si no ha pagado
-        // - Monto (decimal)
-        // - Estado (string)
+        // Ocultar columnas internas
+        if (dgvCuotas.Columns.Contains("IdCuota")) dgvCuotas.Columns["IdCuota"].Visible = false;
+        if (dgvCuotas.Columns.Contains("IdVenta")) dgvCuotas.Columns["IdVenta"].Visible = false;
+
+        // Ajustar títulos
+        if (dgvCuotas.Columns.Contains("FechaProgramada")) dgvCuotas.Columns["FechaProgramada"].HeaderText = "F. Vencimiento";
+        if (dgvCuotas.Columns.Contains("FechaPago")) dgvCuotas.Columns["FechaPago"].HeaderText = "F. Pagado";
     }
 
-    // ESTA ES LA PARTE CLAVE: El pintado condicional
     private void dgvCuotas_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
     {
-        // Aseguramos que no sea la cabecera y que haya filas
-        if (this.dgvCuotas.Columns[e.ColumnIndex].Name != "Estado" || e.Value == null)
+        if (this.dgvCuotas.Columns[e.ColumnIndex].Name == "Estado")
         {
-            return;
-        }
-        // Obtenemos la fila actual
-        DataGridViewRow row = dgvCuotas.Rows[e.RowIndex];
+            var row = dgvCuotas.Rows[e.RowIndex];
 
-        // Recuperamos las fechas (Ajusta los nombres de celdas a tu DGV)
-        var fechaVencimiento = Convert.ToDateTime(row.Cells["FechaProgramada"].Value);
+            // Seguridad: Validar que existan los valores
+            if (row.Cells["FechaProgramada"].Value == null) return;
+            string strVencimiento = row.Cells["FechaProgramada"].Value.ToString();
+            string strPago = row.Cells["FechaPago"].Value != null ? row.Cells["FechaPago"].Value.ToString() : "";
 
-        // Verificamos si hay fecha de pago (si es null o DBNull, no está pagado)
-        var celdaPago = row.Cells["FechaPago"].Value;
-        bool pagado = celdaPago != null && celdaPago != DBNull.Value;
+            DateTime fechaVencimiento;
+            if (!DateTime.TryParse(strVencimiento, out fechaVencimiento)) return;
 
-        if (pagado)
-        {
-            DateTime fechaRealPago = Convert.ToDateTime(celdaPago);
-
-            // Lógica de Colores
-            if (fechaRealPago > fechaVencimiento)
+            // CASO 1: YA PAGÓ (FechaPago tiene valor)
+            if (!string.IsNullOrEmpty(strPago))
             {
-                // PAGO TARDE (ROJO)
-                e.CellStyle.BackColor = Color.LightCoral;
-                e.CellStyle.ForeColor = Color.Black;
-                row.Cells["Estado"].Value = "Atrasado"; // Opcional: Cambiar texto
-            }
-            else
-            {
-                // PAGO A TIEMPO O ADELANTADO (VERDE)
-                e.CellStyle.BackColor = Color.LightGreen;
-                e.CellStyle.ForeColor = Color.Black;
+                DateTime fechaRealPago = Convert.ToDateTime(strPago);
 
-                // Si quieres distinguir "Adelantado" vs "El mismo día", puedes agregar otro if:
-                if (fechaRealPago < fechaVencimiento.Date)
+                if (fechaRealPago.Date > fechaVencimiento.Date)
                 {
-                    row.Cells["Estado"].Value = "Adelantado";
-                    // Podrías usar un verde más oscuro o diferente si quisieras
+                    // PAGÓ TARDE -> Rojo Suave
+                    e.CellStyle.BackColor = Color.LightCoral;
+                    e.CellStyle.ForeColor = Color.Black;
+                    e.Value = "Atrasado";
                 }
                 else
                 {
-                    row.Cells["Estado"].Value = "A Tiempo";
+                    // PAGÓ A TIEMPO -> Verde
+                    e.CellStyle.BackColor = Color.LightGreen;
+                    e.CellStyle.ForeColor = Color.Black;
+                    e.Value = "Pagado";
                 }
             }
-        }
-        else
-        {
-            // NO PAGADO AÚN
-            // Si la fecha actual ya pasó el vencimiento y no ha pagado:
-            if (DateTime.Now > fechaVencimiento)
-            {
-                e.CellStyle.BackColor = Color.OrangeRed; // Alerta de deuda
-                e.CellStyle.ForeColor = Color.White;
-            }
+            // CASO 2: NO HA PAGADO (FechaPago vacía)
             else
             {
-                e.CellStyle.BackColor = Color.White; // Pendiente normal
+                if (DateTime.Now.Date > fechaVencimiento.Date)
+                {
+                    // VENCIDO Y SIN PAGAR -> Rojo Fuerte / Alerta
+                    e.CellStyle.BackColor = Color.Red;
+                    e.CellStyle.ForeColor = Color.White;
+                    e.Value = "Vencido";
+                }
+                else
+                {
+                    // AÚN ESTÁ EN TIEMPO -> Blanco o Amarillo claro
+                    e.CellStyle.BackColor = Color.White;
+                    e.Value = "Pendiente";
+                }
             }
         }
     }

@@ -233,15 +233,27 @@ namespace CapaPresentacion
             if (MessageBox.Show("¿Desea registrar el abono de " + montoAbono.ToString("N2") + "?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 string mensaje = string.Empty;
-                
+
+                int idVenta = 0;
+
+                foreach (DataGridViewRow row in dgvData.Rows)
+                {
+                    if (Convert.ToInt32(row.Cells["IdCuentaPorCobrar"].Value) == _idCuentaSeleccionada)
+                    {
+                        idVenta = Convert.ToInt32(row.Cells["IdVenta"].Value);
+                        break;
+                    }
+                }
+
                 // Llamamos a la capa de negocio
-                bool resultado = new CN_CuentaPorCobrar().RegistrarAbono(_idCuentaSeleccionada, montoAbono, out mensaje);
+                bool resultado = new CN_CuentaPorCobrar().RegistrarAbono(_idCuentaSeleccionada, idVenta, montoAbono, out mensaje);
 
                 if (resultado)
                 {
                     MessageBox.Show("Abono registrado correctamente.", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // Recargamos la grilla para actualizar saldos
                     CargarDatos();
+                    LimpiarPanelAccion();
                 }
                 else
                 {
@@ -347,17 +359,18 @@ namespace CapaPresentacion
                 try
                 {
                     // CAMBIO PRINCIPAL: Usamos "IdCuentaPorCobrar" en lugar de "IdVenta"
-                    int idCuenta = 0;
-                    string fechaVencimiento = "";
+                    int idVentaSeleccionada = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells["IdVenta"].Value);
+                    
 
                     // Obtenemos el ID de la Cuenta por Cobrar (que es el que usa ListarAbonos)
-                    if (dgvData.Columns.Contains("IdCuentaPorCobrar") && dgvData.Rows[e.RowIndex].Cells["IdCuentaPorCobrar"].Value != null)
+                    string fechaVencimiento = "";
+                    if (dgvData.Columns.Contains("FechaVencimiento") && dgvData.Rows[e.RowIndex].Cells["FechaVencimiento"].Value != null)
                     {
-                        idCuenta = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells["IdCuentaPorCobrar"].Value);
+                        fechaVencimiento = dgvData.Rows[e.RowIndex].Cells["FechaVencimiento"].Value.ToString();
                     }
                     else
                     {
-                        MessageBox.Show("No se encontró el ID de la Cuenta en la grilla.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("No se encontró el ID de la venta en la grilla.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -368,7 +381,7 @@ namespace CapaPresentacion
                     }
 
                     // Pasar el ID correcto al modal
-                    using (var modal = new CapaPresentacion.modales.mdlDetalleCuotas(idCuenta, fechaVencimiento))
+                    using (var modal = new CapaPresentacion.modales.mdlDetalleCuotas(idVentaSeleccionada, fechaVencimiento))
                     {
                         var result = modal.ShowDialog();
                     }

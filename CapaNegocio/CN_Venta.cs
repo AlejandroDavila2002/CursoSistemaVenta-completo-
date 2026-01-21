@@ -33,7 +33,7 @@ namespace CapaNegocio
             return objcd_Venta.ObtenerCorrelativo();
         }
 
-        public bool RegistrarVenta(Venta obj, DataTable DetalleVenta, CuentaPorCobrar oCuenta, out string Mensaje)
+        public bool RegistrarVenta(Venta obj, DataTable DetalleVenta, CuentaPorCobrar oCuenta, DataTable dtCuotas, out string Mensaje)
         {
             return objcd_Venta.RegistrarVenta(obj, DetalleVenta, oCuenta, out Mensaje);
         }

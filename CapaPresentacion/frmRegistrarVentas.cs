@@ -2,22 +2,21 @@
 using CapaNegocio;
 using CapaPresentacion.modales;
 using CapaPresentacion.utilidades;
-using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace CapaPresentacion
 {
     public partial class frmRegistrarVentas : Form
     {
+        List<Cuota> listaCuotasParaSQL = new List<Cuota>();
+
         private Usuario _UsuarioActual;
         private decimal _totalUSD = 0; // Totales acumulados en memoria para rapidez
         private decimal _totalVES = 0;
@@ -592,6 +591,8 @@ namespace CapaPresentacion
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
+            listaCuotasParaSQL = new List<Cuota>();
+
             // --- 1. VALIDACIONES INICIALES ---
             if (string.IsNullOrWhiteSpace(txtDocumento.Text))
             {
@@ -651,6 +652,7 @@ namespace CapaPresentacion
                         {
                             // Capturamos el plan configurado por el usuario
                             oPlanPago = modal._DatosPlan;
+                            listaCuotasParaSQL = modal._ListaCuotas; // Rescatamos las cuotas del modal
                         }
                         else
                         {
@@ -687,6 +689,16 @@ namespace CapaPresentacion
             detalleVenta.Columns.Add("SubTotal", typeof(decimal));
             detalleVenta.Columns.Add("SubTotalBs", typeof(decimal));
 
+            DataTable dtCuotas = new DataTable();
+            dtCuotas.Columns.Add("NumeroCuota", typeof(int));
+            dtCuotas.Columns.Add("FechaProgramada", typeof(DateTime));
+            dtCuotas.Columns.Add("MontoCuota", typeof(decimal));
+
+            foreach (var item in listaCuotasParaSQL)
+            {
+                dtCuotas.Rows.Add(item.NumeroCuota, Convert.ToDateTime(item.FechaProgramada), item.MontoCuota);
+            }
+
             foreach (DataGridViewRow row in dgvData.Rows)
             {
                 detalleVenta.Rows.Add(
@@ -719,8 +731,9 @@ namespace CapaPresentacion
             };
 
             string mensaje = string.Empty;
-          
-            bool resultado = new CN_Venta().RegistrarVenta(oVenta, detalleVenta, oPlanPago, out mensaje);
+
+            // Modifica esta línea para pasar el dtCuotas
+            bool resultado = new CN_Venta().RegistrarVenta(oVenta, detalleVenta, oPlanPago, dtCuotas, out mensaje);
 
             if (resultado)
             {

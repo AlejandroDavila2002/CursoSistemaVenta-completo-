@@ -6,16 +6,26 @@ namespace CapaNegocio
 {
     public class CN_Cuota
     {
-        private CD_Cuota objcd_cuota = new CD_Cuota();
+        private CD_Cuota objCD_Cuota = new CD_Cuota();
 
-        public List<Cuota> Listar(int idVenta)
-        {
-            return objcd_cuota.Listar(idVenta);
-        }
-
+        // 1. Método existente (si lo tenías)
         public bool Registrar(Cuota obj, out string Mensaje)
         {
-            return objcd_cuota.Registrar(obj, out Mensaje);
+            return objCD_Cuota.Registrar(obj, out Mensaje);
+        }
+
+        // 2. NUEVO MÉTODO PUENTE (El que faltaba)
+        // EN CapaNegocio -> CN_Cuota.cs
+
+        public List<Cuota> ListarPorVenta(int idVenta)
+        {
+            return objCD_Cuota.ListarPorVenta(idVenta);
+        }
+
+        // 3. Método para la lógica de cascada (Opcional si lo usas en CN_CuentaPorCobrar)
+        public bool ActualizarEstadoCuota(int idCuota, string estado, string fechaPago)
+        {
+            return objCD_Cuota.ActualizarEstadoCuota(idCuota, estado, fechaPago);
         }
     }
 }

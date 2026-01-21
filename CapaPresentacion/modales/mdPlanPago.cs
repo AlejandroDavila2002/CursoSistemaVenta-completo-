@@ -1,6 +1,7 @@
 ﻿using CapaEntidad;
 using CapaPresentacion.utilidades;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,6 +12,7 @@ namespace CapaPresentacion.modales
         private decimal _montoDeuda;
 
         // Propiedades para devolver los datos al formulario de ventas
+        public List<Cuota> _ListaCuotas { get; set; } = new List<Cuota>();
         public CuentaPorCobrar _DatosPlan { get; set; }
         public bool _Confirmado { get; set; } = false;
 
@@ -129,6 +131,17 @@ namespace CapaPresentacion.modales
 
                 PorcentajeMora = txtMora.Value
             };
+
+            _ListaCuotas = new List<Cuota>();
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                _ListaCuotas.Add(new Cuota()
+                {
+                    NumeroCuota = Convert.ToInt32(row.Cells["NroCuota"].Value),
+                    MontoCuota = Convert.ToDecimal(row.Cells["Monto"].Value),
+                    FechaProgramada = row.Cells["FechaPago"].Value.ToString()
+                });
+            }
 
             _Confirmado = true;
             this.Close();

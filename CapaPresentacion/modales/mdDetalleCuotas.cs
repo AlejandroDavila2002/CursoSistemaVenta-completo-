@@ -1,5 +1,5 @@
 ﻿using CapaEntidad;
-using CapaNegocio;
+using CapaNegocio; // Referencia correcta
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,15 +9,13 @@ namespace CapaPresentacion.modales
 {
     public partial class mdlDetalleCuotas : Form
     {
-        private int _idCuenta;
-        private string _fechaVencimientoVenta;
+        private int _idVenta;
 
-        // Constructor modificado: Recibe ID Cuenta y la Fecha Límite de la Venta
-        public mdlDetalleCuotas(int idCuenta, string fechaVencimiento)
+        // Constructor
+        public mdlDetalleCuotas(int idVenta, string fechaVencimiento)
         {
             InitializeComponent();
-            _idCuenta = idCuenta;
-            _fechaVencimientoVenta = fechaVencimiento;
+            _idVenta = idVenta; // Asignamos
         }
 
         private void mdlDetalleCuotas_Load(object sender, EventArgs e)
@@ -28,50 +26,86 @@ namespace CapaPresentacion.modales
 
         private void ConfigurarGrid()
         {
-            label2.Text = "Historial de Pagos Registrados";
+            label2.Text = "Detalle de Cuotas del Crédito";
         }
 
         private void CargarHistorial()
         {
-            // Traemos los abonos reales desde la BD
-            List<Abono> lista = new CN_CuentaPorCobrar().ListarAbonos(_idCuenta);
+            // CORRECCIÓN 1: Llamamos a la Capa de NEGOCIO, no a Datos
+            List<Cuota> lista = new CN_Cuota().ListarPorVenta(_idVenta);
+
             dgvCuotas.DataSource = lista;
 
-            // Ocultar ID
-            if (dgvCuotas.Columns.Contains("IdAbono")) dgvCuotas.Columns["IdAbono"].Visible = false;
+            // Ocultar columnas técnicas
+            string[] columnasOcultas = { "IdCuota", "IdVenta", "IdCuentaPorCobrar" };
+            foreach (string col in columnasOcultas)
+            {
+                if (dgvCuotas.Columns.Contains(col)) dgvCuotas.Columns[col].Visible = false;
+            }
 
-            // Encabezados
-            if (dgvCuotas.Columns.Contains("FechaRegistro")) dgvCuotas.Columns["FechaRegistro"].HeaderText = "Fecha de Pago";
-            if (dgvCuotas.Columns.Contains("Monto")) dgvCuotas.Columns["Monto"].HeaderText = "Monto Abonado";
-            if (dgvCuotas.Columns.Contains("Nota")) dgvCuotas.Columns["Nota"].HeaderText = "Nota / Ref";
+            // Renombrar encabezados para el usuario
+            if (dgvCuotas.Columns.Contains("NumeroCuota"))
+            {
+                dgvCuotas.Columns["NumeroCuota"].HeaderText = "Nro";
+                dgvCuotas.Columns["NumeroCuota"].Width = 40;
+            }
+            if (dgvCuotas.Columns.Contains("FechaProgramada")) dgvCuotas.Columns["FechaProgramada"].HeaderText = "Fecha Vencimiento";
+            if (dgvCuotas.Columns.Contains("MontoCuota")) dgvCuotas.Columns["MontoCuota"].HeaderText = "Monto";
+            if (dgvCuotas.Columns.Contains("Estado")) dgvCuotas.Columns["Estado"].HeaderText = "Estado";
+            if (dgvCuotas.Columns.Contains("FechaPago")) dgvCuotas.Columns["FechaPago"].HeaderText = "Pagado El";
 
             dgvCuotas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
+        // --- FUSIÓN DE LÓGICA DE COLORES ---
         private void dgvCuotas_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // PINTAR ROJO/VERDE SEGÚN FECHA
-            if (dgvCuotas.Columns[e.ColumnIndex].Name == "FechaRegistro" && e.Value != null)
+            // Aplicamos el formato a toda la fila para que se vea claro
+            if (dgvCuotas.Columns[e.ColumnIndex].Name == "Estado" && e.Value != null)
             {
-                // 1. Obtener fecha del pago (Abono)
-                DateTime fechaPago;
-                if (!DateTime.TryParse(e.Value.ToString(), out fechaPago)) return;
+                string estado = e.Value.ToString();
+                DataGridViewRow row = dgvCuotas.Rows[e.RowIndex];
 
-                // 2. Obtener fecha de vencimiento de la venta
-                DateTime fechaLimite;
-                if (DateTime.TryParse(_fechaVencimientoVenta, out fechaLimite))
+                // 1. Obtenemos las fechas clave de la fila actual
+                DateTime fechaVencimiento; // La fecha limite de ESTA cuota
+                DateTime.TryParse(row.Cells["FechaProgramada"].Value.ToString(), out fechaVencimiento);
+
+                // CASO A: CUOTA YA PAGADA
+                if (estado == "Pagada")
                 {
-                    // LÓGICA: Si pagó DESPUÉS de la fecha límite -> ROJO
-                    if (fechaPago.Date > fechaLimite.Date)
+                    DateTime fechaPago;
+                    DateTime.TryParse(row.Cells["FechaPago"].Value.ToString(), out fechaPago);
+
+                    // Lógica del Usuario: ¿Pagó después de la fecha?
+                    if (fechaPago.Date > fechaVencimiento.Date)
                     {
-                        e.CellStyle.BackColor = Color.LightCoral;
-                        e.CellStyle.ForeColor = Color.Black;
+                        // Pagó, pero TARDE (Rojo claro / Alerta)
+                        row.DefaultCellStyle.BackColor = Color.LightCoral;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
                     }
                     else
                     {
-                        // Pagó a tiempo -> VERDE
-                        e.CellStyle.BackColor = Color.LightGreen;
-                        e.CellStyle.ForeColor = Color.Black;
+                        // Pagó A TIEMPO (Verde Éxito)
+                        row.DefaultCellStyle.BackColor = Color.LightGreen;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                }
+                // CASO B: CUOTA PENDIENTE
+                else
+                {
+                    // Mi Lógica: ¿Ya se venció y no ha pagado?
+                    if (DateTime.Now.Date > fechaVencimiento.Date)
+                    {
+                        // MOROSO (Salmón Intenso)
+                        row.DefaultCellStyle.BackColor = Color.Salmon;
+                        row.DefaultCellStyle.ForeColor = Color.White;
+                        row.DefaultCellStyle.Font = new Font(dgvCuotas.Font, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        // PENDIENTE FUTURA (Blanco normal)
+                        row.DefaultCellStyle.BackColor = Color.White;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
                     }
                 }
             }

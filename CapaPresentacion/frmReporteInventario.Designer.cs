@@ -82,6 +82,7 @@
             this.cboBusquedaPorStock = new System.Windows.Forms.ComboBox();
             this.btnLimpiarCombo = new FontAwesome.Sharp.IconButton();
             this.btnBuscar = new FontAwesome.Sharp.IconButton();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -102,7 +103,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(4, 5);
             this.label1.Name = "label1";
@@ -112,14 +113,15 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.totalproductos);
             this.groupBox1.Controls.Add(this.iconPictureBox1);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 35);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.Size = new System.Drawing.Size(216, 100);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
@@ -128,7 +130,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(162, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(32, 13);
+            this.label4.Size = new System.Drawing.Size(44, 16);
             this.label4.TabIndex = 3;
             this.label4.Text = "Items";
             // 
@@ -137,7 +139,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(5, 82);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 13);
+            this.label3.Size = new System.Drawing.Size(117, 16);
             this.label3.TabIndex = 2;
             this.label3.Text = "Total Productos";
             // 
@@ -153,7 +155,7 @@
             // 
             // iconPictureBox1
             // 
-            this.iconPictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.iconPictureBox1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.iconPictureBox1.ForeColor = System.Drawing.Color.RoyalBlue;
             this.iconPictureBox1.IconChar = FontAwesome.Sharp.IconChar.Archive;
             this.iconPictureBox1.IconColor = System.Drawing.Color.RoyalBlue;
@@ -166,23 +168,24 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox2.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.valorInventario_Costo);
             this.groupBox2.Controls.Add(this.iconPictureBox2);
-            this.groupBox2.Location = new System.Drawing.Point(227, 35);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Location = new System.Drawing.Point(234, 36);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 100);
+            this.groupBox2.Size = new System.Drawing.Size(216, 100);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(162, 16);
+            this.label5.Location = new System.Drawing.Point(156, 16);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(34, 13);
+            this.label5.Size = new System.Drawing.Size(47, 16);
             this.label5.TabIndex = 3;
             this.label5.Text = "Costo";
             // 
@@ -191,7 +194,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(5, 82);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(117, 13);
+            this.label6.Size = new System.Drawing.Size(170, 16);
             this.label6.TabIndex = 2;
             this.label6.Text = "Valor Inventario (Costo)";
             // 
@@ -207,7 +210,7 @@
             // 
             // iconPictureBox2
             // 
-            this.iconPictureBox2.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.iconPictureBox2.BackColor = System.Drawing.Color.WhiteSmoke;
             this.iconPictureBox2.ForeColor = System.Drawing.Color.Lime;
             this.iconPictureBox2.IconChar = FontAwesome.Sharp.IconChar.Donate;
             this.iconPictureBox2.IconColor = System.Drawing.Color.Lime;
@@ -220,14 +223,15 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox3.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.valorInventario_Venta);
             this.groupBox3.Controls.Add(this.iconPictureBox3);
-            this.groupBox3.Location = new System.Drawing.Point(443, 35);
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Location = new System.Drawing.Point(456, 36);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(200, 100);
+            this.groupBox3.Size = new System.Drawing.Size(216, 100);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             // 
@@ -236,7 +240,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(162, 16);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(35, 13);
+            this.label8.Size = new System.Drawing.Size(47, 16);
             this.label8.TabIndex = 3;
             this.label8.Text = "Venta";
             // 
@@ -245,7 +249,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(5, 82);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(118, 13);
+            this.label9.Size = new System.Drawing.Size(170, 16);
             this.label9.TabIndex = 2;
             this.label9.Text = "Valor Inventario (Venta)";
             // 
@@ -261,7 +265,7 @@
             // 
             // iconPictureBox3
             // 
-            this.iconPictureBox3.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.iconPictureBox3.BackColor = System.Drawing.Color.WhiteSmoke;
             this.iconPictureBox3.ForeColor = System.Drawing.Color.Blue;
             this.iconPictureBox3.IconChar = FontAwesome.Sharp.IconChar.DollyFlatbed;
             this.iconPictureBox3.IconColor = System.Drawing.Color.Blue;
@@ -274,13 +278,14 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox4.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.ProductosBajo);
             this.groupBox4.Controls.Add(this.iconPictureBox4);
-            this.groupBox4.Location = new System.Drawing.Point(658, 35);
+            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox4.Location = new System.Drawing.Point(678, 36);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 100);
+            this.groupBox4.Size = new System.Drawing.Size(216, 100);
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             // 
@@ -289,7 +294,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(5, 82);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(104, 13);
+            this.label12.Size = new System.Drawing.Size(147, 16);
             this.label12.TabIndex = 2;
             this.label12.Text = "Producto Stock bajo";
             // 
@@ -305,7 +310,7 @@
             // 
             // iconPictureBox4
             // 
-            this.iconPictureBox4.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.iconPictureBox4.BackColor = System.Drawing.Color.WhiteSmoke;
             this.iconPictureBox4.Flip = FontAwesome.Sharp.FlipOrientation.Vertical;
             this.iconPictureBox4.ForeColor = System.Drawing.Color.Yellow;
             this.iconPictureBox4.IconChar = FontAwesome.Sharp.IconChar.ExclamationTriangle;
@@ -321,13 +326,14 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox5.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox5.Controls.Add(this.label11);
             this.groupBox5.Controls.Add(this.ProductosAgotados);
             this.groupBox5.Controls.Add(this.iconPictureBox5);
-            this.groupBox5.Location = new System.Drawing.Point(864, 35);
+            this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox5.Location = new System.Drawing.Point(906, 36);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(200, 100);
+            this.groupBox5.Size = new System.Drawing.Size(216, 100);
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
             // 
@@ -336,7 +342,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(8, 82);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(102, 13);
+            this.label11.Size = new System.Drawing.Size(144, 16);
             this.label11.TabIndex = 4;
             this.label11.Text = "Productos sin Stock";
             // 
@@ -352,7 +358,7 @@
             // 
             // iconPictureBox5
             // 
-            this.iconPictureBox5.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.iconPictureBox5.BackColor = System.Drawing.Color.WhiteSmoke;
             this.iconPictureBox5.ForeColor = System.Drawing.Color.Red;
             this.iconPictureBox5.IconChar = FontAwesome.Sharp.IconChar.Exclamation;
             this.iconPictureBox5.IconColor = System.Drawing.Color.Red;
@@ -365,7 +371,7 @@
             // 
             // btnExportarPDF
             // 
-            this.btnExportarPDF.BackColor = System.Drawing.Color.White;
+            this.btnExportarPDF.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btnExportarPDF.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExportarPDF.FlatAppearance.BorderSize = 0;
             this.btnExportarPDF.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -375,7 +381,7 @@
             this.btnExportarPDF.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnExportarPDF.IconSize = 28;
             this.btnExportarPDF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExportarPDF.Location = new System.Drawing.Point(1070, 93);
+            this.btnExportarPDF.Location = new System.Drawing.Point(1137, 93);
             this.btnExportarPDF.Name = "btnExportarPDF";
             this.btnExportarPDF.Size = new System.Drawing.Size(114, 38);
             this.btnExportarPDF.TabIndex = 64;
@@ -386,7 +392,7 @@
             // 
             // btnExportarExcel
             // 
-            this.btnExportarExcel.BackColor = System.Drawing.Color.White;
+            this.btnExportarExcel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btnExportarExcel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExportarExcel.FlatAppearance.BorderSize = 0;
             this.btnExportarExcel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(255)))), ((int)(((byte)(224)))));
@@ -396,7 +402,7 @@
             this.btnExportarExcel.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnExportarExcel.IconSize = 28;
             this.btnExportarExcel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExportarExcel.Location = new System.Drawing.Point(1070, 43);
+            this.btnExportarExcel.Location = new System.Drawing.Point(1137, 43);
             this.btnExportarExcel.Name = "btnExportarExcel";
             this.btnExportarExcel.Size = new System.Drawing.Size(114, 44);
             this.btnExportarExcel.TabIndex = 63;
@@ -607,19 +613,22 @@
             // 
             // label14
             // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label14.BackColor = System.Drawing.Color.White;
+            this.label14.BackColor = System.Drawing.Color.Teal;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(4, 151);
+            this.label14.Location = new System.Drawing.Point(-49, -2);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(1628, 52);
+            this.label14.Size = new System.Drawing.Size(1687, 710);
             this.label14.TabIndex = 69;
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtBusqueda
             // 
             this.txtBusqueda.AllowDrop = true;
-            this.txtBusqueda.Location = new System.Drawing.Point(8, 171);
+            this.txtBusqueda.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBusqueda.Location = new System.Drawing.Point(906, 168);
             this.txtBusqueda.MaximumSize = new System.Drawing.Size(340, 20);
             this.txtBusqueda.Name = "txtBusqueda";
             this.txtBusqueda.Size = new System.Drawing.Size(290, 20);
@@ -628,10 +637,11 @@
             // cboBusquedaCategorias
             // 
             this.cboBusquedaCategorias.AllowDrop = true;
+            this.cboBusquedaCategorias.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBusquedaCategorias.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.cboBusquedaCategorias.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBusquedaCategorias.FormattingEnabled = true;
-            this.cboBusquedaCategorias.Location = new System.Drawing.Point(302, 170);
+            this.cboBusquedaCategorias.Location = new System.Drawing.Point(1200, 167);
             this.cboBusquedaCategorias.Name = "cboBusquedaCategorias";
             this.cboBusquedaCategorias.Size = new System.Drawing.Size(161, 21);
             this.cboBusquedaCategorias.TabIndex = 71;
@@ -639,10 +649,11 @@
             // cboBusquedaPorStock
             // 
             this.cboBusquedaPorStock.AllowDrop = true;
+            this.cboBusquedaPorStock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBusquedaPorStock.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.cboBusquedaPorStock.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBusquedaPorStock.FormattingEnabled = true;
-            this.cboBusquedaPorStock.Location = new System.Drawing.Point(468, 170);
+            this.cboBusquedaPorStock.Location = new System.Drawing.Point(1366, 167);
             this.cboBusquedaPorStock.Name = "cboBusquedaPorStock";
             this.cboBusquedaPorStock.Size = new System.Drawing.Size(161, 21);
             this.cboBusquedaPorStock.TabIndex = 72;
@@ -650,6 +661,7 @@
             // btnLimpiarCombo
             // 
             this.btnLimpiarCombo.AllowDrop = true;
+            this.btnLimpiarCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLimpiarCombo.BackColor = System.Drawing.SystemColors.Control;
             this.btnLimpiarCombo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLimpiarCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -658,7 +670,7 @@
             this.btnLimpiarCombo.IconColor = System.Drawing.Color.Black;
             this.btnLimpiarCombo.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnLimpiarCombo.IconSize = 24;
-            this.btnLimpiarCombo.Location = new System.Drawing.Point(686, 169);
+            this.btnLimpiarCombo.Location = new System.Drawing.Point(1584, 166);
             this.btnLimpiarCombo.Margin = new System.Windows.Forms.Padding(2);
             this.btnLimpiarCombo.Name = "btnLimpiarCombo";
             this.btnLimpiarCombo.Size = new System.Drawing.Size(48, 23);
@@ -670,6 +682,7 @@
             // btnBuscar
             // 
             this.btnBuscar.AllowDrop = true;
+            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBuscar.BackColor = System.Drawing.SystemColors.Control;
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -678,7 +691,7 @@
             this.btnBuscar.IconColor = System.Drawing.Color.Black;
             this.btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnBuscar.IconSize = 24;
-            this.btnBuscar.Location = new System.Drawing.Point(634, 169);
+            this.btnBuscar.Location = new System.Drawing.Point(1532, 166);
             this.btnBuscar.Margin = new System.Windows.Forms.Padding(2);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(48, 23);
@@ -687,17 +700,28 @@
             this.btnBuscar.AutoSizeChanged += new System.EventHandler(this.btnLimpiarCombo_AutoSizeChanged);
             this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.Teal;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(39, 166);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(220, 23);
+            this.label2.TabIndex = 75;
+            this.label2.Text = "Detalles Proncipales";
+            // 
             // frmReporteInventario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1636, 693);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnLimpiarCombo);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.cboBusquedaPorStock);
             this.Controls.Add(this.cboBusquedaCategorias);
             this.Controls.Add(this.txtBusqueda);
-            this.Controls.Add(this.label14);
             this.Controls.Add(this.dvgDataVenta);
             this.Controls.Add(this.dgvDataAccion);
             this.Controls.Add(this.dgvDataCosto);
@@ -710,6 +734,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.label14);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.Name = "frmReporteInventario";
             this.Text = "frmReporteInventario";
@@ -786,5 +811,6 @@
         private System.Windows.Forms.ComboBox cboBusquedaPorStock;
         private FontAwesome.Sharp.IconButton btnLimpiarCombo;
         private FontAwesome.Sharp.IconButton btnBuscar;
+        private System.Windows.Forms.Label label2;
     }
 }

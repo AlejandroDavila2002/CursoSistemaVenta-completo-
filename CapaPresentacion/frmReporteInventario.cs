@@ -46,6 +46,11 @@ namespace CapaPresentacion
 
             // 3. Cargar los datos por defecto
             CargarDatosReporte();
+
+            AplicarEstiloGris(dgvDataProducto);
+            AplicarEstiloGris(dgvDataCosto);
+            AplicarEstiloGris(dvgDataVenta);
+            AplicarEstiloGris(dgvDataAccion);
         }
 
         private void CargarDatosReporte()
@@ -58,6 +63,9 @@ namespace CapaPresentacion
             dgvDataCosto.Rows.Clear();
             dvgDataVenta.Rows.Clear();
             dgvDataAccion.Rows.Clear();
+
+            dgvDataProducto.Columns["IMG"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgvDataProducto.Columns["IMG"].Width = 40;
 
             // 3. Variables para los totales
             decimal sumCostoTotal = 0;
@@ -190,9 +198,23 @@ namespace CapaPresentacion
                     totalItems++;
                     int stock = Convert.ToInt32(row.Cells["STOCK"].Value);
 
-                    // Obtener valores de las otras tablas por el mismo índice
-                    decimal costoFila = Convert.ToDecimal(dgvDataCosto.Rows[row.Index].Cells["TOTALCOSTO"].Value);
-                    decimal ventaFila = Convert.ToDecimal(dvgDataVenta.Rows[row.Index].Cells["TOTALVENTA"].Value);
+                    // --- CORRECCIÓN AQUÍ ---
+                    // 1. Obtenemos el texto de la celda
+                    string textoCosto = dgvDataCosto.Rows[row.Index].Cells["TOTALCOSTO"].Value.ToString();
+                    string textoVenta = dvgDataVenta.Rows[row.Index].Cells["TOTALVENTA"].Value.ToString();
+
+                    // 2. Limpiamos el símbolo "$" y los espacios en blanco
+                    textoCosto = textoCosto.Replace("$", "").Trim();
+                    textoVenta = textoVenta.Replace("$", "").Trim();
+
+                    // 3. Convertimos el texto limpio a decimal
+                    // Usamos decimal.Parse asumiendo que el formato numérico coincide con tu configuración regional
+                    decimal costoFila = 0;
+                    decimal ventaFila = 0;
+
+                    decimal.TryParse(textoCosto, out costoFila);
+                    decimal.TryParse(textoVenta, out ventaFila);
+                    // ------------------------
 
                     totalCosto += costoFila;
                     totalVenta += ventaFila;
@@ -204,8 +226,8 @@ namespace CapaPresentacion
 
             // Actualizar la interfaz
             totalproductos.Text = totalItems.ToString();
-            valorInventario_Costo.Text = totalCosto.ToString("N2");
-            valorInventario_Venta.Text = totalVenta.ToString("N2");
+            valorInventario_Costo.Text = "$ " + totalCosto.ToString("N2"); // Agregamos el $ visualmente aquí
+            valorInventario_Venta.Text = "$ " + totalVenta.ToString("N2");
             ProductosBajo.Text = productosBajo.ToString();
             ProductosAgotados.Text = productosAgotados.ToString();
         }
@@ -236,8 +258,21 @@ namespace CapaPresentacion
                 if (row.Visible)
                 {
                     int i = row.Index;
-                    decimal tCosto = Convert.ToDecimal(dgvDataCosto.Rows[i].Cells["TOTALCOSTO"].Value);
-                    decimal tVenta = Convert.ToDecimal(dvgDataVenta.Rows[i].Cells["TOTALVENTA"].Value);
+
+                    // --- CORRECCIÓN PARA EXCEL ---
+                    string textoCosto = dgvDataCosto.Rows[i].Cells["TOTALCOSTO"].Value.ToString();
+                    string textoVenta = dvgDataVenta.Rows[i].Cells["TOTALVENTA"].Value.ToString();
+
+                    // Limpieza
+                    textoCosto = textoCosto.Replace("$", "").Trim();
+                    textoVenta = textoVenta.Replace("$", "").Trim();
+
+                    decimal tCosto = 0;
+                    decimal tVenta = 0;
+
+                    decimal.TryParse(textoCosto, out tCosto);
+                    decimal.TryParse(textoVenta, out tVenta);
+                    // -----------------------------
 
                     dt.Rows.Add(
                         row.Cells["CODIGO"].Value.ToString(),
@@ -321,20 +356,24 @@ namespace CapaPresentacion
                     {
                         int i = row.Index;
 
-                        // Lógica de validación de Stock para asignar la clase CSS a la fila
+                        // --- LÓGICA DE COLORES CORREGIDA ---
                         int stock = Convert.ToInt32(row.Cells["STOCK"].Value);
-                        // Definimos un umbral para stock bajo (puedes ajustarlo o traerlo de la DB)
-                        int stockMinimo = 10;
-
                         string claseFila = "";
-                        if (stock <= 0)
+
+                        // Validación exacta:
+                        // 0 = Agotado (Rojo)
+                        // 1, 2, 3 = Bajo (Amarillo)
+                        // 4 o más = Normal (Sin color)
+
+                        if (stock == 0)
                         {
-                            claseFila = "class='stock-agotado'"; // Fondo Rojo
+                            claseFila = "class='stock-agotado'";
                         }
-                        else if (stock <= stockMinimo)
+                        else if (stock > 0 && stock < 4)
                         {
-                            claseFila = "class='stock-bajo'";    // Fondo Amarillo
+                            claseFila = "class='stock-bajo'";
                         }
+                        // -----------------------------------
 
                         // Construcción de la fila HTML
                         filas.Append($"<tr {claseFila}>");
@@ -391,6 +430,39 @@ namespace CapaPresentacion
             {
                 MessageBox.Show("Error al generar el PDF: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void AplicarEstiloGris(DataGridView dgv)
+        {
+            // 1. DESACTIVAR el estilo visual de Windows para poder pintar los encabezados
+            dgv.EnableHeadersVisualStyles = false;
+
+            // 2. Estilo de los ENCABEZADOS (Gris Oscuro Profesional)
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64); // Gris oscuro
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;             // Texto blanco
+            dgv.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9, FontStyle.Bold);
+            dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            // 3. Estilo de las FILAS (Alternadas y Selección)
+            dgv.BackgroundColor = Color.White; // Fondo del control
+
+            // Fila normal
+            dgv.DefaultCellStyle.BackColor = Color.White;
+            dgv.DefaultCellStyle.ForeColor = Color.Black;
+            dgv.DefaultCellStyle.SelectionBackColor = Color.Silver; // Gris claro al seleccionar (Gainsboro o Silver)
+            dgv.DefaultCellStyle.SelectionForeColor = Color.Black;
+
+            // Fila Alternada (Opcional: un gris muy tenue para facilitar lectura)
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
+            dgv.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.Silver;
+
+            // 4. Bordes y Grid
+            dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgv.GridColor = Color.FromArgb(224, 224, 224); // Líneas divisoras gris suave
+            dgv.RowHeadersVisible = false; // Ocultar la primera columna vacía
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
     }

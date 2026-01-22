@@ -29,18 +29,18 @@
             text-align: center;
         }
 
-        .business-info h2 {
-            margin: 0;
-            color: #1a5276;
-            font-size: 18px;
-            text-transform: uppercase;
-        }
+            .business-info h2 {
+                margin: 0;
+                color: #1a5276;
+                font-size: 18px;
+                text-transform: uppercase;
+            }
 
-        .business-info p {
-            margin: 2px 0;
-            font-size: 10px;
-            color: #555;
-        }
+            .business-info p {
+                margin: 2px 0;
+                font-size: 10px;
+                color: #555;
+            }
 
         .date-info {
             text-align: right;
@@ -58,41 +58,47 @@
             border-radius: 4px;
         }
 
-        .report-title h3 {
-            margin: 0;
-            letter-spacing: 1px;
-            font-size: 14px;
-        }
+            .report-title h3 {
+                margin: 0;
+                letter-spacing: 1px;
+                font-size: 14px;
+            }
 
-        /* Contenedores de Resumen (KPIs) */
+        /* --- CORRECCIÓN DE ESPACIADO EN RESUMEN (KPIs) --- */
         .summary-table {
             width: 100%;
             margin-bottom: 20px;
-            border-spacing: 8px; /* Aumentado para más separación */
+            border-spacing: 10px; /* Más espacio entre cuadros */
             border-collapse: separate;
         }
 
         .summary-box {
             border: 1px solid #d1d1d1;
             background-color: #fcfcfc;
-            padding: 8px; /* Aumentado para mayor holgura */
+            padding: 12px 5px; /* 12px arriba/abajo para dar aire */
             text-align: center;
             width: 20%;
             border-radius: 4px;
+            vertical-align: top; /* Asegura alineación superior */
         }
 
-        .summary-box strong {
+        /* Usamos clases específicas en lugar de etiquetas genéricas para asegurar el estilo */
+        .kpi-title {
             display: block;
-            font-size: 9px; /* Ajustado para coincidir con valores */
+            font-size: 9px;
             color: #1a5276;
             text-transform: uppercase;
             border-bottom: 1px solid #eee;
-            margin-bottom: 5px;
+            margin-bottom: 8px; /* Separación entre el título y el número */
+            padding-bottom: 3px;
+            font-weight: bold;
         }
 
-        .summary-value {
-            font-size: 9px; /* Tamaño unificado */
+        .kpi-value {
+            display: block;
+            font-size: 11px; /* Un poco más grande para destacar */
             font-weight: bold;
+            margin-top: 2px;
         }
 
         /* Tabla de Datos Principal */
@@ -102,41 +108,48 @@
             table-layout: fixed;
         }
 
-        table.data-table thead tr {
-            background-color: #2c3e50;
-            color: white;
+            table.data-table thead tr {
+                background-color: #2c3e50;
+                color: white;
+            }
+
+            table.data-table th {
+                padding: 10px 4px; /* Más aire en encabezados */
+                text-align: center;
+                font-size: 9px;
+                text-transform: uppercase;
+                border: 1px solid #2c3e50;
+            }
+
+            table.data-table td {
+                border: 1px solid #ddd;
+                padding: 8px 5px; /* Más aire en las celdas */
+                font-size: 9px;
+                word-wrap: break-word;
+            }
+
+        /* === COLORES DEFINITIVOS (Tonos medios/fuertes) === */
+
+        /* Stock Bajo: Ámbar Intenso (#FFD54F) */
+        tr.stock-bajo td {
+            background-color: #FFD54F;
+            color: #000000;
         }
 
-        table.data-table th {
-            padding: 8px 4px; /* Mayor separación */
+        /* Stock Agotado: Rojo Salmón Fuerte (#EF9A9A) */
+        tr.stock-agotado td {
+            background-color: #EF9A9A;
+            color: #000000;
+        }
+
+        /* Utilidades */
+        .text-center {
             text-align: center;
-            font-size: 9px;
-            text-transform: uppercase;
-            border: 1px solid #2c3e50;
         }
 
-        table.data-table td {
-            border: 1px solid #ddd;
-            padding: 7px 4px; /* Mayor separación entre filas */
-            font-size: 9px; /* Tamaño unificado para letras y números */
-            word-wrap: break-word;
+        .text-right {
+            text-align: right;
         }
-
-        /* Clases de estado para el Stock (usar en la generación de {{filas}}) */
-        .stock-bajo {
-            color: #D4AC0D; /* Amarillo / Dorado */
-            font-weight: bold;
-        }
-
-        .stock-agotado {
-            color: #CB4335; /* Rojo */
-            font-weight: bold;
-        }
-
-        /* Utilidades de alineación */
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .bold { font-weight: bold; }
     </style>
 </head>
 <body>
@@ -162,11 +175,26 @@
 
     <table class="summary-table">
         <tr>
-            <td class="summary-box"><strong>Total Productos</strong><span class="summary-value">{{totalprods}}</span></td>
-            <td class="summary-box"><strong>Valor (Costo)</strong><span class="summary-value">{{vcosto}}</span></td>
-            <td class="summary-box"><strong>Valor (Venta)</strong><span class="summary-value">{{vventa}}</span></td>
-            <td class="summary-box"><strong>Stock Bajo</strong><span class="summary-value" style="color: #D4AC0D;">{{sbajo}}</span></td>
-            <td class="summary-box"><strong>Agotados</strong><span class="summary-value" style="color: #CB4335;">{{sagotado}}</span></td>
+            <td class="summary-box">
+                <div class="kpi-title">Total Productos</div>
+                <div class="kpi-value">{{totalprods}}</div>
+            </td>
+            <td class="summary-box">
+                <div class="kpi-title">Valor (Costo)</div>
+                <div class="kpi-value">{{vcosto}}</div>
+            </td>
+            <td class="summary-box">
+                <div class="kpi-title">Valor (Venta)</div>
+                <div class="kpi-value">{{vventa}}</div>
+            </td>
+            <td class="summary-box">
+                <div class="kpi-title">Stock Bajo</div>
+                <div class="kpi-value" style="color: #B7950B;">{{sbajo}}</div>
+            </td>
+            <td class="summary-box">
+                <div class="kpi-title">Agotados</div>
+                <div class="kpi-value" style="color: #C0392B;">{{sagotado}}</div>
+            </td>
         </tr>
     </table>
 

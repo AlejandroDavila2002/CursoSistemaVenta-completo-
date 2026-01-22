@@ -73,7 +73,7 @@ namespace CapaPresentacion.modales
             dgvCuotas.Columns["NumeroCuota"].Width = 40;
 
             dgvCuotas.Columns["Estado"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dgvCuotas.Columns["Estado"].Width = 180;
+            dgvCuotas.Columns["Estado"].Width = 200;
 
 
 

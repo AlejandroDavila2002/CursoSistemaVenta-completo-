@@ -68,7 +68,11 @@ namespace CapaPresentacion
             foreach (ReporteInventario item in lista)
             {
                     // A. Tabla Producto
-                    dgvDataProducto.Rows.Add(new object[] { "", item.Codigo, item.Producto, item.Stock });
+                    int indiceFila = dgvDataProducto.Rows.Add(new object[] { "", item.Codigo, item.Producto, item.Stock });
+    
+                    // Asignar la categoría al Tag de la celda PRODUCTO para usarla en el filtro
+                    dgvDataProducto.Rows[indiceFila].Cells["PRODUCTO"].Tag = item.Categoria;
+
 
                     // B. Tabla Costo (Agregamos "$ " para que se vea profesional)
                     dgvDataCosto.Rows.Add(new object[] {

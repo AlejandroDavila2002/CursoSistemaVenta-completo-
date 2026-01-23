@@ -66,7 +66,7 @@ namespace CapaPresentacion.modales
                     if (buscarEnBs)
                     {
                         // Calculamos el monto en Bs usando la tasa histórica de esa compra
-                        decimal montoEnBs = c.MontoTotal * c.TasaCambio; // O el campo que uses para total en Bs
+                        decimal montoEnBs = c.MontoTotal; // O el campo que uses para total en Bs
                         montoFormateado = $"Bs. {montoEnBs.ToString("N2")}";
                     }
                     else

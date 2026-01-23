@@ -1,12 +1,13 @@
 ﻿using CapaEntidad;
 using CapaNegocio;
+using CapaPresentacion.modales;
 using CapaPresentacion.utilidades;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using CapaPresentacion.modales;
 
 namespace CapaPresentacion
 {
@@ -501,6 +502,80 @@ namespace CapaPresentacion
             }
         }
 
+        private void btnCerrarCaja_Click(object sender, EventArgs e)
+        {
+            // 1. Validaciones iniciales
+            if (MessageBox.Show("¿Desea realizar el cierre de caja del día actual?", "Confirmar Cierre", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            {
+                return;
+            }
 
+            // 2. Obtener la fecha de HOY para el cierre
+            string fechaCierre = DateTime.Now.ToString("yyyy-MM-dd"); // O dtpFechaInicio.Value.ToString("yyyy-MM-dd") si quieres cerrar una fecha elegida
+
+            // 3. Obtener los datos (La lista detallada y el cálculo)
+            // Usamos el método que creamos en el Paso 3 modificado
+            CN_FlujoCaja negocio = new CN_FlujoCaja();
+            DataTable dtVentasCierre = negocio.ObtenerVentasParaCierre(fechaCierre, fechaCierre);
+
+            // 4. Calcular el Monto Teórico Total desde la misma lista para asegurar coincidencia
+            decimal montoTeoricoTotal = 0;
+
+            // Sumamos la columna "MontoUSD" que calculamos en la query SQL
+            if (dtVentasCierre.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtVentasCierre.Rows)
+                {
+                    montoTeoricoTotal += Convert.ToDecimal(row["MontoUSD"]);
+                }
+            }
+            else
+            {
+                // Opcional: Permitir cerrar en cero o avisar
+                if (MessageBox.Show("No hay ventas registradas para cerrar hoy. ¿Desea cerrar la caja en cero?", "Sin Movimientos", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    return;
+            }
+
+            // 5. Llamar al Modal pasando los datos
+            using (var modal = new CapaPresentacion.modales.mdCierreCaja(montoTeoricoTotal, dtVentasCierre))
+            {
+                var result = modal.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    // 6. Si el usuario aceptó en el modal, procedemos a Guardar en BD
+                    try
+                    {
+                        CierreCaja oCierre = new CierreCaja()
+                        {
+                            oUsuario = new Usuario() { IdUsuario = 1 }, 
+                            MontoTeorico = montoTeoricoTotal,
+                            MontoReal = modal.MontoRealIngresado,
+                            Observacion = modal.ObservacionIngresada
+                        };
+
+                        string mensaje = string.Empty;
+
+                        // Llamada al método de CapaDatos (Paso 3)
+                        bool respuesta = negocio.RegistrarCierre(oCierre, dtVentasCierre, out mensaje);
+
+                        if (respuesta)
+                        {
+                            MessageBox.Show($"Cierre registrado correctamente.\n\nDiferencia detectada: $ {oCierre.MontoReal - oCierre.MontoTeorico}", "Cierre Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Opcional: Reiniciar pantalla o inhabilitar botón de cierre por hoy
+                        }
+                        else
+                        {
+                            MessageBox.Show(mensaje, "Error al Guardar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error crítico: " + ex.Message);
+                    }
+                }
+            }
+        }
     }
 }

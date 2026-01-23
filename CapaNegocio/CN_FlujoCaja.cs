@@ -1,6 +1,7 @@
 ﻿using CapaDatos;
 using CapaEntidad;
 using System.Collections.Generic;
+using System.Data;
 
 namespace CapaNegocio
 {
@@ -104,6 +105,20 @@ namespace CapaNegocio
             return objcd.EliminarFormaPago(id, out Mensaje);
         }
 
+
+
+
+        // Metodos para CIERRE DE CAJA
+
+        public DataTable ObtenerVentasParaCierre(string fechaInicio, string fechaFin)
+        {
+            return objcd.ObtenerVentasParaCierre(fechaInicio, fechaFin);
+        }
+
+        public bool RegistrarCierre(CierreCaja obj, DataTable dtDetalle, out string Mensaje)
+        {
+            return objcd.RegistrarCierre(obj, dtDetalle, out Mensaje);
+        }
 
     }
 }

@@ -44,6 +44,7 @@
     <Compile Include="Abono.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="CategoriaGasto.cs" />
+    <Compile Include="CierreCaja.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Compra.cs" />
     <Compile Include="CuentaPorCobrar.cs" />

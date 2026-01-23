@@ -103,14 +103,15 @@
             this.cboBusquedaDeudores = new System.Windows.Forms.ComboBox();
             this.txtBusquedaDeudores = new System.Windows.Forms.TextBox();
             this.dgvDataDeudores = new System.Windows.Forms.DataGridView();
+            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MontoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FechaDeuda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnBuscarDeudores = new FontAwesome.Sharp.IconButton();
             this.lblTotalDeudoresPendientes = new System.Windows.Forms.Label();
             this.btnLimpiarDeudores = new FontAwesome.Sharp.IconButton();
             this.gpbDeudores = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.Cliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MontoCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FechaDeuda = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnCerrarCaja = new FontAwesome.Sharp.IconButton();
             this.gpbGastosOperativos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataGastosOperativos)).BeginInit();
             this.gpbutilidad.SuspendLayout();
@@ -835,7 +836,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.VentasVSGastos.Series.Add(series1);
-            this.VentasVSGastos.Size = new System.Drawing.Size(452, 100);
+            this.VentasVSGastos.Size = new System.Drawing.Size(339, 100);
             this.VentasVSGastos.TabIndex = 104;
             // 
             // label12
@@ -904,6 +905,27 @@
             this.dgvDataDeudores.Name = "dgvDataDeudores";
             this.dgvDataDeudores.Size = new System.Drawing.Size(505, 541);
             this.dgvDataDeudores.TabIndex = 0;
+            // 
+            // Cliente
+            // 
+            this.Cliente.HeaderText = "Cliente";
+            this.Cliente.Name = "Cliente";
+            this.Cliente.ReadOnly = true;
+            this.Cliente.Width = 180;
+            // 
+            // MontoCliente
+            // 
+            this.MontoCliente.HeaderText = "Monto";
+            this.MontoCliente.Name = "MontoCliente";
+            this.MontoCliente.ReadOnly = true;
+            this.MontoCliente.Width = 150;
+            // 
+            // FechaDeuda
+            // 
+            this.FechaDeuda.HeaderText = "Fecha de Deuda";
+            this.FechaDeuda.Name = "FechaDeuda";
+            this.FechaDeuda.ReadOnly = true;
+            this.FechaDeuda.Width = 150;
             // 
             // btnBuscarDeudores
             // 
@@ -983,32 +1005,34 @@
             this.label16.TabIndex = 104;
             this.label16.Text = "Lista de Deudores";
             // 
-            // Cliente
+            // btnCerrarCaja
             // 
-            this.Cliente.HeaderText = "Cliente";
-            this.Cliente.Name = "Cliente";
-            this.Cliente.ReadOnly = true;
-            this.Cliente.Width = 180;
-            // 
-            // MontoCliente
-            // 
-            this.MontoCliente.HeaderText = "Monto";
-            this.MontoCliente.Name = "MontoCliente";
-            this.MontoCliente.ReadOnly = true;
-            this.MontoCliente.Width = 150;
-            // 
-            // FechaDeuda
-            // 
-            this.FechaDeuda.HeaderText = "Fecha de Deuda";
-            this.FechaDeuda.Name = "FechaDeuda";
-            this.FechaDeuda.ReadOnly = true;
-            this.FechaDeuda.Width = 150;
+            this.btnCerrarCaja.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnCerrarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrarCaja.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCerrarCaja.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrarCaja.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnCerrarCaja.IconChar = FontAwesome.Sharp.IconChar.Save;
+            this.btnCerrarCaja.IconColor = System.Drawing.Color.White;
+            this.btnCerrarCaja.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnCerrarCaja.IconSize = 24;
+            this.btnCerrarCaja.Location = new System.Drawing.Point(1795, 70);
+            this.btnCerrarCaja.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCerrarCaja.Name = "btnCerrarCaja";
+            this.btnCerrarCaja.Size = new System.Drawing.Size(104, 89);
+            this.btnCerrarCaja.TabIndex = 110;
+            this.btnCerrarCaja.Text = "Cierre";
+            this.btnCerrarCaja.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCerrarCaja.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCerrarCaja.UseVisualStyleBackColor = false;
+            this.btnCerrarCaja.Click += new System.EventHandler(this.btnCerrarCaja_Click);
             // 
             // frmFlujoCaja
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1906, 843);
+            this.Controls.Add(this.btnCerrarCaja);
             this.Controls.Add(this.gpbDeudores);
             this.Controls.Add(this.txtMonto);
             this.Controls.Add(this.label15);
@@ -1145,5 +1169,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Cliente;
         private System.Windows.Forms.DataGridViewTextBoxColumn MontoCliente;
         private System.Windows.Forms.DataGridViewTextBoxColumn FechaDeuda;
+        private FontAwesome.Sharp.IconButton btnCerrarCaja;
     }
 }

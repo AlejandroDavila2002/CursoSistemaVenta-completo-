@@ -114,11 +114,11 @@ namespace CapaDatos
         public Dictionary<string, decimal> ObtenerResumenFinanciero(string fechaInicio, string fechaFin)
         {
             Dictionary<string, decimal> resumen = new Dictionary<string, decimal>()
-    {
-        { "TotalIngresos", 0m },
-        { "TotalEgresosMercancia", 0m },
-        { "TotalGastosOperativos", 0m }
-    };
+            {
+                { "TotalIngresos", 0m },
+                { "TotalEgresosMercancia", 0m },
+                { "TotalGastosOperativos", 0m }
+            };
 
             using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
             {
@@ -126,34 +126,46 @@ namespace CapaDatos
                 {
                     StringBuilder query = new StringBuilder();
 
-                    // 1. INGRESOS POR VENTAS (Solo lo que se pagó en caja al momento: Iniciales o Contado)
-                    //    IMPORTANTE: Aquí usamos 'MontoPago', NO 'MontoTotal'. 
-                    //    Si la venta fue a crédito sin inicial, MontoPago es 0, así que no suma nada.
+                    // 1. INGRESOS POR VENTAS (MontoPago con conversión según TipoMoneda)
                     query.AppendLine("DECLARE @DineroVentas DECIMAL(18,2) = (");
-                    query.AppendLine("    SELECT ISNULL(SUM(MontoPago), 0) FROM VENTA");
+                    query.AppendLine("    SELECT ISNULL(SUM(");
+                    query.AppendLine("       CASE ");
+                    // Si la venta fue en Bolívares (VES), convertimos a Dólares
+                    query.AppendLine("           WHEN TipoMoneda = 'VES' THEN (MontoPago / ISNULL(NULLIF(TasaCambio, 0), 1))");
+                    // Si fue en USD, tomamos el pago directo
+                    query.AppendLine("           ELSE MontoPago ");
+                    query.AppendLine("       END");
+                    query.AppendLine("    ), 0) FROM VENTA");
                     query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
                     query.AppendLine(");");
 
-                    // 2. INGRESOS POR ABONOS (El dinero que entra después por cobros de créditos)
-                    //    Sumamos todo lo registrado en la tabla ABONO en ese rango de fechas.
+                    // 2. INGRESOS POR ABONOS (Se mantiene igual, asumiendo que el abono se registra ya convertido o en moneda base)
+                    // Si tus abonos también tienen moneda, habría que aplicar lógica similar. Por ahora lo dejamos estándar.
                     query.AppendLine("DECLARE @DineroAbonos DECIMAL(18,2) = (");
                     query.AppendLine("    SELECT ISNULL(SUM(Monto), 0) FROM ABONO");
                     query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
                     query.AppendLine(");");
 
-                    // 3. EGRESOS POR COMPRAS (Mercancía)
+                    // 3. EGRESOS POR COMPRAS (Mercancía) - Lógica inteligente (Mantenida del paso anterior)
                     query.AppendLine("DECLARE @EgresosCompras DECIMAL(18,2) = (");
-                    query.AppendLine("    SELECT ISNULL(SUM(MontoTotal), 0) FROM COMPRA");
+                    query.AppendLine("    SELECT ISNULL(SUM(");
+                    query.AppendLine("       CASE ");
+                    // Si EsCompraEnBs es 1 (True), convertimos a Dólares
+                    query.AppendLine("           WHEN EsCompraEnBs = 1 THEN (MontoTotal / ISNULL(NULLIF(TasaCambio, 0), 1))");
+                    // Si es 0 (USD), tomamos el total directo
+                    query.AppendLine("           ELSE MontoTotal ");
+                    query.AppendLine("       END");
+                    query.AppendLine("    ), 0) FROM COMPRA");
                     query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
                     query.AppendLine(");");
 
-                    // 4. GASTOS OPERATIVOS (Luz, agua, nómina, etc.)
+                    // 4. GASTOS OPERATIVOS
                     query.AppendLine("DECLARE @GastosOperativos DECIMAL(18,2) = (");
                     query.AppendLine("    SELECT ISNULL(SUM(Monto), 0) FROM GASTO");
                     query.AppendLine("    WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
                     query.AppendLine(");");
 
-                    // RESULTADO FINAL: Sumamos Ventas(Caja) + Abonos(Cobros)
+                    // RESULTADO FINAL
                     query.AppendLine("SELECT ");
                     query.AppendLine("(@DineroVentas + @DineroAbonos) AS TotalIngresosReal,");
                     query.AppendLine("@EgresosCompras AS TotalCompras,");
@@ -177,7 +189,7 @@ namespace CapaDatos
                 }
                 catch (Exception ex)
                 {
-                    // Opcional: Console.WriteLine(ex.Message);
+                    // Manejo de errores
                 }
             }
             return resumen;
@@ -352,5 +364,100 @@ namespace CapaDatos
             }
             return respuesta;
         }
+
+
+        // 1. MÉTODO PARA OBTENER LAS VENTAS QUE SE VAN A CERRAR (Con cálculo USD incluido)
+        public DataTable ObtenerVentasParaCierre(string fechaInicio, string fechaFin)
+        {
+            DataTable dt = new DataTable();
+            // Definimos las columnas que espera nuestro Type SQL [EDetalleCierreVenta]
+            dt.Columns.Add("IdVenta", typeof(int));
+            dt.Columns.Add("MontoOriginal", typeof(decimal));
+            dt.Columns.Add("MonedaOriginal", typeof(string));
+            dt.Columns.Add("TasaUtilizada", typeof(decimal));
+            dt.Columns.Add("MontoCalculadoUSD", typeof(decimal));
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    // Esta consulta replica tu lógica de conversión para obtener fila por fila
+                    query.AppendLine("SELECT IdVenta, MontoPago, TipoMoneda, TasaCambio,");
+                    query.AppendLine("CASE");
+                    query.AppendLine("   WHEN TipoMoneda = 'VES' THEN (MontoPago / ISNULL(NULLIF(TasaCambio,0),1))");
+                    query.AppendLine("   ELSE MontoPago");
+                    query.AppendLine("END as MontoUSD");
+                    query.AppendLine("FROM VENTA");
+                    query.AppendLine("WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@FInicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@FFin", fechaFin);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            // Llenamos el DataTable con los resultados
+                            dt.Rows.Add(
+                                Convert.ToInt32(dr["IdVenta"]),
+                                Convert.ToDecimal(dr["MontoPago"]),
+                                dr["TipoMoneda"].ToString(),
+                                Convert.ToDecimal(dr["TasaCambio"]),
+                                Convert.ToDecimal(dr["MontoUSD"])
+                            );
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    dt = new DataTable(); // Retornar vacío en error
+                }
+            }
+            return dt;
+        }
+
+        // 2. MÉTODO PARA REGISTRAR EL CIERRE (Recibe el Objeto y el DataTable de ventas)
+        public bool RegistrarCierre(CierreCaja obj, DataTable dtDetalle, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarCierreCompleto", oconexion);
+                    cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
+                    cmd.Parameters.AddWithValue("MontoTeorico", obj.MontoTeorico);
+                    cmd.Parameters.AddWithValue("MontoReal", obj.MontoReal);
+                    cmd.Parameters.AddWithValue("Observacion", obj.Observacion);
+
+                    // AQUÍ PASAMOS LA LISTA DE VENTAS AL SQL
+                    cmd.Parameters.AddWithValue("DetalleVentas", dtDetalle);
+
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                    Mensaje = ex.Message;
+                }
+            }
+            return respuesta;
+        }
+
+
     }
 }

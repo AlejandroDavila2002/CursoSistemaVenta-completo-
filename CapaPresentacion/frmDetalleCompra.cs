@@ -110,7 +110,7 @@ namespace CapaPresentacion
                 {
                     // Nota: Aquí asumo que quieres calcular el total en Bs basado en lo almacenado o calculado
                     // Si tienes un campo MontoTotalBs en la BD, úsalo. Si no, calcúlalo:
-                    decimal totalEnBs = oCompra.MontoTotal * oCompra.TasaCambio;
+                    decimal totalEnBs = oCompra.MontoTotal;
                     txtTotalaPagar.Text = totalEnBs.ToString("N2");
                 }
                 else

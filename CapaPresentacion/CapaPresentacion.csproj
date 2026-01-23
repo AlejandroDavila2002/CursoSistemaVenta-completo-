@@ -232,6 +232,12 @@
     <Compile Include="modales\mdCategoriaGasto.Designer.cs">
       <DependentUpon>mdCategoriaGasto.cs</DependentUpon>
     </Compile>
+    <Compile Include="modales\mdCierreCaja.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modales\mdCierreCaja.Designer.cs">
+      <DependentUpon>mdCierreCaja.cs</DependentUpon>
+    </Compile>
     <Compile Include="modales\mdCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdCategoriaGasto.resx">
       <DependentUpon>mdCategoriaGasto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="modales\mdCierreCaja.resx">
+      <DependentUpon>mdCierreCaja.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="modales\mdCliente.resx">
       <DependentUpon>mdCliente.cs</DependentUpon>

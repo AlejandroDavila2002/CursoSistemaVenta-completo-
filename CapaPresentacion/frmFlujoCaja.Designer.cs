@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -826,16 +826,16 @@
             this.VentasVSGastos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VentasVSGastos.BorderlineColor = System.Drawing.Color.WhiteSmoke;
-            chartArea1.Name = "ChartArea1";
-            this.VentasVSGastos.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.VentasVSGastos.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.VentasVSGastos.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.VentasVSGastos.Legends.Add(legend2);
             this.VentasVSGastos.Location = new System.Drawing.Point(1451, 63);
             this.VentasVSGastos.Name = "VentasVSGastos";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.VentasVSGastos.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.VentasVSGastos.Series.Add(series2);
             this.VentasVSGastos.Size = new System.Drawing.Size(339, 100);
             this.VentasVSGastos.TabIndex = 104;
             // 
@@ -1007,6 +1007,7 @@
             // 
             // btnCerrarCaja
             // 
+            this.btnCerrarCaja.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCerrarCaja.BackColor = System.Drawing.Color.ForestGreen;
             this.btnCerrarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrarCaja.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1016,10 +1017,10 @@
             this.btnCerrarCaja.IconColor = System.Drawing.Color.White;
             this.btnCerrarCaja.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnCerrarCaja.IconSize = 24;
-            this.btnCerrarCaja.Location = new System.Drawing.Point(1795, 70);
+            this.btnCerrarCaja.Location = new System.Drawing.Point(1796, 65);
             this.btnCerrarCaja.Margin = new System.Windows.Forms.Padding(2);
             this.btnCerrarCaja.Name = "btnCerrarCaja";
-            this.btnCerrarCaja.Size = new System.Drawing.Size(104, 89);
+            this.btnCerrarCaja.Size = new System.Drawing.Size(104, 96);
             this.btnCerrarCaja.TabIndex = 110;
             this.btnCerrarCaja.Text = "Cierre";
             this.btnCerrarCaja.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

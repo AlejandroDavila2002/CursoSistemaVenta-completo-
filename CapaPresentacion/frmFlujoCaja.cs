@@ -504,75 +504,78 @@ namespace CapaPresentacion
 
         private void btnCerrarCaja_Click(object sender, EventArgs e)
         {
-            // 1. Validaciones iniciales
-            if (MessageBox.Show("¿Desea realizar el cierre de caja del día actual?", "Confirmar Cierre", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            // 1. Validar si ya se cerró HOY (Lógica de Turnos)
+            string fechaCierre = DateTime.Now.ToString("yyyy-MM-dd");
+            CN_FlujoCaja negocio = new CN_FlujoCaja();
+            string mensajeTurno = string.Empty;
+            bool existeCierreHoy = negocio.ValidarCierreExistente(fechaCierre, out mensajeTurno);
+
+            // 2. Obtener Datos y ALERTA DE PENDIENTES ANTIGUOS
+            decimal montoTeoricoNeto = 0;
+            bool hayPendientesAntiguos = false;
+
+            // Llamamos al nuevo método
+            DataTable dtVentasCierre = negocio.ObtenerDetalleCierre(fechaCierre, out montoTeoricoNeto, out hayPendientesAntiguos);
+
+            // --- CONSTRUCCIÓN DEL MENSAJE INTELIGENTE ---
+            string mensajeFinal = "¿Desea realizar el Cierre de Caja?";
+            MessageBoxIcon icono = MessageBoxIcon.Question;
+
+            if (hayPendientesAntiguos)
+            {
+                mensajeFinal = "⚠️ ¡ADVERTENCIA IMPORTANTE!\n\n" +
+                               "Se han detectado ventas o movimientos de DÍAS ANTERIORES que no fueron cerrados.\n" +
+                               "Estos montos se incluirán automáticamente en este cierre para regularizar la caja.\n\n" +
+                               "¿Desea proceder con el Cierre Acumulado?";
+                icono = MessageBoxIcon.Warning;
+            }
+            else if (existeCierreHoy)
+            {
+                mensajeFinal = "Ya existen cierres registrados el día de hoy.\n\n" +
+                               "¿Desea cerrar el TURNO ACTUAL y contabilizar solo los movimientos nuevos?";
+                icono = MessageBoxIcon.Information;
+            }
+
+            // Mostrar el mensaje construido
+            if (MessageBox.Show(mensajeFinal, "Confirmar Cierre", MessageBoxButtons.YesNo, icono) == DialogResult.No)
             {
                 return;
             }
 
-            // 2. Obtener la fecha de HOY para el cierre
-            string fechaCierre = DateTime.Now.ToString("yyyy-MM-dd"); // O dtpFechaInicio.Value.ToString("yyyy-MM-dd") si quieres cerrar una fecha elegida
-
-            // 3. Obtener los datos (La lista detallada y el cálculo)
-            // Usamos el método que creamos en el Paso 3 modificado
-            CN_FlujoCaja negocio = new CN_FlujoCaja();
-            DataTable dtVentasCierre = negocio.ObtenerVentasParaCierre(fechaCierre, fechaCierre);
-
-            // 4. Calcular el Monto Teórico Total desde la misma lista para asegurar coincidencia
-            decimal montoTeoricoTotal = 0;
-
-            // Sumamos la columna "MontoUSD" que calculamos en la query SQL
-            if (dtVentasCierre.Rows.Count > 0)
+            // Validar si hay datos (Si no hay nada de nada)
+            if (dtVentasCierre.Rows.Count == 0 && montoTeoricoNeto == 0)
             {
-                foreach (DataRow row in dtVentasCierre.Rows)
-                {
-                    montoTeoricoTotal += Convert.ToDecimal(row["MontoUSD"]);
-                }
-            }
-            else
-            {
-                // Opcional: Permitir cerrar en cero o avisar
-                if (MessageBox.Show("No hay ventas registradas para cerrar hoy. ¿Desea cerrar la caja en cero?", "Sin Movimientos", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                if (MessageBox.Show("No hay movimientos nuevos para cerrar. ¿Cerrar en cero?", "Sin Movimientos", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                     return;
             }
 
-            // 5. Llamar al Modal pasando los datos
-            using (var modal = new CapaPresentacion.modales.mdCierreCaja(montoTeoricoTotal, dtVentasCierre))
+            // 3. ABRIR EL MODAL (Igual que antes)
+            using (var modal = new CapaPresentacion.modales.mdCierreCaja(montoTeoricoNeto, dtVentasCierre))
             {
                 var result = modal.ShowDialog();
-
                 if (result == DialogResult.OK)
                 {
-                    // 6. Si el usuario aceptó en el modal, procedemos a Guardar en BD
                     try
                     {
                         CierreCaja oCierre = new CierreCaja()
                         {
-                            oUsuario = new Usuario() { IdUsuario = 1 }, 
-                            MontoTeorico = montoTeoricoTotal,
+                            oUsuario = new Usuario() { IdUsuario = 1 }, // Variable Global
+                            MontoTeorico = montoTeoricoNeto,
                             MontoReal = modal.MontoRealIngresado,
                             Observacion = modal.ObservacionIngresada
                         };
 
                         string mensaje = string.Empty;
-
-                        // Llamada al método de CapaDatos (Paso 3)
                         bool respuesta = negocio.RegistrarCierre(oCierre, dtVentasCierre, out mensaje);
 
                         if (respuesta)
-                        {
-                            MessageBox.Show($"Cierre registrado correctamente.\n\nDiferencia detectada: $ {oCierre.MontoReal - oCierre.MontoTeorico}", "Cierre Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // Opcional: Reiniciar pantalla o inhabilitar botón de cierre por hoy
-                        }
+                            MessageBox.Show($"Cierre Exitoso.\nDiferencia: $ {oCierre.MontoReal - oCierre.MontoTeorico}", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         else
-                        {
-                            MessageBox.Show(mensaje, "Error al Guardar", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                            MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error crítico: " + ex.Message);
+                        MessageBox.Show("Error: " + ex.Message);
                     }
                 }
             }

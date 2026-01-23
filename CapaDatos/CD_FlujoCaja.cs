@@ -367,13 +367,25 @@ namespace CapaDatos
 
 
         // 1. MÉTODO PARA OBTENER LAS VENTAS QUE SE VAN A CERRAR (Con cálculo USD incluido)
-        public DataTable ObtenerVentasParaCierre(string fechaInicio, string fechaFin)
+        // 1. OBTENER VENTAS (Ahora trae Cliente y Documento para verlos en el Modal)
+        // Método Renovado: Obtiene la lista Y el total calculado en BD
+
+        // 1. MÉTODO DE LECTURA (Agregamos columna "Tipo")
+        // Modifica la firma del método para devolver el booleano
+        public DataTable ObtenerDetalleCierre(string fecha, out decimal saldoFinalCalculado, out bool hayPendientesAntiguos)
         {
             DataTable dt = new DataTable();
-            // Definimos las columnas que espera nuestro Type SQL [EDetalleCierreVenta]
-            dt.Columns.Add("IdVenta", typeof(int));
+            saldoFinalCalculado = 0;
+            hayPendientesAntiguos = false; // Valor por defecto
+
+            // ... (Definición de columnas igual que antes) ...
+            dt.Columns.Add("IdMovimiento", typeof(int));
+            dt.Columns.Add("Tipo", typeof(string));
+            dt.Columns.Add("Hora", typeof(string));
+            dt.Columns.Add("NumeroDocumento", typeof(string));
+            dt.Columns.Add("NombreCliente", typeof(string));
             dt.Columns.Add("MontoOriginal", typeof(decimal));
-            dt.Columns.Add("MonedaOriginal", typeof(string));
+            dt.Columns.Add("TipoMoneda", typeof(string));
             dt.Columns.Add("TasaUtilizada", typeof(decimal));
             dt.Columns.Add("MontoCalculadoUSD", typeof(decimal));
 
@@ -381,50 +393,92 @@ namespace CapaDatos
             {
                 try
                 {
-                    StringBuilder query = new StringBuilder();
-                    // Esta consulta replica tu lógica de conversión para obtener fila por fila
-                    query.AppendLine("SELECT IdVenta, MontoPago, TipoMoneda, TasaCambio,");
-                    query.AppendLine("CASE");
-                    query.AppendLine("   WHEN TipoMoneda = 'VES' THEN (MontoPago / ISNULL(NULLIF(TasaCambio,0),1))");
-                    query.AppendLine("   ELSE MontoPago");
-                    query.AppendLine("END as MontoUSD");
-                    query.AppendLine("FROM VENTA");
-                    query.AppendLine("WHERE CONVERT(DATE, FechaRegistro) BETWEEN @FInicio AND @FFin");
+                    SqlCommand cmd = new SqlCommand("SP_ObtenerCierreCajaDetallado", oconexion);
+                    cmd.Parameters.AddWithValue("@Fecha", fecha);
 
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
-                    cmd.Parameters.AddWithValue("@FInicio", fechaInicio);
-                    cmd.Parameters.AddWithValue("@FFin", fechaFin);
-                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.Add("@SaldoFinalCaja", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                    cmd.Parameters["@SaldoFinalCaja"].Precision = 18; cmd.Parameters["@SaldoFinalCaja"].Scale = 2;
 
+                    cmd.Parameters.Add("@TotalVentas", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@TotalGastosYCompras", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                    // NUEVO PARÁMETRO DE SALIDA
+                    cmd.Parameters.Add("@HayPendientesAntiguos", SqlDbType.Bit).Direction = ParameterDirection.Output;
+
+                    cmd.CommandType = CommandType.StoredProcedure;
                     oconexion.Open();
+
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            // Llenamos el DataTable con los resultados
                             dt.Rows.Add(
-                                Convert.ToInt32(dr["IdVenta"]),
-                                Convert.ToDecimal(dr["MontoPago"]),
+                                Convert.ToInt32(dr["IdMovimiento"]),
+                                dr["Tipo"].ToString(),
+                                dr["Hora"].ToString(),
+                                dr["NumeroDocumento"].ToString(),
+                                dr["NombreCliente"].ToString(),
+                                Convert.ToDecimal(dr["MontoOriginal"]),
                                 dr["TipoMoneda"].ToString(),
-                                Convert.ToDecimal(dr["TasaCambio"]),
-                                Convert.ToDecimal(dr["MontoUSD"])
+                                Convert.ToDecimal(dr["TasaUtilizada"]),
+                                Convert.ToDecimal(dr["MontoCalculadoUSD"])
                             );
                         }
                     }
+                    if (cmd.Parameters["@SaldoFinalCaja"].Value != DBNull.Value)
+                        saldoFinalCalculado = Convert.ToDecimal(cmd.Parameters["@SaldoFinalCaja"].Value);
+
+                    // LEER LA ALERTA
+                    if (cmd.Parameters["@HayPendientesAntiguos"].Value != DBNull.Value)
+                        hayPendientesAntiguos = Convert.ToBoolean(cmd.Parameters["@HayPendientesAntiguos"].Value);
                 }
-                catch (Exception ex)
-                {
-                    dt = new DataTable(); // Retornar vacío en error
-                }
+                catch (Exception ex) { dt = new DataTable(); }
             }
             return dt;
         }
 
-        // 2. MÉTODO PARA REGISTRAR EL CIERRE (Recibe el Objeto y el DataTable de ventas)
-        public bool RegistrarCierre(CierreCaja obj, DataTable dtDetalle, out string Mensaje)
+        // 2. MÉTODO DE GUARDADO (Separa Ventas y Abonos)
+        public bool RegistrarCierre(CierreCaja obj, DataTable dtDetalleUnificado, out string Mensaje)
         {
             bool respuesta = false;
             Mensaje = string.Empty;
+
+            // A. PREPARAMOS TABLA DE VENTAS
+            DataTable dtVentasSQL = new DataTable();
+            dtVentasSQL.Columns.Add("IdVenta", typeof(int));
+            dtVentasSQL.Columns.Add("MontoOriginal", typeof(decimal));
+            dtVentasSQL.Columns.Add("MonedaOriginal", typeof(string));
+            dtVentasSQL.Columns.Add("TasaUtilizada", typeof(decimal));
+            dtVentasSQL.Columns.Add("MontoCalculadoUSD", typeof(decimal));
+
+            // B. PREPARAMOS TABLA DE ABONOS (Nueva)
+            DataTable dtAbonosSQL = new DataTable();
+            dtAbonosSQL.Columns.Add("IdAbono", typeof(int));
+            dtAbonosSQL.Columns.Add("Monto", typeof(decimal));
+
+            // C. SEPARAMOS LA LISTA QUE VIENE DEL GRID
+            foreach (DataRow row in dtDetalleUnificado.Rows)
+            {
+                string tipo = row["Tipo"].ToString();
+
+                if (tipo == "VENTA")
+                {
+                    dtVentasSQL.Rows.Add(
+                        row["IdMovimiento"],
+                        row["MontoOriginal"],
+                        row["TipoMoneda"],
+                        row["TasaUtilizada"],
+                        row["MontoCalculadoUSD"]
+                    );
+                }
+                else if (tipo == "ABONO")
+                {
+                    dtAbonosSQL.Rows.Add(
+                        row["IdMovimiento"], // En el SP definimos que IdMovimiento es IdAbono
+                        row["MontoCalculadoUSD"]
+                    );
+                }
+            }
 
             using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
             {
@@ -436,8 +490,9 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("MontoReal", obj.MontoReal);
                     cmd.Parameters.AddWithValue("Observacion", obj.Observacion);
 
-                    // AQUÍ PASAMOS LA LISTA DE VENTAS AL SQL
-                    cmd.Parameters.AddWithValue("DetalleVentas", dtDetalle);
+                    // PASAMOS LAS DOS LISTAS
+                    cmd.Parameters.AddWithValue("DetalleVentas", dtVentasSQL);
+                    cmd.Parameters.AddWithValue("DetalleAbonos", dtAbonosSQL);
 
                     cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
@@ -458,6 +513,44 @@ namespace CapaDatos
             return respuesta;
         }
 
+
+
+
+
+        // Método para verificar si ya existe un cierre en esa fecha
+        public bool ValidarCierreExistente(string fecha, out string mensaje)
+        {
+            bool existe = false;
+            mensaje = string.Empty;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    string query = "SELECT COUNT(*) FROM CIERRE_CAJA WHERE CONVERT(DATE, FechaCierre) = @Fecha";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@Fecha", fecha);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    int conteo = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (conteo > 0)
+                    {
+                        existe = true;
+                        // MENSAJE ACTUALIZADO: Informativo, no de advertencia crítica
+                        mensaje = $"Información: Se han encontrado {conteo} cierre(s) previos para el día de hoy.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    existe = false;
+                    mensaje = ex.Message;
+                }
+            }
+            return existe;
+        }
 
     }
 }

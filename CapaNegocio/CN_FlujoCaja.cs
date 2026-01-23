@@ -110,9 +110,9 @@ namespace CapaNegocio
 
         // Metodos para CIERRE DE CAJA
 
-        public DataTable ObtenerVentasParaCierre(string fechaInicio, string fechaFin)
+        public DataTable ObtenerDetalleCierre(string fecha, out decimal saldoFinal, out bool hayPendientes)
         {
-            return objcd.ObtenerVentasParaCierre(fechaInicio, fechaFin);
+            return objcd.ObtenerDetalleCierre(fecha, out saldoFinal, out hayPendientes);
         }
 
         public bool RegistrarCierre(CierreCaja obj, DataTable dtDetalle, out string Mensaje)
@@ -120,5 +120,10 @@ namespace CapaNegocio
             return objcd.RegistrarCierre(obj, dtDetalle, out Mensaje);
         }
 
+
+        public bool ValidarCierreExistente(string fecha, out string mensaje)
+        {
+            return objcd.ValidarCierreExistente(fecha, out mensaje);
+        }
     }
 }

@@ -29,38 +29,31 @@ namespace CapaPresentacion.modales
             txtMontoTeorico.Text = _montoTeorico.ToString("N2");
             txtMontoReal.Text = "0.00";
 
-            // La diferencia inicia en negativo porque el real es 0. 
-            // (Es decir: "Faltan" 500 porque no has contado nada aún).
             CalcularDiferencia();
 
-            // 2. Configurar Grid (CRÍTICO: Definir columnas antes de cargar datos)
+            // 2. Configurar Grid (Columnas)
             ConfigurarColumnasGrid();
 
-            // 3. Cargar Datos al Grid
+            // --- NUEVO: Aumentar Fuente y Tamaño ---
+            PersonalizarFuente();
+            // ---------------------------------------
+
+            // 3. Cargar Datos al Grid (Ahora las filas se crearán con la nueva altura)
             dgvData.DataSource = _dtVentas;
 
-            // 4. Aplicar Colores (Ahora sí funcionará porque las columnas tienen Nombre)
+            // 4. Aplicar Colores (Se mantiene igual)
             PintarColores();
 
             txtMontoReal.Select();
         }
+
 
         private void ConfigurarColumnasGrid()
         {
             dgvData.AutoGenerateColumns = false;
             dgvData.Columns.Clear();
 
-            // 1. Columna TIPO (Vital para diferenciar colores). 
-            // La ponemos Visible = false si no quieres que ocupe espacio visual, 
-            // pero debe estar ahí para que la lógica de colores funcione.
-            dgvData.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                Name = "Tipo",
-                DataPropertyName = "Tipo",
-                Visible = false
-            });
-
-            // 2. Hora
+            // 1. Hora
             dgvData.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "Hora",
@@ -69,13 +62,22 @@ namespace CapaPresentacion.modales
                 Width = 60
             });
 
-            // 3. Documento / Descripción (Aquí saldrá el Nro Factura o "ABONO CREDITO")
+            // 2. Descripción (Tipo)
+            dgvData.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                Name = "Tipo",
+                DataPropertyName = "Tipo",
+                HeaderText = "Descripción",
+                Width = 80
+            });
+
+            // 3. Código / Referencia
             dgvData.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NumeroDocumento",
                 DataPropertyName = "NumeroDocumento",
-                HeaderText = "Descripción",
-                Width = 120 // Un poco más ancho
+                HeaderText = "Código / Ref",
+                Width = 100
             });
 
             // 4. Cliente
@@ -84,10 +86,10 @@ namespace CapaPresentacion.modales
                 Name = "NombreCliente",
                 DataPropertyName = "NombreCliente",
                 HeaderText = "Cliente",
-                Width = 140
+                Width = 150
             });
 
-            // 5. Moneda
+            // 5. Divisa
             dgvData.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "TipoMoneda",
@@ -96,31 +98,34 @@ namespace CapaPresentacion.modales
                 Width = 40
             });
 
-            // 6. Monto Original
+            // 6. Monto Original (FORMATO N2)
             dgvData.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "MontoOriginal",
                 DataPropertyName = "MontoOriginal",
                 HeaderText = "Monto Orig.",
-                Width = 90
+                Width = 90,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2", Alignment = DataGridViewContentAlignment.MiddleRight } // Alineado a la derecha se ve mejor
             });
 
-            // 7. Tasa
+            // 7. Tasa (También le ponemos formato para uniformidad)
             dgvData.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "TasaUtilizada",
                 DataPropertyName = "TasaUtilizada",
                 HeaderText = "Tasa",
-                Width = 50
+                Width = 50,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2", Alignment = DataGridViewContentAlignment.MiddleRight }
             });
 
-            // 8. Total USD
+            // 8. Total USD (FORMATO N2)
             dgvData.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "MontoCalculadoUSD",
                 DataPropertyName = "MontoCalculadoUSD",
                 HeaderText = "Total USD",
-                Width = 90
+                Width = 90,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2", Alignment = DataGridViewContentAlignment.MiddleRight }
             });
         }
 
@@ -128,43 +133,41 @@ namespace CapaPresentacion.modales
         {
             foreach (DataGridViewRow row in dgvData.Rows)
             {
-                // Validamos que la fila tenga datos para evitar errores
+                // Validamos que la fila tenga datos
                 if (row.Cells["Tipo"].Value != null)
                 {
                     string tipo = row.Cells["Tipo"].Value.ToString();
 
-                    // Verificamos moneda con seguridad (por si viene nula)
+                    // Obtenemos la moneda con seguridad
                     string moneda = "";
                     if (row.Cells["TipoMoneda"].Value != null)
                         moneda = row.Cells["TipoMoneda"].Value.ToString();
 
-                    // LÓGICA DE COLORES
                     if (tipo == "ABONO")
                     {
-                        // CASO 1: ES UN ABONO (Fondo Naranja Claro)
-                        // Usamos BackColor para resaltar toda la fila
-                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 240, 220);
-                        row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 200, 150);
+                        // ESTILO ABONOS: Limpio, solo texto en Naranja
+                        // Pintamos las columnas numéricas y la moneda
+                        row.Cells["MontoOriginal"].Style.ForeColor = Color.DarkOrange;
+                        row.Cells["TipoMoneda"].Style.ForeColor = Color.DarkOrange;
 
-                        // Ponemos la letra en un color fuerte para contraste
-                        row.DefaultCellStyle.ForeColor = Color.Chocolate;
+                        // Pintamos y resaltamos la descripción "ABONO"
+                        row.Cells["Tipo"].Style.ForeColor = Color.DarkOrange;
+                        row.Cells["Tipo"].Style.Font = new Font(dgvData.Font, FontStyle.Bold);
 
-                        // Negrita para que destaque
-                        row.Cells["NumeroDocumento"].Style.Font = new Font(dgvData.Font, FontStyle.Bold);
+                        // Resto de la fila en color normal (Negro)
+                        row.Cells["NumeroDocumento"].Style.ForeColor = Color.Black;
+                        row.Cells["NombreCliente"].Style.ForeColor = Color.Black;
                     }
                     else
                     {
-                        // CASO 2: ES UNA VENTA (Fondo Blanco normal)
-
+                        // ESTILO VENTAS: Verde (VES) o Azul (USD)
                         if (moneda == "VES")
                         {
-                            // Venta en Bs -> Texto VERDE
                             row.Cells["MontoOriginal"].Style.ForeColor = Color.Green;
                             row.Cells["TipoMoneda"].Style.ForeColor = Color.Green;
                         }
                         else
                         {
-                            // Venta en USD -> Texto AZUL
                             row.Cells["MontoOriginal"].Style.ForeColor = Color.Blue;
                             row.Cells["TipoMoneda"].Style.ForeColor = Color.Blue;
                         }
@@ -245,6 +248,22 @@ namespace CapaPresentacion.modales
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+
+        private void PersonalizarFuente()
+        {
+            // 1. Fuente para las celdas normales (Tamaño 10)
+            dgvData.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
+
+            // 2. Fuente para los encabezados (Tamaño 10 y Negrita)
+            dgvData.ColumnHeadersDefaultCellStyle.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
+
+            // 3. Aumentar la altura de las filas para que el texto "respire"
+            dgvData.RowTemplate.Height = 32;
+
+            // 4. Aumentar la altura de la cabecera
+            dgvData.ColumnHeadersHeight = 35;
         }
     }
 }
